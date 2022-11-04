@@ -4,6 +4,7 @@ use clap::Parser;
 
 mod world_state;
 
+/// Program to run the Brian's Brain cellular automaton.
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 struct Args {
