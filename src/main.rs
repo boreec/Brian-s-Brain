@@ -1,3 +1,7 @@
+use crate::world_state::WorldState;
+
+mod world_state;
+
 fn main() {
-    println!("Hello, world!");
+    let ws = WorldState::new(10u16);
 }
