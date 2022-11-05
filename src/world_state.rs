@@ -21,8 +21,9 @@ pub struct WorldState {
 
 impl WorldState {
     
-    /// Create a new **WorldState** with a defined size.
-    /// The size provided is used for the width and the height.
+    /// Create a new **WorldState** with a defined `size`.
+    ///
+    /// The `size` provided is used for the world's width and height.
     pub fn new(size: u16) -> WorldState {
         WorldState {
             size,
