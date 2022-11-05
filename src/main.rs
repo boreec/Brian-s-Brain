@@ -34,4 +34,10 @@ fn init_vulkan() {
         InstanceCreateInfo::application_from_cargo_toml()    
     )
     .expect("Failed to create instance!");
+
+    // Check if Vulkan is supported by at least one physical device.
+    
+    let physical_devices = instance
+        .enumerate_physical_devices()
+        .expect("Could not enumerate devices supported by Vulkan!");
 }
