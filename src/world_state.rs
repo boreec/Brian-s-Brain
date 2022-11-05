@@ -67,4 +67,15 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn test_randomize_for_rate_equal_zero() {
+        let mut ws = WorldState::new(1000);
+        ws.randomize(0.0);
+        for i in 0..1000 {
+            for j in 0..1000 {
+                assert_eq!(ws.get_cell(i,j), Some(&CellState::Off));
+            }
+        }
+    }
 }
