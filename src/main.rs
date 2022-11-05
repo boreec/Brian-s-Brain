@@ -2,6 +2,10 @@ use crate::world_state::WorldState;
 
 use clap::Parser;
 
+use vulkano::VulkanLibrary;
+use vulkano::instance::Instance;
+use vulkano::instance::InstanceCreateInfo;
+
 mod world_state;
 
 /// Program to run the Brian's Brain cellular automaton.
@@ -18,4 +22,10 @@ fn main() {
     let args = Args::parse();
     
     let ws = WorldState::new(args.size);
+    
+    init_vulkan();
+}
+
+fn init_vulkan() {
+    let library = VulkanLibrary::new().expect("no Vulkan library/DLL");   
 }
