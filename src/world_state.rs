@@ -36,8 +36,11 @@ impl WorldState {
     /// `on_rate` corresponds to the percentage of cells in the world to
     /// set their state to **CellState::On**. `on_rate` is expected to be
     /// between 0 and 1. Any value outside that range will cause a panic.
-    pub fn randomize(&self, on_rate: f64) {
-        
+    pub fn randomize(&mut self, on_rate: f64) {
+        if on_rate == 1.0 {
+            self.world = Array2D::filled_with(CellState::On, self.size as usize, self.size as usize);
+            return;
+        }        
     }
     
     fn get_cell(&self, row: u16, col: u16) -> Option<&CellState> {
@@ -66,7 +69,7 @@ mod tests {
     
     #[test]
     fn test_randomize_for_rate_equal_one() {
-        let ws = WorldState::new(1000);
+        let mut ws = WorldState::new(1000);
         ws.randomize(1.0);
         assert_eq!(count_cell_on(&ws), 1000);
     }
