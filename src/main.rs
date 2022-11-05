@@ -27,5 +27,11 @@ fn main() {
 }
 
 fn init_vulkan() {
-    let library = VulkanLibrary::new().expect("no Vulkan library/DLL");   
+    let library = VulkanLibrary::new().expect("no Vulkan library/DLL!");   
+    
+    let instance = Instance::new(
+        library,
+        InstanceCreateInfo::default()    
+    )
+    .expect("Failed to create instance!");
 }
