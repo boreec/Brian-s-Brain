@@ -2,6 +2,8 @@ use crate::world_state::WorldState;
 
 use clap::Parser;
 
+use std::error::Error;
+
 use vulkano::VulkanLibrary;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
@@ -31,7 +33,7 @@ fn main() {
     }
 }
 
-fn init_vulkan() -> Result<(), Box<dyn std::error::Error>>{
+fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
     
     let instance = Instance::new(
@@ -40,8 +42,12 @@ fn init_vulkan() -> Result<(), Box<dyn std::error::Error>>{
     )?;
 
     // Check if Vulkan is supported by at least one physical device.
+    // If so, pick the first device to come up.
+    // (to do: pick the device with the best capacities ?)
+    let physical_device = instance
+        .enumerate_physical_devices()?
+        .next()
+        .ok_or(Box::<dyn Error>::from("No physical devices support Vulkan!"));
     
-    let physical_devices = instance.enumerate_physical_devices()?;
-
     Ok(())
 }
