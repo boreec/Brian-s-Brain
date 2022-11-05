@@ -29,5 +29,14 @@ impl WorldState {
             size,
             world: Array2D::filled_with(CellState::Off, size as usize, size as usize),
         }
-    }    
+    }
+    
+    /// Initialize the world with a certain amount of **CellState::On**.
+    /// 
+    /// `on_rate` corresponds to the percentage of cells in the world to
+    /// set their state to **CellState::On**. `on_rate` is expected to be
+    /// between 0 and 1. Any value outside that range will cause a panic.
+    pub fn randomize(&self, on_rate: f64) {
+        
+    } 
 }
