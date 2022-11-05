@@ -6,7 +6,7 @@ use array2d::Array2D;
 /// that were on. All cells that were **On** go into the **Dying** state, which is not
 /// counted as an **On** cell in the neighbor count, and prevents any cell from being
 /// born there. Cells that were in the **Dying** state go into the **Off** state. 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 enum CellState {
     On,
     Dying,
@@ -57,20 +57,14 @@ mod tests {
     
     use super::*;
     
-    fn count_cell_on(ws: &WorldState) -> u16 {
-        let mut sum = 0;
-        for i in 0..ws.get_size(){
-            for j in 0..ws.get_size(){
-                sum += if ws.get_cell(i,j) == Some(&CellState::On) { 1 } else { 0 };
-            }
-        }
-        sum
-    }
-    
     #[test]
     fn test_randomize_for_rate_equal_one() {
         let mut ws = WorldState::new(1000);
         ws.randomize(1.0);
-        assert_eq!(count_cell_on(&ws), 1000);
+        for i in 0..1000 {
+            for j in 0..1000 {
+                assert_eq!(ws.get_cell(i,j), Some(&CellState::On));
+            }
+        }
     }
 }
