@@ -1,3 +1,8 @@
+enum CellState {
+    On,
+    Dying,
+    Off,
+}
 
 /// This struct represents the entire Cellular Automaton. 
 pub struct WorldState {
