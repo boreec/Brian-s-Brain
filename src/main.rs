@@ -31,7 +31,7 @@ fn init_vulkan() {
     
     let instance = Instance::new(
         library,
-        InstanceCreateInfo::default()    
+        InstanceCreateInfo::application_from_cargo_toml()    
     )
     .expect("Failed to create instance!");
 }
