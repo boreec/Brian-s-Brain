@@ -23,21 +23,25 @@ fn main() {
     
     let ws = WorldState::new(args.size);
     
-    init_vulkan();
+    match init_vulkan() {
+        Ok(_) => {},
+        Err(e) => {
+            println!("Error occured while initializing Vulkan:\n {e}");
+        },
+    }
 }
 
-fn init_vulkan() {
-    let library = VulkanLibrary::new().expect("no Vulkan library/DLL!");   
+fn init_vulkan() -> Result<(), Box<dyn std::error::Error>>{
+    let library = VulkanLibrary::new()?;   
     
     let instance = Instance::new(
         library,
         InstanceCreateInfo::application_from_cargo_toml()    
-    )
-    .expect("Failed to create instance!");
+    )?;
 
     // Check if Vulkan is supported by at least one physical device.
     
-    let physical_devices = instance
-        .enumerate_physical_devices()
-        .expect("Could not enumerate devices supported by Vulkan!");
+    let physical_devices = instance.enumerate_physical_devices()?;
+
+    Ok(())
 }
