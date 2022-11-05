@@ -33,6 +33,7 @@ fn main() {
     }
 }
 
+
 fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
     
@@ -47,7 +48,16 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let physical_device = instance
         .enumerate_physical_devices()?
         .next()
-        .ok_or_else(|| Box::<dyn Error>::from("No physical devices support Vulkan!"));
+        .ok_or_else(|| Box::<dyn Error>::from("No physical devices support Vulkan!"))?;
+    
+    // Locate a queue supporting graphical operations.
+    let queue_family_index = physical_device
+        .queue_family_properties()
+        .iter()
+        .enumerate()
+        .position(|(_, q)| q.queue_flags.graphics)
+        .ok_or_else(|| Box::<dyn Error>::from("No queue family found on the device!"))?
+        as u32;
     
     Ok(())
 }
