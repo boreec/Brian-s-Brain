@@ -6,7 +6,7 @@ use array2d::Array2D;
 /// that were on. All cells that were **On** go into the **Dying** state, which is not
 /// counted as an **On** cell in the neighbor count, and prevents any cell from being
 /// born there. Cells that were in the **Dying** state go into the **Off** state. 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 enum CellState {
     On,
     Dying,
