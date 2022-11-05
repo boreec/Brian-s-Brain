@@ -47,7 +47,7 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let physical_device = instance
         .enumerate_physical_devices()?
         .next()
-        .ok_or(Box::<dyn Error>::from("No physical devices support Vulkan!"));
+        .ok_or_else(|| Box::<dyn Error>::from("No physical devices support Vulkan!"));
     
     Ok(())
 }
