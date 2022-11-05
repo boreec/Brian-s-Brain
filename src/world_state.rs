@@ -38,5 +38,36 @@ impl WorldState {
     /// between 0 and 1. Any value outside that range will cause a panic.
     pub fn randomize(&self, on_rate: f64) {
         
-    } 
+    }
+    
+    fn get_cell(&self, row: u16, col: u16) -> Option<&CellState> {
+        self.world.get(row as usize, col as usize)
+    }
+    
+    fn get_size(&self) -> u16 {
+        self.size
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    
+    use super::*;
+    
+    fn count_cell_on(ws: &WorldState) -> u16 {
+        let mut sum = 0;
+        for i in 0..ws.get_size(){
+            for j in 0..ws.get_size(){
+                sum += if ws.get_cell(i,j) == Some(&CellState::On) { 1 } else { 0 };
+            }
+        }
+        sum
+    }
+    
+    #[test]
+    fn test_randomize_for_rate_equal_one() {
+        let ws = WorldState::new(1000);
+        ws.randomize(1.0);
+        assert_eq!(count_cell_on(&ws), 1000);
+    }
 }
