@@ -5,6 +5,9 @@ use clap::Parser;
 use std::error::Error;
 
 use vulkano::VulkanLibrary;
+use vulkano::device::DeviceCreateInfo;
+use vulkano::device::Device;
+use vulkano::device::QueueCreateInfo;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
 
@@ -58,6 +61,19 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         .position(|(_, q)| q.queue_flags.graphics)
         .ok_or_else(|| Box::<dyn Error>::from("No queue family found on the device!"))?
         as u32;
+ 
+    // Create a Vulkan context by instantiating a Device object.
+    let (device, mut queues) = Device::new(
+        physical_device,
+        DeviceCreateInfo {
+            // The queue family information
+            queue_create_infos: vec![QueueCreateInfo {
+                queue_family_index,
+                ..Default::default()
+            }],
+            ..Default::default()
+        },
+    )?;
     
     Ok(())
 }
