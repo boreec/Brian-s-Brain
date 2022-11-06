@@ -11,6 +11,11 @@ use vulkano::device::QueueCreateInfo;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
 
+use vulkano_win::VkSurfaceBuild;
+
+use winit::event_loop::EventLoop;
+use winit::window::WindowBuilder;
+
 mod world_state;
 
 /// Program to run the Brian's Brain cellular automaton.
@@ -34,15 +39,21 @@ fn main() {
             println!("Error occured while initializing Vulkan:\n {e}");
         },
     }
+   
 }
 
 
 fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
+    let required_extensions = vulkano_win::required_extensions(&library);
     
     let instance = Instance::new(
         library,
-        InstanceCreateInfo::application_from_cargo_toml()    
+        InstanceCreateInfo {
+            enabled_extensions: required_extensions,
+            enumerate_portability: true,
+            ..Default::default()        
+        },
     )?;
 
     // Check if Vulkan is supported by at least one physical device.
@@ -53,6 +64,7 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         .next()
         .ok_or_else(|| Box::<dyn Error>::from("No physical devices support Vulkan!"))?;
     
+        
     // Locate a queue supporting graphical operations.
     let queue_family_index = physical_device
         .queue_family_properties()
@@ -74,6 +86,11 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
             ..Default::default()
         },
     )?;
-    
+     
+    let event_loop = EventLoop::new();
+    let surface = WindowBuilder::new()
+        .build_vk_surface(&event_loop, instance.clone())
+        .expect("Expected to create a window for Vulkan context!");
+         
     Ok(())
 }
