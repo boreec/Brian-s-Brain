@@ -5,9 +5,12 @@ use clap::Parser;
 use std::error::Error;
 
 use vulkano::VulkanLibrary;
-use vulkano::device::DeviceCreateInfo;
 use vulkano::device::Device;
+use vulkano::device::DeviceCreateInfo;
+use vulkano::device::DeviceExtensions;
+use vulkano::device::physical::PhysicalDeviceType;
 use vulkano::device::QueueCreateInfo;
+use vulkano::device::QueueFlags;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
 
@@ -56,41 +59,53 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         },
     )?;
 
-    // Check if Vulkan is supported by at least one physical device.
-    // If so, pick the first device to come up.
-    // (to do: pick the device with the best capacities ?)
-    let physical_device = instance
-        .enumerate_physical_devices()?
-        .next()
-        .ok_or_else(|| Box::<dyn Error>::from("No physical devices support Vulkan!"))?;
-    
-        
-    // Locate a queue supporting graphical operations.
-    let queue_family_index = physical_device
-        .queue_family_properties()
-        .iter()
-        .enumerate()
-        .position(|(_, q)| q.queue_flags.graphics)
-        .ok_or_else(|| Box::<dyn Error>::from("No queue family found on the device!"))?
-        as u32;
- 
-    // Create a Vulkan context by instantiating a Device object.
-    let (device, mut queues) = Device::new(
-        physical_device,
-        DeviceCreateInfo {
-            // The queue family information
-            queue_create_infos: vec![QueueCreateInfo {
-                queue_family_index,
-                ..Default::default()
-            }],
-            ..Default::default()
-        },
-    )?;
-     
     let event_loop = EventLoop::new();
     let surface = WindowBuilder::new()
         .build_vk_surface(&event_loop, instance.clone())
         .expect("Expected to create a window for Vulkan context!");
-         
+    
+    let device_extensions = DeviceExtensions {
+        khr_swapchain: true,
+        ..DeviceExtensions::empty()    
+    };
+
+    let (physical_device, queue_family_index) = instance
+        .enumerate_physical_devices()
+        .unwrap()
+        .filter(|p| {
+            p.supported_extensions().contains(&device_extensions)
+        })
+        // for a device supporting vulkan check if it contains
+        // queues that support graphical operations.
+        .filter_map(|p| {
+            p.queue_family_properties()
+                .iter()
+                .enumerate()
+                .position(|(i, q)|{
+                    q.queue_flags.graphics == true
+                        && p.surface_support(i as u32, &surface)
+                            .unwrap_or(false)
+                })
+                .map(|i| (p, i as u32))
+        })
+        // Set a priority for each physical device according to its type.
+        .min_by_key(|(p, _)| {
+            match p.properties().device_type {
+                PhysicalDeviceType::DiscreteGpu => 0,
+                PhysicalDeviceType::IntegratedGpu => 1,
+                PhysicalDeviceType::VirtualGpu => 2,
+                PhysicalDeviceType::Cpu => 3,
+                PhysicalDeviceType::Other => 4,
+                _ => 5,
+            }
+        })
+        .expect("No suitable physical device found");
+    
+    println!(
+        "using device: {} (type: {:?})",
+        physical_device.properties().device_name,
+        physical_device.properties().device_type,
+    );
+    
     Ok(())
 }
