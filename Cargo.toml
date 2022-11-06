@@ -8,3 +8,5 @@ authors = ["Cyprien Borée <cyprien.boree@tuta.io>"]
 array2d = "0.2.1"
 clap = { version = "4.0.18", features = ["derive"] }
 vulkano = "0.31.0"
+vulkano-win = "0.31.0"
+winit = "0.27.5"
