@@ -13,6 +13,7 @@ use vulkano::device::QueueCreateInfo;
 use vulkano::image::ImageUsage;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
+use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::swapchain::Swapchain;
 use vulkano::swapchain::SwapchainCreateInfo;
 
@@ -160,6 +161,8 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         )
         .unwrap()
     };
+    
+    let memory_allocator = StandardMemoryAllocator::new_default(device.clone());
     
     Ok(())
 }
