@@ -1,5 +1,8 @@
 use crate::world_state::WorldState;
 
+use bytemuck::Pod;
+use bytemuck::Zeroable;
+
 use clap::Parser;
 
 use std::error::Error;
@@ -11,6 +14,7 @@ use vulkano::device::DeviceExtensions;
 use vulkano::device::physical::PhysicalDeviceType;
 use vulkano::device::QueueCreateInfo;
 use vulkano::image::ImageUsage;
+use vulkano::impl_vertex;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
 use vulkano::memory::allocator::StandardMemoryAllocator;
@@ -164,5 +168,11 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     
     let memory_allocator = StandardMemoryAllocator::new_default(device.clone());
     
+    #[repr(C)]
+    #[derive(Clone, Copy, Debug, Default, Zeroable, Pod)]
+    struct Vertex {
+        position: [f32; 2],
+    }
+    impl_vertex!(Vertex, position);
     Ok(())
 }
