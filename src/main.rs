@@ -10,13 +10,16 @@ use vulkano::device::DeviceCreateInfo;
 use vulkano::device::DeviceExtensions;
 use vulkano::device::physical::PhysicalDeviceType;
 use vulkano::device::QueueCreateInfo;
-use vulkano::device::QueueFlags;
+use vulkano::image::ImageUsage;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
+use vulkano::swapchain::Swapchain;
+use vulkano::swapchain::SwapchainCreateInfo;
 
 use vulkano_win::VkSurfaceBuild;
 
 use winit::event_loop::EventLoop;
+use winit::window::Window;
 use winit::window::WindowBuilder;
 
 mod world_state;
@@ -62,8 +65,8 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let event_loop = EventLoop::new();
     let surface = WindowBuilder::new()
         .build_vk_surface(&event_loop, instance.clone())
-        .expect("Expected to create a window for Vulkan context!");
-    
+        .unwrap();
+        
     let device_extensions = DeviceExtensions {
         khr_swapchain: true,
         ..DeviceExtensions::empty()    
@@ -119,6 +122,44 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
             ..Default::default()
         },
     )?;
+    
+    let (mut swapchain, images) = {
+        let surface_capabilities = device
+            .physical_device()
+            .surface_capabilities(&surface, Default::default())
+            .unwrap();
+        
+        let image_format = Some(
+            device
+                .physical_device()
+                .surface_formats(&surface, Default::default())
+                .unwrap()[0]
+                .0,  
+        );
+        
+        let window = surface.object().unwrap().downcast_ref::<Window>().unwrap();
+        
+        Swapchain::new(
+            device.clone(),
+            surface.clone(),
+            SwapchainCreateInfo {
+                min_image_count: surface_capabilities.min_image_count,
+                image_format,
+                image_extent: window.inner_size().into(),
+                image_usage: ImageUsage {
+                    color_attachment: true,
+                    ..Default::default()
+                },
+                composite_alpha: surface_capabilities
+                    .supported_composite_alpha
+                    .iter()
+                    .next()
+                    .unwrap(),
+                ..Default::default()  
+            },
+        )
+        .unwrap()
+    };
     
     Ok(())
 }
