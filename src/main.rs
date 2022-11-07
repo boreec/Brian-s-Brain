@@ -174,5 +174,18 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         position: [f32; 2],
     }
     impl_vertex!(Vertex, position);
+
+    let vertices = [
+        Vertex {
+            position: [-0.5, -0.25],
+        },
+        Vertex {
+            position: [0.0, 0.5],
+        },
+        Vertex {
+            position: [0.25, -0.1],
+        },
+    ];
+    
     Ok(())
 }
