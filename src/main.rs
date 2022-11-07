@@ -8,6 +8,8 @@ use clap::Parser;
 use std::error::Error;
 
 use vulkano::VulkanLibrary;
+use vulkano::buffer::BufferUsage;
+use vulkano::buffer::CpuAccessibleBuffer;
 use vulkano::device::Device;
 use vulkano::device::DeviceCreateInfo;
 use vulkano::device::DeviceExtensions;
@@ -186,6 +188,17 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
             position: [0.25, -0.1],
         },
     ];
+    
+    let vertex_buffer = CpuAccessibleBuffer::from_iter(
+        &memory_allocator,
+        BufferUsage {
+            vertex_buffer: true,
+            ..Default::default()
+        },
+        false,
+        vertices
+    )
+    .unwrap();
     
     Ok(())
 }
