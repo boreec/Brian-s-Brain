@@ -170,6 +170,7 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     
     let memory_allocator = StandardMemoryAllocator::new_default(device.clone());
     
+    // use repr(C) to prevent rust to mess with the data.
     #[repr(C)]
     #[derive(Clone, Copy, Debug, Default, Zeroable, Pod)]
     struct Vertex {
