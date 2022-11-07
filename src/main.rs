@@ -178,6 +178,7 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     }
     impl_vertex!(Vertex, position);
 
+    // Vertices representing a triangle.
     let vertices = [
         Vertex {
             position: [-0.5, -0.25],
