@@ -107,5 +107,18 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         physical_device.properties().device_type,
     );
     
+    // Initializing the logical device
+    let (device, mut queues) = Device::new(
+        physical_device,
+        DeviceCreateInfo {
+            enabled_extensions: device_extensions,
+            queue_create_infos: vec![QueueCreateInfo {
+                queue_family_index,
+                ..Default::default()
+            }],
+            ..Default::default()
+        },
+    )?;
+    
     Ok(())
 }
