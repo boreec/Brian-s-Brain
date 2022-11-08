@@ -20,6 +20,11 @@ use vulkano::impl_vertex;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
 use vulkano::memory::allocator::StandardMemoryAllocator;
+use vulkano::pipeline::GraphicsPipeline;
+use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
+use vulkano::pipeline::graphics::vertex_input::BuffersDefinition;
+use vulkano::pipeline::graphics::viewport::ViewportState;
+use vulkano::render_pass::Subpass;
 use vulkano::swapchain::Swapchain;
 use vulkano::swapchain::SwapchainCreateInfo;
 
@@ -254,6 +259,16 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         }
     )
     .unwrap();
+    
+    let pipeline = GraphicsPipeline::start()
+        .render_pass(Subpass::from(render_pass.clone(), 0).unwrap())
+        .vertex_input_state(BuffersDefinition::new().vertex::<Vertex>())
+        .input_assembly_state(InputAssemblyState::new())
+        .vertex_shader(vs.entry_point("main").unwrap(), ())
+        .viewport_state(ViewportState::viewport_dynamic_scissor_irrelevant())
+        .fragment_shader(fs.entry_point("main").unwrap(), ())
+        .build(device.clone())
+        .unwrap();
     
     Ok(())
 }
