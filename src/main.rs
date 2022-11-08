@@ -23,6 +23,7 @@ use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::GraphicsPipeline;
 use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
 use vulkano::pipeline::graphics::vertex_input::BuffersDefinition;
+use vulkano::pipeline::graphics::viewport::Viewport;
 use vulkano::pipeline::graphics::viewport::ViewportState;
 use vulkano::render_pass::Subpass;
 use vulkano::swapchain::Swapchain;
@@ -269,6 +270,12 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         .fragment_shader(fs.entry_point("main").unwrap(), ())
         .build(device.clone())
         .unwrap();
+    
+    let mut viewport = Viewport {
+        origin: [0.0, 0.0],
+        dimensions: [0.0, 0.0],
+        depth_range: 0.0..1.0,
+    };
     
     Ok(())
 }
