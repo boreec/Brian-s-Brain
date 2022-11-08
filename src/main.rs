@@ -229,5 +229,8 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
             }"
         }
     }
+    
+    let vs = vs::load(device.clone()).unwrap();
+    let fs = fs::load(device.clone()).unwrap();
     Ok(())
 }
