@@ -261,6 +261,8 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     )
     .unwrap();
     
+    // Create a GraphicsPipeline object to define how the
+    // implementation should perform a draw operation.
     let pipeline = GraphicsPipeline::start()
         .render_pass(Subpass::from(render_pass.clone(), 0).unwrap())
         .vertex_input_state(BuffersDefinition::new().vertex::<Vertex>())
