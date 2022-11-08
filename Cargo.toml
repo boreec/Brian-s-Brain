@@ -10,4 +10,5 @@ bytemuck = "1.12.3"
 clap = { version = "4.0.18", features = ["derive"] }
 vulkano = "0.32.0"
 vulkano-win = "0.32.0"
+vulkano-shader = "0.32.0"
 winit = "0.27.5"
