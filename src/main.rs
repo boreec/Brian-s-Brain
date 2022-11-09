@@ -37,6 +37,7 @@ use vulkano::render_pass::Subpass;
 use vulkano::sync;
 use vulkano::sync::GpuFuture;
 use vulkano::swapchain::Swapchain;
+use vulkano::swapchain::SwapchainCreationError;
 use vulkano::swapchain::SwapchainCreateInfo;
 
 use vulkano_win::VkSurfaceBuild;
@@ -320,6 +321,28 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                 // Don't draw frame if one dimension is equal to 0.
                 if dimensions.width == 0 || dimensions.height == 0 {
                     return;
+                }
+                
+                previous_frame_end.as_mut().unwrap().cleanup_finished();
+                
+                if recreate_swapchain {
+                    let (new_swapchain, new_images) =
+                        match swapchain.recreate(SwapchainCreateInfo {
+                            image_extent: dimensions.into(),
+                            ..swapchain.create_info()
+                    }) {
+                            Ok(r) => r,
+                            Err(SwapchainCreationError::ImageExtentNotSupported {..}) => return,
+                            Err(e) => panic!("Failed to recreate swapchain: {:?}", e),
+                        };
+                    
+                    swapchain = new_swapchain;
+                    framebuffers = window_size_dependent_setup(
+                        &new_images,
+                        render_pass.clone(),
+                        &mut viewport,
+                    );
+                    recreate_swapchain = false;
                 }
             }
             _ => {}
