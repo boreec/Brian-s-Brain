@@ -357,6 +357,10 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                         }
                         Err(e) => panic!("Failed to acquire next image: {:?}", e),
                     };
+            
+                if suboptimal {
+                    recreate_swapchain = true;
+                }
             }
             _ => {}
         }
