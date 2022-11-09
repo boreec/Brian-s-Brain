@@ -314,6 +314,14 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
             } => {
                 recreate_swapchain = true;
             }
+            Event::RedrawEventsCleared => {
+                let window = surface.object().unwrap().downcast_ref::<Window>().unwrap();
+                let dimensions = window.inner_size();
+                // Don't draw frame if one dimension is equal to 0.
+                if dimensions.width == 0 || dimensions.height == 0 {
+                    return;
+                }
+            }
             _ => {}
         }
     });
