@@ -3,6 +3,8 @@ use crate::world_state::WorldState;
 
 use clap::Parser;
 
+/// Module containing vulkan initialization and
+/// window handling.
 mod graphics;
 mod world_state;
 
