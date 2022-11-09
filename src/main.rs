@@ -11,6 +11,7 @@ use std::sync::Arc;
 use vulkano::VulkanLibrary;
 use vulkano::buffer::BufferUsage;
 use vulkano::buffer::CpuAccessibleBuffer;
+use vulkano::buffer::TypedBufferAccess;
 use vulkano::command_buffer::allocator::StandardCommandBufferAllocator;
 use vulkano::command_buffer::AutoCommandBufferBuilder;
 use vulkano::command_buffer::CommandBufferUsage;
@@ -385,6 +386,13 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                         },
                         SubpassContents::Inline,
                     )
+                    .unwrap()
+                    .set_viewport(0, [viewport.clone()])
+                    .bind_pipeline_graphics(pipeline.clone())
+                    .bind_vertex_buffers(0, vertex_buffer.clone())
+                    .draw(vertex_buffer.len() as u32, 1, 0, 0)
+                    .unwrap()
+                    .end_render_pass()
                     .unwrap();
             }
             _ => {}
