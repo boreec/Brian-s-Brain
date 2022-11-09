@@ -14,6 +14,8 @@ use vulkano::buffer::CpuAccessibleBuffer;
 use vulkano::command_buffer::allocator::StandardCommandBufferAllocator;
 use vulkano::command_buffer::AutoCommandBufferBuilder;
 use vulkano::command_buffer::CommandBufferUsage;
+use vulkano::command_buffer::RenderPassBeginInfo;
+use vulkano::command_buffer::SubpassContents;
 use vulkano::device::Device;
 use vulkano::device::DeviceCreateInfo;
 use vulkano::device::DeviceExtensions;
@@ -372,6 +374,18 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                     CommandBufferUsage::OneTimeSubmit,
                 )
                 .unwrap();
+                
+                builder
+                    .begin_render_pass(
+                        RenderPassBeginInfo {
+                            clear_values: vec![Some([0.0,0.0,1.0,1.0].into())],
+                            ..RenderPassBeginInfo::framebuffer(
+                                framebuffers[image_index as usize].clone(),
+                            )
+                        },
+                        SubpassContents::Inline,
+                    )
+                    .unwrap();
             }
             _ => {}
         }
