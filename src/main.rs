@@ -34,6 +34,8 @@ use vulkano::render_pass::Framebuffer;
 use vulkano::render_pass::FramebufferCreateInfo;
 use vulkano::render_pass::RenderPass;
 use vulkano::render_pass::Subpass;
+use vulkano::sync;
+use vulkano::sync::GpuFuture;
 use vulkano::swapchain::Swapchain;
 use vulkano::swapchain::SwapchainCreateInfo;
 
@@ -291,6 +293,13 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     
     let command_buffer_allocator =
         StandardCommandBufferAllocator::new(device.clone(), Default::default());
+    
+    let mut recreate_swapchain = false;
+    let mut previous_frame_end = Some(sync::now(device.clone()).boxed());
+    
+    event_loop.run(move |event, _, control_flow| {
+        
+    });
     Ok(())
 }
 
