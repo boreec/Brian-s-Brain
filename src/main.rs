@@ -308,6 +308,12 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
             } => {
                 *control_flow = ControlFlow::Exit;
             }
+            Event::WindowEvent {
+                event: WindowEvent::Resized(_),
+                ..
+            } => {
+                recreate_swapchain = true;
+            }
             _ => {}
         }
     });
