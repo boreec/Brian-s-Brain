@@ -40,6 +40,7 @@ use vulkano::render_pass::FramebufferCreateInfo;
 use vulkano::render_pass::RenderPass;
 use vulkano::render_pass::Subpass;
 use vulkano::sync;
+use vulkano::sync::FlushError;
 use vulkano::sync::GpuFuture;
 use vulkano::swapchain::AcquireError;
 use vulkano::swapchain::acquire_next_image;
@@ -409,6 +410,19 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                         SwapchainPresentInfo::swapchain_image_index(swapchain.clone(), image_index),
                     )
                     .then_signal_fence_and_flush();
+                
+                match future {
+                    Ok(future) => {
+                        previous_frame_end = Some(future.boxed());
+                    }
+                    Err(FlushError::OutOfDate) => {
+                        recreate_swapchain = true;
+                        previous_frame_end = Some(sync::now(device.clone()).boxed());
+                    }
+                    Err(e) => {
+                        panic!("Failed to flush future: {:?}", e);
+                    }
+                }
             }
             _ => {}
         }
