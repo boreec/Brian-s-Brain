@@ -46,6 +46,7 @@ use vulkano::swapchain::acquire_next_image;
 use vulkano::swapchain::Swapchain;
 use vulkano::swapchain::SwapchainCreationError;
 use vulkano::swapchain::SwapchainCreateInfo;
+use vulkano::swapchain::SwapchainPresentInfo;
 
 use vulkano_win::VkSurfaceBuild;
 
@@ -355,7 +356,7 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                 }
                 
                 // Try to acquire image from Swapchain
-                let (image_index, suboptimal, aquire_future) = 
+                let (image_index, suboptimal, acquire_future) = 
                     match acquire_next_image(swapchain.clone(), None) {
                         Ok(r) => r,
                         Err(AcquireError::OutOfDate) => {
@@ -394,6 +395,20 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                     .unwrap()
                     .end_render_pass()
                     .unwrap();
+                
+                let command_buffer = builder.build().unwrap();
+                
+                let future = previous_frame_end
+                    .take()
+                    .unwrap()
+                    .join(acquire_future)
+                    .then_execute(queue.clone(), command_buffer)
+                    .unwrap()
+                    .then_swapchain_present(
+                        queue.clone(),
+                        SwapchainPresentInfo::swapchain_image_index(swapchain.clone(), image_index),
+                    )
+                    .then_signal_fence_and_flush();
             }
             _ => {}
         }
