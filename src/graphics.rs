@@ -15,8 +15,11 @@ use vulkano::command_buffer::RenderPassBeginInfo;
 use vulkano::command_buffer::SubpassContents;
 use vulkano::device::Device;
 use vulkano::device::DeviceCreateInfo;
+use vulkano::device::DeviceCreationError;
 use vulkano::device::DeviceExtensions;
+use vulkano::device::physical::PhysicalDevice;
 use vulkano::device::physical::PhysicalDeviceType;
+use vulkano::device::Queue;
 use vulkano::device::QueueCreateInfo;
 use vulkano::image::ImageAccess;
 use vulkano::image::ImageUsage;
@@ -118,19 +121,14 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
         physical_device.properties().device_type,
     );
     
-    // Initializing the logical device
-    let (device, mut queues) = Device::new(
-        physical_device,
-        DeviceCreateInfo {
-            enabled_extensions: device_extensions,
-            queue_create_infos: vec![QueueCreateInfo {
-                queue_family_index,
-                ..Default::default()
-            }],
-            ..Default::default()
-        },
-    )?;
-    
+    // Create logical device
+    let (device, mut queues) = 
+        initialize_logical_device(
+            physical_device, 
+            &device_extensions, 
+            queue_family_index
+        )?; // failed to create logical device
+            
     let queue = queues.next().unwrap();
     
     let (mut swapchain, images) = {
@@ -430,4 +428,21 @@ fn window_size_dependent_setup(
             .unwrap()
         })
     .collect::<Vec<_>>()
+}
+
+fn initialize_logical_device(
+    physical_device: Arc<PhysicalDevice>,
+    device_extensions: &DeviceExtensions,
+    queue_family_index: u32,
+) -> Result<(Arc<Device>, impl ExactSizeIterator<Item = Arc<Queue>>), DeviceCreationError> {
+        Device::new(
+        physical_device,
+        DeviceCreateInfo {
+            enabled_extensions: *device_extensions,
+            queue_create_infos: vec![QueueCreateInfo {
+                queue_family_index,
+                ..Default::default()
+            }],
+            ..Default::default()
+        },)
 }
