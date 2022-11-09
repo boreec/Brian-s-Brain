@@ -26,6 +26,12 @@ struct Args {
     /// with the `cli` argument.
     #[arg(short, long, default_value_t = true)]
     gui: bool,
+
+    /// Run the program in the terminal. Note that if the cellular
+    /// automaton's environment is too huge, render may not be done
+    /// properly. It can be used alongside with `gui` argument.
+    #[arg(short, long, default_value_t = false)]
+    cli: bool,
 }
 
 fn main() {
