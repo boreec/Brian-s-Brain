@@ -6,6 +6,7 @@ use bytemuck::Zeroable;
 use clap::Parser;
 
 use std::error::Error;
+use std::sync::Arc;
 
 use vulkano::VulkanLibrary;
 use vulkano::buffer::BufferUsage;
@@ -15,7 +16,10 @@ use vulkano::device::DeviceCreateInfo;
 use vulkano::device::DeviceExtensions;
 use vulkano::device::physical::PhysicalDeviceType;
 use vulkano::device::QueueCreateInfo;
+use vulkano::image::ImageAccess;
 use vulkano::image::ImageUsage;
+use vulkano::image::SwapchainImage;
+use vulkano::image::view::ImageView;
 use vulkano::impl_vertex;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
@@ -25,6 +29,9 @@ use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
 use vulkano::pipeline::graphics::vertex_input::BuffersDefinition;
 use vulkano::pipeline::graphics::viewport::Viewport;
 use vulkano::pipeline::graphics::viewport::ViewportState;
+use vulkano::render_pass::Framebuffer;
+use vulkano::render_pass::FramebufferCreateInfo;
+use vulkano::render_pass::RenderPass;
 use vulkano::render_pass::Subpass;
 use vulkano::swapchain::Swapchain;
 use vulkano::swapchain::SwapchainCreateInfo;
@@ -278,6 +285,31 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
         dimensions: [0.0, 0.0],
         depth_range: 0.0..1.0,
     };
-    
+
+    let mut framebuffers = window_size_dependent_setup(&images, render_pass.clone(), &mut viewport);    
     Ok(())
+}
+
+fn window_size_dependent_setup(
+    images: &[Arc<SwapchainImage>],
+    render_pass: Arc<RenderPass>,
+    viewport: &mut Viewport,
+) -> Vec<Arc<Framebuffer>> {
+    let dimensions = images[0].dimensions().width_height();
+    viewport.dimensions = [dimensions[0] as f32, dimensions[1] as f32];
+    
+    images
+        .iter()
+        .map(|image| {
+            let view = ImageView::new_default(image.clone()).unwrap();
+            Framebuffer::new(
+                render_pass.clone(),
+                FramebufferCreateInfo {
+                    attachments: vec![view],
+                    ..Default::default()
+                },
+            )
+            .unwrap()
+        })
+    .collect::<Vec<_>>()
 }
