@@ -12,6 +12,8 @@ use vulkano::VulkanLibrary;
 use vulkano::buffer::BufferUsage;
 use vulkano::buffer::CpuAccessibleBuffer;
 use vulkano::command_buffer::allocator::StandardCommandBufferAllocator;
+use vulkano::command_buffer::AutoCommandBufferBuilder;
+use vulkano::command_buffer::CommandBufferUsage;
 use vulkano::device::Device;
 use vulkano::device::DeviceCreateInfo;
 use vulkano::device::DeviceExtensions;
@@ -151,6 +153,8 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
             ..Default::default()
         },
     )?;
+    
+    let queue = queues.next().unwrap();
     
     let (mut swapchain, images) = {
         let surface_capabilities = device
@@ -361,6 +365,13 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                 if suboptimal {
                     recreate_swapchain = true;
                 }
+                
+                let mut builder = AutoCommandBufferBuilder::primary(
+                    &command_buffer_allocator,
+                    queue.queue_family_index(),
+                    CommandBufferUsage::OneTimeSubmit,
+                )
+                .unwrap();
             }
             _ => {}
         }
