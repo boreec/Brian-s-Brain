@@ -18,7 +18,14 @@ struct Args {
     
     /// The size of the world in which the cells live.    
     #[arg(short, long, default_value_t = 10)]
-    size: u16,     
+    size: u16,
+    
+    /// Run the program with a graphical user interface.
+    /// If vulkan/winit is not supported by the system or if
+    /// you just want, you can also run the program in the terminal
+    /// with the `cli` argument.
+    #[arg(short, long, default_value_t = true)]
+    gui: bool,
 }
 
 fn main() {
