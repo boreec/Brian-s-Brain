@@ -129,7 +129,9 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
             queue_family_index
         )?; // failed to create logical device
             
-    let queue = queues.next().unwrap();
+    let queue = queues
+        .next()
+        .ok_or(Box::<dyn Error>::from("failed to retrieve queue!"))?;
     
     let (mut swapchain, images) = {
         let surface_capabilities = device
@@ -144,7 +146,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
                 .unwrap()[0]
                 .0,  
         );
-        
+            
         let window = surface.object().unwrap().downcast_ref::<Window>().unwrap();
         
         Swapchain::new(
