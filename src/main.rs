@@ -21,16 +21,15 @@ struct Args {
     size: u16,
     
     /// Run the program with a graphical user interface.
-    /// If vulkan/winit is not supported by the system or if
-    /// you just want, you can also run the program in the terminal
-    /// with the `cli` argument.
-    #[arg(short, long, default_value_t = true)]
+    /// This is the default mode if no other viewing modes is selected.
+    /// It can be used alongside with `cli`.
+    #[arg(short, long, action, default_value_t = false)]
     gui: bool,
 
     /// Run the program in the terminal. Note that if the cellular
     /// automaton's environment is too huge, render may not be done
     /// properly. It can be used alongside with `gui` argument.
-    #[arg(short, long, default_value_t = false)]
+    #[arg(short, long, action, default_value_t = false)]
     cli: bool,
 }
 
@@ -39,13 +38,12 @@ fn main() {
     
     let ws = WorldState::new(args.size);
     
-    match init_vulkan() {
-        Ok(_) => {},
-        Err(e) => {
-            println!("Error occured while initializing Vulkan:\n {e}");
-        },
+    if args.gui || (!args.gui && !args.cli){
+        init_vulkan().unwrap();
     }
-   
+    if args.cli {
+        println!("to do");
+    }
 }
 
 
