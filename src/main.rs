@@ -36,6 +36,8 @@ use vulkano::render_pass::RenderPass;
 use vulkano::render_pass::Subpass;
 use vulkano::sync;
 use vulkano::sync::GpuFuture;
+use vulkano::swapchain::AcquireError;
+use vulkano::swapchain::acquire_next_image;
 use vulkano::swapchain::Swapchain;
 use vulkano::swapchain::SwapchainCreationError;
 use vulkano::swapchain::SwapchainCreateInfo;
@@ -344,6 +346,17 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
                     );
                     recreate_swapchain = false;
                 }
+                
+                // Try to acquire image from Swapchain
+                let (image_index, suboptimal, aquire_future) = 
+                    match acquire_next_image(swapchain.clone(), None) {
+                        Ok(r) => r,
+                        Err(AcquireError::OutOfDate) => {
+                            recreate_swapchain = true;
+                            return;
+                        }
+                        Err(e) => panic!("Failed to acquire next image: {:?}", e),
+                    };
             }
             _ => {}
         }
