@@ -41,6 +41,9 @@ use vulkano::swapchain::SwapchainCreateInfo;
 
 use vulkano_win::VkSurfaceBuild;
 
+use winit::event::Event;
+use winit::event::WindowEvent;
+use winit::event_loop::ControlFlow;
 use winit::event_loop::EventLoop;
 use winit::window::Window;
 use winit::window::WindowBuilder;
@@ -298,7 +301,15 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let mut previous_frame_end = Some(sync::now(device.clone()).boxed());
     
     event_loop.run(move |event, _, control_flow| {
-        
+        match event {
+            Event::WindowEvent {
+                event: WindowEvent::CloseRequested,
+                ..
+            } => {
+                *control_flow = ControlFlow::Exit;
+            }
+            _ => {}
+        }
     });
     Ok(())
 }
