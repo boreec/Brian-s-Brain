@@ -52,11 +52,14 @@ use vulkano::swapchain::SwapchainPresentInfo;
 use vulkano_win::VkSurfaceBuild;
 
 use winit::event::Event;
+use winit::event::VirtualKeyCode;
 use winit::event::WindowEvent;
 use winit::event_loop::ControlFlow;
 use winit::event_loop::EventLoop;
 use winit::window::Window;
 use winit::window::WindowBuilder;
+
+use winit_input_helper::WinitInputHelper;
 
 mod world_state;
 
@@ -312,7 +315,13 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let mut recreate_swapchain = false;
     let mut previous_frame_end = Some(sync::now(device.clone()).boxed());
     
+    let mut input = WinitInputHelper::new();
     event_loop.run(move |event, _, control_flow| {
+        if input.update(&event){
+            if input.key_released(VirtualKeyCode::Escape) {
+                *control_flow = ControlFlow::Exit;
+            }
+        }
         match event {
             Event::WindowEvent {
                 event: WindowEvent::CloseRequested,
