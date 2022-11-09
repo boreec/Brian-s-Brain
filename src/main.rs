@@ -11,6 +11,7 @@ use std::sync::Arc;
 use vulkano::VulkanLibrary;
 use vulkano::buffer::BufferUsage;
 use vulkano::buffer::CpuAccessibleBuffer;
+use vulkano::command_buffer::allocator::StandardCommandBufferAllocator;
 use vulkano::device::Device;
 use vulkano::device::DeviceCreateInfo;
 use vulkano::device::DeviceExtensions;
@@ -287,6 +288,9 @@ fn init_vulkan() -> Result<(), Box<dyn Error>>{
     };
 
     let mut framebuffers = window_size_dependent_setup(&images, render_pass.clone(), &mut viewport);    
+    
+    let command_buffer_allocator =
+        StandardCommandBufferAllocator::new(device.clone(), Default::default());
     Ok(())
 }
 
