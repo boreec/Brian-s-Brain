@@ -6,6 +6,9 @@ use clap::Parser;
 /// Module containing vulkan initialization and
 /// window handling.
 mod graphics;
+
+/// Module containing the cellular automaton
+/// (cells, environment, rules, etc.).
 mod world_state;
 
 /// Program to run the Brian's Brain cellular automaton.
