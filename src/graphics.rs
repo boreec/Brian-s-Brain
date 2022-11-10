@@ -50,6 +50,8 @@ use vulkano::swapchain::SwapchainPresentInfo;
 
 use vulkano_win::VkSurfaceBuild;
 
+use winit::dpi::Size;
+use winit::dpi::PhysicalSize;
 use winit::event::Event;
 use winit::event::VirtualKeyCode;
 use winit::event::WindowEvent;
@@ -61,7 +63,7 @@ use winit::window::WindowBuilder;
 use winit_input_helper::WinitInputHelper;
 
 const WINDOW_TITLE: &str = "Brian's Brain, by Cyprien Borée";
-const WINDOW_INNER_SIZE: winit::dpi::Size = winit::dpi::Size::Physical(winit::dpi::PhysicalSize { width: 500, height: 200 });
+const WINDOW_INNER_SIZE: Size = Size::Physical(PhysicalSize { width: 500, height: 200 });
 
 pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
