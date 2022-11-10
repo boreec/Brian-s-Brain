@@ -41,13 +41,10 @@ use vulkano::render_pass::Subpass;
 use vulkano::sync;
 use vulkano::sync::FlushError;
 use vulkano::sync::GpuFuture;
-use vulkano::swapchain::AcquireError;
-use vulkano::swapchain::acquire_next_image;
-use vulkano::swapchain::Surface;
-use vulkano::swapchain::Swapchain;
-use vulkano::swapchain::SwapchainCreationError;
-use vulkano::swapchain::SwapchainCreateInfo;
-use vulkano::swapchain::SwapchainPresentInfo;
+use vulkano::swapchain::{
+    AcquireError, Surface, Swapchain, SwapchainCreationError,
+    SwapchainCreateInfo, SwapchainPresentInfo, acquire_next_image
+};
 
 use vulkano_win::VkSurfaceBuild;
 
