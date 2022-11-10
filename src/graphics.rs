@@ -27,6 +27,8 @@ use vulkano::image::view::ImageView;
 use vulkano::impl_vertex;
 use vulkano::instance::Instance;
 use vulkano::instance::InstanceCreateInfo;
+use vulkano::instance::InstanceCreationError;
+use vulkano::instance::InstanceExtensions;
 use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::GraphicsPipeline;
 use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
@@ -63,14 +65,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
     let required_extensions = vulkano_win::required_extensions(&library);
     
-    let instance = Instance::new(
-        library,
-        InstanceCreateInfo {
-            enabled_extensions: required_extensions,
-            enumerate_portability: true,
-            ..Default::default()        
-        },
-    )?;
+    let instance = create_instance(library.clone(), &required_extensions)?;
 
     let event_loop = EventLoop::new();
     let surface = WindowBuilder::new()
@@ -432,6 +427,21 @@ fn window_size_dependent_setup(
             .unwrap()
         })
     .collect::<Vec<_>>()
+}
+
+fn create_instance(
+    library: Arc<VulkanLibrary>, 
+    required_extensions: &InstanceExtensions
+) -> Result <Arc<Instance>, InstanceCreationError>
+ {    
+    Instance::new(
+        library,
+        InstanceCreateInfo {
+            enabled_extensions: *required_extensions,
+            enumerate_portability: true,
+            ..Default::default()        
+        }
+    )
 }
 
 fn initialize_logical_device(
