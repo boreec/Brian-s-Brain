@@ -60,6 +60,8 @@ use winit::window::WindowBuilder;
 
 use winit_input_helper::WinitInputHelper;
 
+const WINDOW_TITLE: &str = "Brian's Brain, by Cyprien Borée";
+
 pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
     let required_extensions = vulkano_win::required_extensions(&library);
@@ -67,7 +69,9 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let instance = create_instance(library.clone(), &required_extensions)?;
 
     let event_loop = EventLoop::new();
+
     let surface = WindowBuilder::new()
+        .with_title(String::from(WINDOW_TITLE))
         .build_vk_surface(&event_loop, instance.clone())?;
         
     let device_extensions = DeviceExtensions {
