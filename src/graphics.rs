@@ -43,6 +43,7 @@ use vulkano::sync::FlushError;
 use vulkano::sync::GpuFuture;
 use vulkano::swapchain::AcquireError;
 use vulkano::swapchain::acquire_next_image;
+use vulkano::swapchain::Surface;
 use vulkano::swapchain::Swapchain;
 use vulkano::swapchain::SwapchainCreationError;
 use vulkano::swapchain::SwapchainCreateInfo;
@@ -99,38 +100,13 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
         ..DeviceExtensions::empty()    
     };
 
-    let (physical_device, queue_family_index) = instance
-        .enumerate_physical_devices()
-        .unwrap()
-        .filter(|p| {
-            p.supported_extensions().contains(&device_extensions)
-        })
-        // for a device supporting vulkan check if it contains
-        // queues that support graphical operations.
-        .filter_map(|p| {
-            p.queue_family_properties()
-                .iter()
-                .enumerate()
-                .position(|(i, q)|{
-                    q.queue_flags.graphics == true
-                        && p.surface_support(i as u32, &surface)
-                            .unwrap_or(false)
-                })
-                .map(|i| (p, i as u32))
-        })
-        // Set a priority for each physical device according to its type.
-        .min_by_key(|(p, _)| {
-            match p.properties().device_type {
-                PhysicalDeviceType::DiscreteGpu => 0,
-                PhysicalDeviceType::IntegratedGpu => 1,
-                PhysicalDeviceType::VirtualGpu => 2,
-                PhysicalDeviceType::Cpu => 3,
-                PhysicalDeviceType::Other => 4,
-                _ => 5,
-            }
-        })
-        .expect("No suitable physical device found");
-    
+    let (physical_device, queue_family_index) = 
+        select_device_and_queue(
+            instance.clone(), 
+            &device_extensions,
+            surface.clone(),
+        )?;
+        
     println!(
         "using device: {} (type: {:?})",
         physical_device.properties().device_name,
@@ -481,4 +457,43 @@ fn initialize_logical_device(
             }],
             ..Default::default()
         },)
+}
+
+fn select_device_and_queue(
+    instance: Arc<Instance>,
+    device_extensions: &DeviceExtensions,
+    surface: Arc<Surface>
+) -> Result<(Arc<PhysicalDevice>, u32), Box<dyn Error>>
+{
+    instance
+    .enumerate_physical_devices()
+    .unwrap()
+    .filter(|p| {
+        p.supported_extensions().contains(&device_extensions)
+    })
+    // for a device supporting vulkan check if it contains
+    // queues that support graphical operations.
+    .filter_map(|p| {
+        p.queue_family_properties()
+            .iter()
+            .enumerate()
+            .position(|(i, q)|{
+                q.queue_flags.graphics == true
+                    && p.surface_support(i as u32, &surface)
+                        .unwrap_or(false)
+            })
+            .map(|i| (p, i as u32))
+    })
+    // Set a priority for each physical device according to its type.
+    .min_by_key(|(p, _)| {
+        match p.properties().device_type {
+            PhysicalDeviceType::DiscreteGpu => 0,
+            PhysicalDeviceType::IntegratedGpu => 1,
+            PhysicalDeviceType::VirtualGpu => 2,
+            PhysicalDeviceType::Cpu => 3,
+            PhysicalDeviceType::Other => 4,
+            _ => 5,
+        }
+    })
+   .ok_or(Box::<dyn Error>::from("No suitable device!"))
 }
