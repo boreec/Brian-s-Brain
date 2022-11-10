@@ -5,9 +5,9 @@ use std::error::Error;
 use std::sync::Arc;
 
 use vulkano::VulkanLibrary;
-use vulkano::buffer::BufferUsage;
-use vulkano::buffer::CpuAccessibleBuffer;
-use vulkano::buffer::TypedBufferAccess;
+use vulkano::buffer::{
+    BufferUsage, CpuAccessibleBuffer, TypedBufferAccess
+};
 use vulkano::command_buffer::allocator::StandardCommandBufferAllocator;
 use vulkano::command_buffer::AutoCommandBufferBuilder;
 use vulkano::command_buffer::CommandBufferUsage;
