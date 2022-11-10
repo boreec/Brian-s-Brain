@@ -5,7 +5,6 @@ edition = "2021"
 authors = ["Cyprien Borée <cyprien.boree@tuta.io>"]
 
 [dependencies]
-array2d = "0.2.1"
 bytemuck = "1.12.3"
 clap = { version = "4.0.22", features = ["derive"] }
 vulkano = "0.32.1"

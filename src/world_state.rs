@@ -1,5 +1,3 @@
-use array2d::Array2D;
-
 /// The three states a cell can take.
 /// Each cell is considered to have 8 neighbors (the Moore neighborhood).
 /// In each time step, a cell turns on if it was **Off** but had exactly two neighbors
@@ -16,7 +14,7 @@ enum CellState {
 /// This struct represents the entire Cellular Automaton. 
 pub struct WorldState {
     size: u16,
-    world: Array2D<CellState>,
+    world: Vec<CellState>,
 }
 
 impl WorldState {
@@ -27,7 +25,7 @@ impl WorldState {
     pub fn new(size: u16) -> WorldState {
         WorldState {
             size,
-            world: Array2D::filled_with(CellState::Off, size as usize, size as usize),
+            world: vec![CellState::Off; size.pow(2).into()],
         }
     }
     
@@ -38,13 +36,18 @@ impl WorldState {
     /// between 0 and 1. Any value outside that range will cause a panic.
     pub fn randomize(&mut self, on_rate: f64) {
         if on_rate == 1.0 {
-            self.world = Array2D::filled_with(CellState::On, self.size as usize, self.size as usize);
+            self.world = vec![CellState::On; self.size.pow(2).into()];
             return;
-        }        
+        }
+                
     }
     
     fn get_cell(&self, row: u16, col: u16) -> Option<&CellState> {
-        self.world.get(row as usize, col as usize)
+        if row * col + col > self.size.pow(2) {
+            return None;
+        }
+        
+        Some(&self.world[(row * col + col) as usize])
     }
     
     fn get_size(&self) -> u16 {
@@ -78,4 +81,6 @@ mod tests {
             }
         }
     }
+    
+    
 }
