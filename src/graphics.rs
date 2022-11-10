@@ -64,7 +64,14 @@ use winit_input_helper::WinitInputHelper;
 
 /// The window's title.
 const WINDOW_TITLE: &str = "Brian's Brain, by Cyprien Borée";
-const WINDOW_INNER_SIZE: Size = Size::Physical(PhysicalSize { width: 500, height: 200 });
+
+/// The size of the content inside the window.
+const WINDOW_INNER_SIZE: Size = Size::Physical(
+    PhysicalSize { 
+        width: 500, 
+        height: 200 
+    }
+);
 
 pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
