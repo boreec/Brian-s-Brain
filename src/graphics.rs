@@ -205,8 +205,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
         },
         false,
         vertices
-    )
-    .unwrap();
+    )?; // AllocationCreationError is thrown.
     
     mod vs {
         vulkano_shaders::shader! {
