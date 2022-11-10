@@ -361,7 +361,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
                 builder
                     .begin_render_pass(
                         RenderPassBeginInfo {
-                            clear_values: vec![Some([0.0,0.0,1.0,1.0].into())],
+                            clear_values: vec![Some([0.,0.,0.,1.].into())],
                             ..RenderPassBeginInfo::framebuffer(
                                 framebuffers[image_index as usize].clone(),
                             )
