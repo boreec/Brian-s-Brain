@@ -13,14 +13,13 @@ use vulkano::command_buffer::AutoCommandBufferBuilder;
 use vulkano::command_buffer::CommandBufferUsage;
 use vulkano::command_buffer::RenderPassBeginInfo;
 use vulkano::command_buffer::SubpassContents;
-use vulkano::device::Device;
-use vulkano::device::DeviceCreateInfo;
-use vulkano::device::DeviceCreationError;
-use vulkano::device::DeviceExtensions;
-use vulkano::device::physical::PhysicalDevice;
-use vulkano::device::physical::PhysicalDeviceType;
-use vulkano::device::Queue;
-use vulkano::device::QueueCreateInfo;
+use vulkano::device::{
+    Device, DeviceCreateInfo, DeviceCreationError, DeviceExtensions,
+    physical::{
+        PhysicalDevice, PhysicalDeviceType
+    },
+    Queue, QueueCreateInfo
+};
 use vulkano::image::ImageAccess;
 use vulkano::image::ImageUsage;
 use vulkano::image::SwapchainImage;
