@@ -423,6 +423,9 @@ fn window_size_dependent_setup(
     .collect::<Vec<_>>()
 }
 
+/// Create a vulkan instance based on the installed 
+/// vulkan library and required extensions for the application.
+/// An error can be returned if the creation failed for any reason.
 fn create_instance(
     library: Arc<VulkanLibrary>, 
     required_extensions: &InstanceExtensions
