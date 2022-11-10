@@ -146,7 +146,11 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
                 .0,  
         );
             
-        let window = surface.object().unwrap().downcast_ref::<Window>().unwrap();
+        let window = surface
+            .object()
+            .unwrap()
+            .downcast_ref::<Window>()
+            .ok_or(Box::<dyn Error>::from("failed to create window from surface!"))?;
         
         Swapchain::new(
             device.clone(),
