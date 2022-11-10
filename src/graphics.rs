@@ -65,11 +65,17 @@ use winit_input_helper::WinitInputHelper;
 /// The window's title.
 const WINDOW_TITLE: &str = "Brian's Brain, by Cyprien Borée";
 
+/// The window's width (in pixels).
+const WINDOW_WIDTH: u32 = 800;
+
+/// The window's height (in pixels).
+const WINDOW_HEIGHT: u32 = 600;
+
 /// The size of the content inside the window.
 const WINDOW_INNER_SIZE: Size = Size::Physical(
     PhysicalSize { 
-        width: 500, 
-        height: 200 
+        width: WINDOW_WIDTH, 
+        height: WINDOW_HEIGHT, 
     }
 );
 
