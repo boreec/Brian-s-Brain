@@ -160,8 +160,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
                     .unwrap(),
                 ..Default::default()  
             },
-        )
-        .unwrap()
+        )? // SwapchainCreationError
     };
     
     let memory_allocator = StandardMemoryAllocator::new_default(device.clone());
