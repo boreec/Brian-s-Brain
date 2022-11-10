@@ -61,6 +61,7 @@ use winit::window::WindowBuilder;
 use winit_input_helper::WinitInputHelper;
 
 const WINDOW_TITLE: &str = "Brian's Brain, by Cyprien Borée";
+const WINDOW_INNER_SIZE: winit::dpi::Size = winit::dpi::Size::Physical(winit::dpi::PhysicalSize { width: 500, height: 200 });
 
 pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
@@ -72,8 +73,8 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
 
     let surface = WindowBuilder::new()
         .with_resizable(false)
-        .with_min_inner_size(winit::dpi::Size::Physical(winit::dpi::PhysicalSize{width: 500, height: 200}))
-        .with_max_inner_size(winit::dpi::Size::Physical(winit::dpi::PhysicalSize{width: 500, height: 200}))
+        .with_min_inner_size(WINDOW_INNER_SIZE)
+        .with_max_inner_size(WINDOW_INNER_SIZE)
         .with_title(String::from(WINDOW_TITLE))
         .build_vk_surface(&event_loop, instance.clone())?;
         
