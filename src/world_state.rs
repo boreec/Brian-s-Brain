@@ -78,5 +78,12 @@ mod tests {
         assert_eq!(ws.count(CellState::Off), 10_000);    
     }
     
+    #[test]
+    fn test_randomize_for_rate_equal_one_point_five() {
+        let mut ws = WorldState::new(100);
+        ws.randomize(0.5);
+        assert_eq!(ws.count(CellState::Off), 5_000);    
+        assert_eq!(ws.count(CellState::On), 5_000);    
+    }
     
 }
