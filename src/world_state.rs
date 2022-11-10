@@ -1,3 +1,6 @@
+use rand::prelude::SliceRandom;
+use rand::thread_rng;
+
 /// The three states a cell can take.
 /// Each cell is considered to have 8 neighbors (the Moore neighborhood).
 /// In each time step, a cell turns on if it was **Off** but had exactly two neighbors
@@ -39,7 +42,13 @@ impl WorldState {
             self.world = vec![CellState::On; self.size.pow(2).into()];
             return;
         }
-                
+        let mut cell_indexes: Vec<_> = (0..self.size).collect();
+        cell_indexes.shuffle(&mut thread_rng());
+        
+        let cell_amount = (on_rate * (self.world.len() as f64)) as usize;
+        for i in 0..cell_amount {
+            self.world[i] = CellState::On;
+        }
     }
     
     fn get_cell(&self, row: u16, col: u16) -> Option<&CellState> {
@@ -84,6 +93,5 @@ mod tests {
         ws.randomize(0.5);
         assert_eq!(ws.count(CellState::Off), 5_000);    
         assert_eq!(ws.count(CellState::On), 5_000);    
-    }
-    
+    }    
 }
