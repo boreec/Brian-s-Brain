@@ -25,10 +25,9 @@ use vulkano::image::ImageUsage;
 use vulkano::image::SwapchainImage;
 use vulkano::image::view::ImageView;
 use vulkano::impl_vertex;
-use vulkano::instance::Instance;
-use vulkano::instance::InstanceCreateInfo;
-use vulkano::instance::InstanceCreationError;
-use vulkano::instance::InstanceExtensions;
+use vulkano::instance::{
+    Instance, InstanceCreateInfo,InstanceCreationError, InstanceExtensions
+};
 use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::GraphicsPipeline;
 use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
