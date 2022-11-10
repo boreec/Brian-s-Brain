@@ -4,7 +4,7 @@
 /// that were on. All cells that were **On** go into the **Dying** state, which is not
 /// counted as an **On** cell in the neighbor count, and prevents any cell from being
 /// born there. Cells that were in the **Dying** state go into the **Off** state. 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 enum CellState {
     On,
     Dying,
@@ -53,6 +53,10 @@ impl WorldState {
     fn get_size(&self) -> u16 {
         self.size
     }
+    
+    fn count(&self, state: CellState) -> usize {
+        self.world.iter().filter(|&c| *c == state).count()
+    }
 }
 
 #[cfg(test)]
@@ -62,24 +66,16 @@ mod tests {
     
     #[test]
     fn test_randomize_for_rate_equal_one() {
-        let mut ws = WorldState::new(1000);
+        let mut ws = WorldState::new(100);
         ws.randomize(1.0);
-        for i in 0..1000 {
-            for j in 0..1000 {
-                assert_eq!(ws.get_cell(i,j), Some(&CellState::On));
-            }
-        }
+        assert_eq!(ws.count(CellState::On), 10_000);
     }
 
     #[test]
     fn test_randomize_for_rate_equal_zero() {
-        let mut ws = WorldState::new(1000);
+        let mut ws = WorldState::new(100);
         ws.randomize(0.0);
-        for i in 0..1000 {
-            for j in 0..1000 {
-                assert_eq!(ws.get_cell(i,j), Some(&CellState::Off));
-            }
-        }
+        assert_eq!(ws.count(CellState::Off), 10_000);    
     }
     
     
