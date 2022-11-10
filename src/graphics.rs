@@ -252,8 +252,8 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
         }
     }
     
-    let vs = vs::load(device.clone()).unwrap();
-    let fs = fs::load(device.clone()).unwrap();
+    let vs = vs::load(device.clone())?;
+    let fs = fs::load(device.clone())?;
     
     // Build a RenderPass object to represent the steps in which
     // the rendering is done. It contains three parts: 
