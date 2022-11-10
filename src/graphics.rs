@@ -68,8 +68,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
 
     let event_loop = EventLoop::new();
     let surface = WindowBuilder::new()
-        .build_vk_surface(&event_loop, instance.clone())
-        .unwrap();
+        .build_vk_surface(&event_loop, instance.clone())?;
         
     let device_extensions = DeviceExtensions {
         khr_swapchain: true,
