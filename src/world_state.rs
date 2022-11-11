@@ -115,13 +115,13 @@ impl WorldState {
             }
         }
         // update the world
-        for (i, item) in new_dyings.iter().enumerate() { 
+        for (_, item) in new_dyings.iter().enumerate() { 
             self.world[*item] = CellState::Dying; 
         }
-        for (i, item) in new_off.iter().enumerate() { 
+        for (_, item) in new_off.iter().enumerate() { 
             self.world[*item] = CellState::Off; 
         }
-        for (i, item) in new_on.iter().enumerate() { 
+        for (_, item) in new_on.iter().enumerate() { 
             self.world[*item] = CellState::On; 
         }
     }
