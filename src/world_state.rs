@@ -83,8 +83,15 @@ impl WorldState {
         // right edge 
         else if x == self.size - 1 {
             return vec![(x, y - 1), (x, y + 1), (x - 1, y - 1), (x - 1, y), (x - 1, y + 1)];
+        } 
+        // general case
+        else {
+            return vec![
+                (x - 1, y - 1), (x, y - 1), (x + 1, y - 1),
+                (x - 1, y), (x + 1, y),
+                (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)
+            ];
         }
-        return vec![];
     }   
     
     fn get_cell(&self, row: u16, col: u16) -> Option<&CellState> {
@@ -217,5 +224,20 @@ mod tests {
         assert!(neighbours.contains(&(8,6)));
         assert!(neighbours.contains(&(8,4)));
         assert!(neighbours.contains(&(8,5)));
+    }    
+
+    #[test]
+    fn test_get_neighbours_general_case() {
+        let ws = WorldState::new(10);
+        let neighbours = ws.get_neighbours(5, 5);
+        assert_eq!(neighbours.len(), 8);
+        assert!(neighbours.contains(&(4,4)));
+        assert!(neighbours.contains(&(5,4)));
+        assert!(neighbours.contains(&(6,4)));
+        assert!(neighbours.contains(&(4,5)));
+        assert!(neighbours.contains(&(6,5)));
+        assert!(neighbours.contains(&(4,6)));
+        assert!(neighbours.contains(&(5,6)));
+        assert!(neighbours.contains(&(6,6)));
     }    
 }
