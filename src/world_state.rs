@@ -73,8 +73,8 @@ impl WorldState {
         let cell_amount = (on_rate * (self.world.len() as f64)) as usize;
         
         cell_indexes.shuffle(&mut thread_rng());
-        for i in 0..cell_amount {
-            self.world[cell_indexes[i] as usize] = CellState::On;
+        for item in cell_indexes.iter_mut().take(cell_amount) {
+            self.world[*item as usize] = CellState::On;
         }
     }
 
