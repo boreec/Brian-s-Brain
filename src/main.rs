@@ -19,6 +19,10 @@ mod world_state;
 #[command(author, version, about, long_about = None)]
 struct Args {
     
+    #[arg(short, long, default_value_t = 50)]
+    /// The number of time between two frames (in milliseconds).
+    framerate: u16,
+    
     /// The number of iterations to run for.
     #[arg(short, long, default_value_t = 100)]
     iter: u16,
