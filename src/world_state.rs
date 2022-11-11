@@ -1,6 +1,8 @@
 use rand::prelude::SliceRandom;
 use rand::thread_rng;
 
+use std::fmt;
+
 /// The three states a cell can take.
 /// Each cell is considered to have 8 neighbors (the Moore neighborhood).
 /// In each time step, a cell turns on if it was **Off** but had exactly two neighbors
@@ -14,10 +16,35 @@ enum CellState {
     Off,
 }
 
+impl fmt::Display for CellState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let c = match self {
+            CellState::On => { 'O' }
+            CellState::Off => {'.'}
+            CellState::Dying => {'X'}
+        };
+        
+        write!(f, "{c}")
+    }    
+}
+
 /// This struct represents the entire Cellular Automaton. 
 pub struct WorldState {
     size: u16,
     world: Vec<CellState>,
+}
+
+impl fmt::Display for WorldState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut s = String::from("");
+        for (i, item) in self.world.iter().enumerate(){
+            s.push_str("{item}");
+            if i % self.size as usize == 0 {
+                s.push('\n');
+            }
+        }
+        write!(f, "{s}")
+    }    
 }
 
 impl WorldState {
