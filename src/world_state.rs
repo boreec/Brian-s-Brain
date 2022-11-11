@@ -66,7 +66,7 @@ impl WorldState {
     /// between 0 and 1. Any value outside that range will cause a panic.
     pub fn randomize(&mut self, on_rate: f64) {
         if on_rate == 1.0 {
-            self.world = vec![CellState::On; self.world.len().into()];
+            self.world = vec![CellState::On; self.world.len()];
             return;
         }
         let mut cell_indexes: Vec<_> = (0..self.world.len()).collect();
