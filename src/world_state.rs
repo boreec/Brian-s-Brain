@@ -51,7 +51,12 @@ impl WorldState {
         }
     }
 
-    fn next(&mut self) {
+    /// Advance the world to its next state.
+    /// A cell **On** is turned into **Dying**.
+    /// A cell **Dying** is turned into **Off**.
+    /// A cell **Off** is turned into **On** if two of its neighbours
+    /// are also in **On** State.
+    pub fn next(&mut self) {
         let mut new_dyings: Vec<usize> = vec![];
         let mut new_on: Vec<usize> = vec![];
         let mut new_off: Vec<usize> = vec![];
