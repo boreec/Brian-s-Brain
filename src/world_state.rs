@@ -246,5 +246,12 @@ mod tests {
         assert!(neighbours.contains(&(4,6)));
         assert!(neighbours.contains(&(5,6)));
         assert!(neighbours.contains(&(6,6)));
-    }    
+    }
+    
+    #[test]
+    fn test_get_neighbours_outside(){
+        let ws = WorldState::new(10);
+        let neighbours = ws.get_neighbours(10,10);
+        assert_eq!(neighbours.len(), 0);
+    }
 }
