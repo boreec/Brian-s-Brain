@@ -57,7 +57,7 @@ fn main() {
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
         println!("{}", ws);
         thread::sleep(Duration::from_millis(args.framerate));
-        for i in 0..args.iter {
+        for _ in 0..args.iter {
             ws.next();
             print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
             println!("{}", ws);
