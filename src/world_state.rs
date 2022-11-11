@@ -55,6 +55,10 @@ impl WorldState {
         // top left corner
         if x == 0 && y == 0 {
             return vec![(x, y + 1), (x + 1, y + 1), (x + 1, y)];
+        } 
+        // top right corner
+        else if x == self.size - 1 && y == 0 {
+            return vec![(x - 1, y), (x - 1, y + 1), (x, y + 1)];
         }
         return vec![];
     }   
@@ -111,5 +115,15 @@ mod tests {
         assert!(neighbours.contains(&(0,1)));
         assert!(neighbours.contains(&(1,1)));
         assert!(neighbours.contains(&(1,0)));
+    }    
+
+    #[test]
+    fn test_get_neighbours_top_right_corner() {
+        let ws = WorldState::new(10);
+        let neighbours = ws.get_neighbours(9, 0);
+        assert_eq!(neighbours.len(), 3);
+        assert!(neighbours.contains(&(8,0)));
+        assert!(neighbours.contains(&(8,1)));
+        assert!(neighbours.contains(&(9,1)));
     }    
 }
