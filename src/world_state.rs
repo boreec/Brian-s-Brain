@@ -52,8 +52,15 @@ impl WorldState {
     }
 
     fn get_neighbours(&self, x: u16, y: u16) -> Vec<(u16, u16)> {
+        if x > 0 && x < self.size - 1 && y > 0 && y < self.size - 1 {
+            return vec![
+                (x - 1, y - 1), (x, y - 1), (x + 1, y - 1),
+                (x - 1, y), (x + 1, y),
+                (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)
+            ];
+        }
         // top left corner
-        if x == 0 && y == 0 {
+        else if x == 0 && y == 0 {
             return vec![(x, y + 1), (x + 1, y + 1), (x + 1, y)];
         } 
         // top right corner
@@ -83,14 +90,10 @@ impl WorldState {
         // right edge 
         else if x == self.size - 1 {
             return vec![(x, y - 1), (x, y + 1), (x - 1, y - 1), (x - 1, y), (x - 1, y + 1)];
-        } 
-        // general case
+        }         
+        // to do: Error: x or y is out of range!
         else {
-            return vec![
-                (x - 1, y - 1), (x, y - 1), (x + 1, y - 1),
-                (x - 1, y), (x + 1, y),
-                (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)
-            ];
+            return vec![];
         }
     }   
     
