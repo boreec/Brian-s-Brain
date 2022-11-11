@@ -52,6 +52,7 @@ impl WorldState {
     }
 
     fn get_neighbours(&self, x: u16, y: u16) -> Vec<(u16, u16)> {
+        // top left corner
         if x == 0 && y == 0 {
             return vec![(x, y + 1), (x + 1, y + 1), (x + 1, y)];
         }
@@ -103,7 +104,7 @@ mod tests {
     }
     
     #[test]
-    fn test_get_neighbours_for_left_corner() {
+    fn test_get_neighbours_top_left_corner() {
         let ws = WorldState::new(10);
         let neighbours = ws.get_neighbours(0, 0);
         assert_eq!(neighbours.len(), 3);
