@@ -57,47 +57,47 @@ impl WorldState {
     fn get_neighbours(&self, x: u16, y: u16) -> Vec<(u16, u16)> {
         // general case: 8 neighbours
         if x > 0 && x < self.size - 1 && y > 0 && y < self.size - 1 {
-            return vec![
+            vec![
                 (x - 1, y - 1), (x, y - 1), (x + 1, y - 1),
                 (x - 1, y), (x + 1, y),
                 (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)
-            ];
+            ]
         }
         // top left corner: 3 neighbours
         else if x == 0 && y == 0 {
-            return vec![(x, y + 1), (x + 1, y + 1), (x + 1, y)];
+            vec![(x, y + 1), (x + 1, y + 1), (x + 1, y)]
         } 
         // top right corner: 3 neighbours
         else if x == self.size - 1 && y == 0 {
-            return vec![(x - 1, y), (x - 1, y + 1), (x, y + 1)];
+            vec![(x - 1, y), (x - 1, y + 1), (x, y + 1)]
         }
         // bottom left corner: 3 neighbours
         else if x == 0 && y == self.size - 1 {
-            return vec![(x, y - 1), (x + 1, y - 1), (x + 1, y)];
+            vec![(x, y - 1), (x + 1, y - 1), (x + 1, y)]
         }
         // bottom right corner: 3 neighbours
         else if x == self.size - 1 && y == self.size - 1 {
-            return vec![(x - 1, y), (x - 1, y - 1), (x, y - 1)];
+            vec![(x - 1, y), (x - 1, y - 1), (x, y - 1)]
         }
         // top edge: 5 neighbours
         else if y == 0 {
-            return vec![(x - 1, y), (x + 1, y), (x - 1, y + 1), (x, y + 1), (x + 1, y +1)];
+            vec![(x - 1, y), (x + 1, y), (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)]
         }
         // bottom edge: 5 neighbours
         else if y == self.size - 1 {
-            return vec![(x - 1, y), (x + 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)];
+            vec![(x - 1, y), (x + 1, y), (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)]
         }
         // left edge: 5 neighbours
         else if x == 0 {
-            return vec![(x, y - 1), (x, y + 1), (x + 1, y - 1), (x + 1, y), (x + 1, y + 1)];
+            vec![(x, y - 1), (x, y + 1), (x + 1, y - 1), (x + 1, y), (x + 1, y + 1)]
         }
         // right edge: 5 neighbours
         else if x == self.size - 1 {
-            return vec![(x, y - 1), (x, y + 1), (x - 1, y - 1), (x - 1, y), (x - 1, y + 1)];
+            vec![(x, y - 1), (x, y + 1), (x - 1, y - 1), (x - 1, y), (x - 1, y + 1)]
         }         
         // outside the range of the world: 0 neighbours
         else {
-            return vec![];
+            vec![]
         }
     }   
     
