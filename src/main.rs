@@ -21,7 +21,7 @@ struct Args {
     
     #[arg(short, long, default_value_t = 50)]
     /// The number of time between two frames (in milliseconds).
-    framerate: u16,
+    framerate: u64,
     
     /// The number of iterations to run for.
     #[arg(short, long, default_value_t = 100)]
@@ -56,12 +56,12 @@ fn main() {
         ws.randomize(0.5);
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
         println!("{}", ws);
-        thread::sleep(Duration::from_millis(1000));
+        thread::sleep(Duration::from_millis(args.framerate));
         for i in 0..args.iter {
             ws.next();
             print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
             println!("{}", ws);
-            thread::sleep(Duration::from_millis(1000));
+            thread::sleep(Duration::from_millis(args.framerate));
         }
     }
 }
