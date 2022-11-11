@@ -38,8 +38,8 @@ impl fmt::Display for WorldState {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut s = String::from("");
         for (i, item) in self.world.iter().enumerate(){
-            s.push_str("{item}");
-            if i % self.size as usize == 0 {
+            s.push_str(&item.to_string());
+            if (i + 1) % self.size as usize == 0 {
                 s.push('\n');
             }
         }
