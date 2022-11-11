@@ -51,6 +51,36 @@ impl WorldState {
         }
     }
 
+    fn next(&mut self) {
+        let mut new_dyings: Vec<usize> = vec![];
+        let mut new_on: Vec<usize> = vec![];
+        let mut new_off: Vec<usize> = vec![];
+        
+        for (i, item) in self.world.iter().enumerate() {
+            match item {
+                CellState::On => { new_dyings.push(i); }
+                CellState::Off => {
+                    let neighbours = self.get_neighbours(
+                            (i % self.size as usize) as u16,
+                            (i / self.size as usize) as u16
+                    );
+                    let alives = self.world
+                        .iter()
+                        .filter(|&c| *c == CellState::On)
+                        .count();
+                    if alives == 2 {
+                        new_on.push(i);
+                    }
+                }
+                CellState::Dying => { new_off.push(i); }
+            }
+        }
+        // update the world
+        for i in new_dyings { self.world[i] = CellState::Dying; }
+        for i in new_off { self.world[i] = CellState::Off; }
+        for i in new_on { self.world[i] = CellState::On; }
+    }
+    
     /// Return the neighbours of a cell designated by the coordinates `x` and `y`.
     /// The neighbours are returned as a vector of tuples (x_i, y_i). If the given
     /// coordinates are outside the world, the returned vector is empty.
