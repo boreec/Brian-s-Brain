@@ -3,6 +3,9 @@ use crate::world_state::WorldState;
 
 use clap::Parser;
 
+use std::time::Duration;
+use std::thread;
+
 /// Module containing vulkan initialization and
 /// window handling.
 mod graphics;
@@ -40,13 +43,22 @@ struct Args {
 fn main() {
     let args = Args::parse();
     
-    let ws = WorldState::new(args.size);
+    let mut ws = WorldState::new(args.size);
     
     if args.gui || (!args.gui && !args.cli){
         init_vulkan().unwrap();
     }
     if args.cli {
-        println!("to do");
+        ws.randomize(0.5);
+        print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+        println!("{}", ws);
+        thread::sleep(Duration::from_millis(1000));
+        for i in 0..args.iter {
+            ws.next();
+            print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
+            println!("{}", ws);
+            thread::sleep(Duration::from_millis(1000));
+        }
     }
 }
 
