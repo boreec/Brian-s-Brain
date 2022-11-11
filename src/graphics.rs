@@ -81,7 +81,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
     let required_extensions = vulkano_win::required_extensions(&library);
     
-    let instance = create_instance(library.clone(), &required_extensions)?;
+    let instance = create_instance(library, &required_extensions)?;
 
     let event_loop = EventLoop::new();
 
