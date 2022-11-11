@@ -84,9 +84,9 @@ impl WorldState {
     /// A cell **Off** is turned into **On** if two of its neighbours
     /// are also in **On** State.
     pub fn next(&mut self) {
-        let mut new_dyings: Vec<usize> = vec![];
-        let mut new_on: Vec<usize> = vec![];
-        let mut new_off: Vec<usize> = vec![];
+        let mut new_dyings: Vec<_> = vec![];
+        let mut new_on: Vec<_> = vec![];
+        let mut new_off: Vec<_> = vec![];
         
         for (i, item) in self.world.iter().enumerate() {
             match item {
@@ -96,10 +96,17 @@ impl WorldState {
                             (i % self.size as usize) as u16,
                             (i / self.size as usize) as u16
                     );
-                    let alives = self.world
-                        .iter()
-                        .filter(|&c| *c == CellState::On)
-                        .count();
+                    let alives = {
+                        let mut sum = 0;
+                        for tuples in neighbours {
+                            let cell_idx = (tuples.0 * self.size + tuples.1) as usize;
+                            let cell_state = &self.world[cell_idx];
+                            if *cell_state == CellState::On {
+                                sum += 1;
+                            } 
+                        }
+                        sum
+                    };
                     if alives == 2 {
                         new_on.push(i);
                     }
@@ -108,9 +115,15 @@ impl WorldState {
             }
         }
         // update the world
-        for i in new_dyings { self.world[i] = CellState::Dying; }
-        for i in new_off { self.world[i] = CellState::Off; }
-        for i in new_on { self.world[i] = CellState::On; }
+        for (i, item) in new_dyings.iter().enumerate() { 
+            self.world[*item] = CellState::Dying; 
+        }
+        for (i, item) in new_off.iter().enumerate() { 
+            self.world[*item] = CellState::Off; 
+        }
+        for (i, item) in new_on.iter().enumerate() { 
+            self.world[*item] = CellState::On; 
+        }
     }
     
     /// Return the neighbours of a cell designated by the coordinates `x` and `y`.
