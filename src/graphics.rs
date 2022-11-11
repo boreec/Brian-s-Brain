@@ -99,7 +99,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
 
     let (physical_device, queue_family_index) = 
         select_device_and_queue(
-            instance.clone(), 
+            instance, 
             &device_extensions,
             surface.clone(),
         )?;
