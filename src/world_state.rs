@@ -387,4 +387,15 @@ mod tests {
         assert_eq!(on_cells.len(), 0);
         assert_eq!(dying_cells.len(), 0);
     }
+    
+    #[test]
+    fn test_as_vertices_good_coordinates_for_one_cell_world() {
+        let mut ws = WorldState::new(1);
+        ws.randomize(1.0);
+        let (on_cells,_) = ws.as_vertices();
+        assert!(on_cells.contains( &Vertex { position: [-1.0, -1.0] }));
+        assert!(on_cells.contains( &Vertex { position: [-1.0, 1.0] }));
+        assert!(on_cells.contains( &Vertex { position: [1.0, -1.0] }));
+        assert!(on_cells.contains( &Vertex { position: [1.0, 1.0] }));
+    }
 }
