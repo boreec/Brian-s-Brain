@@ -504,5 +504,5 @@ fn select_device_and_queue(
             _ => 5,
         }
     })
-   .ok_or(Box::<dyn Error>::from("No suitable device!"))
+   .ok_or_else(|| Box::<dyn Error>::from("No suitable device!"))
 }
