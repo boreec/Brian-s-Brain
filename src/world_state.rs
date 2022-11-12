@@ -198,8 +198,33 @@ impl WorldState {
     /// `CellState::Dying` values as two distinct vectors.
     /// Moreover, each cell is represented by 6 vertices (3 triangles).
     fn as_vertices(&self) -> (Vec<Vertex>, Vec<Vertex>) {
-        // to do return 6 vertices for each cell    
-        (vec![], vec![])
+        let mut on_cells: Vec<Vertex> = vec![];
+        let mut dying_cells: Vec<Vertex> = vec![];
+        
+        let cell_w = 2.0 / self.size as f32;
+        let cell_h = 2.0 / self.size as f32;
+        for (i, item) in self.world.iter().enumerate() {
+            let cell_x = (i % self.size as usize) as f32;
+            let cell_y = (i / self.size as usize) as f32;
+            // left triangle : ◺
+            let v1 = Vertex { position: [-1.0 + cell_w * cell_x, -1.0 + cell_h * cell_y] };
+            let v2 = Vertex { position: [-1.0 + cell_w * cell_x, -1.0 + cell_h * (cell_y + 1.0)] };
+            let v3 = Vertex { position: [-1.0 + cell_w * (cell_x + 1.0), -1.0 + cell_h * (cell_y + 1.0)]};
+            // right triangle : ◹ 
+            let v4 = v1;
+            let v5 = Vertex { position: [-1.0 + cell_w * (cell_x + 1.0), -1.0 + cell_h * cell_y] };
+            let v6 = v3;
+            match item {
+                CellState::On => {
+                    on_cells.extend_from_slice(&[v1, v2, v3, v4, v5, v6]);
+                }
+                CellState::Dying => {
+                    dying_cells.extend_from_slice(&[v1, v2, v3, v4, v5, v6]);
+                }
+                CellState::Off => {}
+            }
+        }    
+        (on_cells, dying_cells)
     }
 }
 
