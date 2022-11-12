@@ -79,7 +79,7 @@ const WINDOW_INNER_SIZE: Size = Size::Physical(
 
 // use repr(C) to prevent rust to mess with the data.
 #[repr(C)]
-#[derive(Clone, Copy, Debug, Default, Zeroable, Pod)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Zeroable, Pod)]
 pub struct Vertex {
     pub position: [f32; 2],
 }
