@@ -364,4 +364,27 @@ mod tests {
         let neighbours = ws.get_neighbours(10,10);
         assert_eq!(neighbours.len(), 0);
     }
+    
+    #[test]
+    fn test_as_vertices_for_one_cell_world(){
+        // declare a world with just one cell.
+        let mut ws = WorldState::new(1);
+        // set the cell to On state.
+        ws.randomize(1.0);
+        let (on_cells, dying_cells) = ws.as_vertices();
+        assert_eq!(on_cells.len(), 6);
+        assert_eq!(dying_cells.len(), 0);
+        
+        // advance to next iteration: the cell must be in dying mode.
+        ws.next();
+        let (on_cells, dying_cells) = ws.as_vertices();
+        assert_eq!(on_cells.len(), 0);
+        assert_eq!(dying_cells.len(), 6);
+        
+        // advance to next iteration: the cell must be dead.
+        ws.next();
+        let (on_cells, dying_cells) = ws.as_vertices();
+        assert_eq!(on_cells.len(), 0);
+        assert_eq!(dying_cells.len(), 0);
+    }
 }
