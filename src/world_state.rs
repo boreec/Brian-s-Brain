@@ -1,3 +1,5 @@
+use crate::graphics::Vertex;
+
 use rand::prelude::SliceRandom;
 use rand::thread_rng;
 
@@ -190,6 +192,14 @@ impl WorldState {
     
     fn count(&self, state: CellState) -> usize {
         self.world.iter().filter(|&c| *c == state).count()
+    }
+    
+    /// Return vertices of the cells with `CellState::On` and 
+    /// `CellState::Dying` values as two distinct vectors.
+    /// Moreover, each cell is represented by 6 vertices (3 triangles).
+    fn as_vertices(&self) -> (Vec<Vertex>, Vec<Vertex>) {
+        // to do return 6 vertices for each cell    
+        (vec![], vec![])
     }
 }
 
