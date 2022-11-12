@@ -48,12 +48,12 @@ fn main() {
     let args = Args::parse();
     
     let mut ws = WorldState::new(args.size);
-    
+    ws.randomize(0.5);
+
     if args.gui || (!args.gui && !args.cli){
         init_vulkan(&mut ws).unwrap();
     }
     if args.cli {
-        ws.randomize(0.5);
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
         println!("{}", ws);
         thread::sleep(Duration::from_millis(args.framerate));

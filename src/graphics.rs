@@ -174,30 +174,7 @@ pub fn init_vulkan(ws: &mut WorldState) -> Result<(), Box<dyn Error>>{
     };
     
     let memory_allocator = StandardMemoryAllocator::new_default(device.clone());
-    
-
-    // Vertices representing a triangle.
-    let vertices = [
-        Vertex {
-            position: [-0.5, -0.5],
-        },
-        Vertex {
-            position: [-0.5, 0.5],
-        },
-        Vertex {
-            position: [0.5, 0.5],
-        },
-        Vertex {
-            position: [0.5, -0.5],
-        },
-        Vertex {
-            position: [-0.5, -0.5],
-        },
-        Vertex {
-            position: [0.5, 0.5],
-        },
-    ];
-    
+        
     let vertex_buffer = CpuAccessibleBuffer::from_iter(
         &memory_allocator,
         BufferUsage {
@@ -205,7 +182,7 @@ pub fn init_vulkan(ws: &mut WorldState) -> Result<(), Box<dyn Error>>{
             ..Default::default()
         },
         false,
-        vertices
+        ws.as_vertices().0,
     )?; // AllocationCreationError is thrown.
     
     mod vs {
