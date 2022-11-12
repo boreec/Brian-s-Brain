@@ -50,7 +50,7 @@ fn main() {
     let mut ws = WorldState::new(args.size);
     
     if args.gui || (!args.gui && !args.cli){
-        init_vulkan().unwrap();
+        init_vulkan(&mut ws).unwrap();
     }
     if args.cli {
         ws.randomize(0.5);

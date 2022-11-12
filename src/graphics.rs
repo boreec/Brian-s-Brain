@@ -1,6 +1,8 @@
 use bytemuck::Pod;
 use bytemuck::Zeroable;
 
+use crate::WorldState;
+
 use std::error::Error;
 use std::sync::Arc;
 
@@ -85,7 +87,7 @@ pub struct Vertex {
 }
 impl_vertex!(Vertex, position);
 
-pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
+pub fn init_vulkan(ws: &mut WorldState) -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
     let required_extensions = vulkano_win::required_extensions(&library);
     
