@@ -128,7 +128,7 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
             
     let queue = queues
         .next()
-        .ok_or(Box::<dyn Error>::from("failed to retrieve queue!"))?;
+        .ok_or_else(|| Box::<dyn Error>::from("failed to retrieve queue!"))?;
     
     let (mut swapchain, images) = {
         let surface_capabilities = device
