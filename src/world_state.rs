@@ -397,5 +397,11 @@ mod tests {
         assert!(on_cells.contains( &Vertex { position: [-1.0, 1.0] }));
         assert!(on_cells.contains( &Vertex { position: [1.0, -1.0] }));
         assert!(on_cells.contains( &Vertex { position: [1.0, 1.0] }));
+        ws.next();
+        let(_, dying_cells) = ws.as_vertices();
+        assert!(dying_cells.contains( &Vertex { position: [-1.0, -1.0] }));
+        assert!(dying_cells.contains( &Vertex { position: [-1.0, 1.0] }));
+        assert!(dying_cells.contains( &Vertex { position: [1.0, -1.0] }));
+        assert!(dying_cells.contains( &Vertex { position: [1.0, 1.0] }));
     }
 }
