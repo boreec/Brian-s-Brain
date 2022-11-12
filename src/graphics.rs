@@ -77,6 +77,14 @@ const WINDOW_INNER_SIZE: Size = Size::Physical(
     }
 );
 
+// use repr(C) to prevent rust to mess with the data.
+#[repr(C)]
+#[derive(Clone, Copy, Debug, Default, Zeroable, Pod)]
+pub struct Vertex {
+    pub position: [f32; 2],
+}
+impl_vertex!(Vertex, position);
+
 pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
     let required_extensions = vulkano_win::required_extensions(&library);
@@ -165,21 +173,23 @@ pub fn init_vulkan() -> Result<(), Box<dyn Error>>{
     
     let memory_allocator = StandardMemoryAllocator::new_default(device.clone());
     
-    // use repr(C) to prevent rust to mess with the data.
-    #[repr(C)]
-    #[derive(Clone, Copy, Debug, Default, Zeroable, Pod)]
-    struct Vertex {
-        position: [f32; 2],
-    }
-    impl_vertex!(Vertex, position);
 
     // Vertices representing a triangle.
     let vertices = [
         Vertex {
-            position: [0., -0.5],
+            position: [-0.5, -0.5],
         },
         Vertex {
             position: [-0.5, 0.5],
+        },
+        Vertex {
+            position: [0.5, 0.5],
+        },
+        Vertex {
+            position: [0.5, -0.5],
+        },
+        Vertex {
+            position: [-0.5, -0.5],
         },
         Vertex {
             position: [0.5, 0.5],
