@@ -478,7 +478,7 @@ fn select_device_and_queue(
     .enumerate_physical_devices()
     .unwrap()
     .filter(|p| {
-        p.supported_extensions().contains(&device_extensions)
+        p.supported_extensions().contains(device_extensions)
     })
     // for a device supporting vulkan check if it contains
     // queues that support graphical operations.
