@@ -197,7 +197,7 @@ impl WorldState {
     /// Return vertices of the cells with `CellState::On` and 
     /// `CellState::Dying` values as two distinct vectors.
     /// Moreover, each cell is represented by 6 vertices (3 triangles).
-    fn as_vertices(&self) -> (Vec<Vertex>, Vec<Vertex>) {
+    pub fn as_vertices(&self) -> (Vec<Vertex>, Vec<Vertex>) {
         let mut on_cells: Vec<Vertex> = vec![];
         let mut dying_cells: Vec<Vertex> = vec![];
         
