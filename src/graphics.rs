@@ -2,6 +2,7 @@ use bytemuck::{Pod, Zeroable};
 
 use crate::WorldState;
 use crate::graphics::vulkan::*;
+use crate::graphics::window::*;
 
 use std::error::Error;
 use std::sync::Arc;
@@ -23,7 +24,6 @@ use vulkano::sync::{FlushError, GpuFuture, self};
 
 use vulkano_win::VkSurfaceBuild;
 
-use winit::dpi::{Size, PhysicalSize};
 use winit::event::{Event, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::{Window, WindowBuilder};
@@ -31,23 +31,7 @@ use winit::window::{Window, WindowBuilder};
 use winit_input_helper::WinitInputHelper;
 
 mod vulkan;
-
-/// The window's title.
-const WINDOW_TITLE: &str = "Brian's Brain, by Cyprien Borée";
-
-/// The window's width (in pixels).
-const WINDOW_WIDTH: u32 = 800;
-
-/// The window's height (in pixels).
-const WINDOW_HEIGHT: u32 = 600;
-
-/// The size of the content inside the window.
-const WINDOW_INNER_SIZE: Size = Size::Physical(
-    PhysicalSize { 
-        width: WINDOW_WIDTH, 
-        height: WINDOW_HEIGHT, 
-    }
-);
+mod window;
 
 // use repr(C) to prevent rust to mess with the data.
 #[repr(C)]
