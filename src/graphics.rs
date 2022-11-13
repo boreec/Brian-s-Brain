@@ -173,9 +173,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     }
     
     let vs = load_vertex_shader(device.clone())?;
-    //let fs = load_fragment_shader(device.clone());
-    //let vs = vs::load(device.clone())?;
-    let fs = fs::load(device.clone())?;
+    let fs = load_fragment_shader(device.clone())?;
     
     // Build a RenderPass object to represent the steps in which
     // the rendering is done. It contains three parts: 
@@ -466,8 +464,8 @@ fn load_vertex_shader(device: Arc<Device>)
     vs::load(device.clone())
 }
 
-/*
-fn load_fragment_shader(device: Arc<Device>){
+fn load_fragment_shader(device: Arc<Device>)
+-> Result<Arc<ShaderModule>, ShaderCreationError> {
     mod fs {
         vulkano_shaders::shader! {
             ty: "fragment",
@@ -481,6 +479,5 @@ fn load_fragment_shader(device: Arc<Device>){
             }"
         }
     }
-    return fs::load(device.clone());
+    fs::load(device.clone())
 }
-*/
