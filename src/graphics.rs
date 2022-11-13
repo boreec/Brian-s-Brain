@@ -147,10 +147,8 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         )? // SwapchainCreationError
     };
     
-    let memory_allocator = StandardMemoryAllocator::new_default(device.clone());
-        
     let vertex_buffer = CpuAccessibleBuffer::from_iter(
-        &memory_allocator,
+        &StandardMemoryAllocator::new_default(device.clone()),
         BufferUsage {
             vertex_buffer: true,
             ..Default::default()
