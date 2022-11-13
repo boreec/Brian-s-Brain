@@ -1,5 +1,4 @@
-use bytemuck::Pod;
-use bytemuck::Zeroable;
+use bytemuck::{Pod, Zeroable};
 
 use crate::WorldState;
 
@@ -7,58 +6,33 @@ use std::error::Error;
 use std::sync::Arc;
 
 use vulkano::VulkanLibrary;
-use vulkano::buffer::{
-    BufferUsage, CpuAccessibleBuffer, TypedBufferAccess
-};
-use vulkano::command_buffer::allocator::StandardCommandBufferAllocator;
-use vulkano::command_buffer::AutoCommandBufferBuilder;
-use vulkano::command_buffer::CommandBufferUsage;
-use vulkano::command_buffer::RenderPassBeginInfo;
-use vulkano::command_buffer::SubpassContents;
+use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer, TypedBufferAccess};
+use vulkano::command_buffer::{
+    allocator::StandardCommandBufferAllocator, AutoCommandBufferBuilder, 
+    CommandBufferUsage, RenderPassBeginInfo, SubpassContents};
 use vulkano::device::{
     Device, DeviceCreateInfo, DeviceCreationError, DeviceExtensions,
-    physical::{
-        PhysicalDevice, PhysicalDeviceType
-    },
+    physical::{PhysicalDevice, PhysicalDeviceType},
     Queue, QueueCreateInfo
 };
-use vulkano::image::ImageAccess;
-use vulkano::image::ImageUsage;
-use vulkano::image::SwapchainImage;
-use vulkano::image::view::ImageView;
+use vulkano::image::{ImageAccess, ImageUsage, SwapchainImage, view::ImageView};
 use vulkano::impl_vertex;
-use vulkano::instance::{
-    Instance, InstanceCreateInfo,InstanceCreationError, InstanceExtensions
-};
+use vulkano::instance::{Instance, InstanceCreateInfo, 
+    InstanceCreationError, InstanceExtensions};
 use vulkano::memory::allocator::StandardMemoryAllocator;
-use vulkano::pipeline::GraphicsPipeline;
-use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
-use vulkano::pipeline::graphics::vertex_input::BuffersDefinition;
-use vulkano::pipeline::graphics::viewport::Viewport;
-use vulkano::pipeline::graphics::viewport::ViewportState;
-use vulkano::render_pass::Framebuffer;
-use vulkano::render_pass::FramebufferCreateInfo;
-use vulkano::render_pass::RenderPass;
-use vulkano::render_pass::Subpass;
-use vulkano::sync;
-use vulkano::sync::FlushError;
-use vulkano::sync::GpuFuture;
-use vulkano::swapchain::{
-    AcquireError, Surface, Swapchain, SwapchainCreationError,
-    SwapchainCreateInfo, SwapchainPresentInfo, acquire_next_image
-};
+use vulkano::pipeline::{GraphicsPipeline, graphics::{input_assembly::InputAssemblyState,
+    vertex_input::BuffersDefinition, viewport::{Viewport, ViewportState}}};
+use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, Subpass};
+use vulkano::sync::{self, FlushError, GpuFuture};
+use vulkano::swapchain::{AcquireError, Surface, Swapchain, SwapchainCreationError,
+    SwapchainCreateInfo, SwapchainPresentInfo, acquire_next_image};
 
 use vulkano_win::VkSurfaceBuild;
 
-use winit::dpi::Size;
-use winit::dpi::PhysicalSize;
-use winit::event::Event;
-use winit::event::VirtualKeyCode;
-use winit::event::WindowEvent;
-use winit::event_loop::ControlFlow;
-use winit::event_loop::EventLoop;
-use winit::window::Window;
-use winit::window::WindowBuilder;
+use winit::dpi::{Size, PhysicalSize};
+use winit::event::{Event, VirtualKeyCode, WindowEvent};
+use winit::event_loop::{ControlFlow, EventLoop};
+use winit::window::{Window, WindowBuilder};
 
 use winit_input_helper::WinitInputHelper;
 
