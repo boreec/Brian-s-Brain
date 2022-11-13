@@ -23,6 +23,7 @@ use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::{GraphicsPipeline, graphics::{input_assembly::InputAssemblyState,
     vertex_input::BuffersDefinition, viewport::{Viewport, ViewportState}}};
 use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, Subpass};
+use vulkano::shader::{ShaderCreationError, ShaderModule};
 use vulkano::sync::{self, FlushError, GpuFuture};
 use vulkano::swapchain::{AcquireError, Surface, Swapchain, SwapchainCreationError,
     SwapchainCreateInfo, SwapchainPresentInfo, acquire_next_image};
@@ -157,20 +158,6 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         ws.as_vertices().0,
     )?; // AllocationCreationError is thrown.
     
-    mod vs {
-        vulkano_shaders::shader! {
-            ty: "vertex",
-            src: 
-            "#version 450
-
-            layout(location = 0) in vec2 position;
-
-            void main(){
-                gl_Position = vec4(position, 0.0, 1.0);
-            }"
-        }
-    }    
-    
     mod fs {
         vulkano_shaders::shader! {
             ty: "fragment",
@@ -185,7 +172,9 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         }
     }
     
-    let vs = vs::load(device.clone())?;
+    let vs = load_vertex_shader(device.clone())?;
+    //let fs = load_fragment_shader(device.clone());
+    //let vs = vs::load(device.clone())?;
     let fs = fs::load(device.clone())?;
     
     // Build a RenderPass object to represent the steps in which
@@ -222,12 +211,13 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         .build(device.clone())
         .unwrap();
     
+    
     let mut viewport = Viewport {
         origin: [0.0, 0.0],
         dimensions: [0.0, 0.0],
         depth_range: 0.0..1.0,
     };
-
+    
     let mut framebuffers = window_size_dependent_setup(&images, render_pass.clone(), &mut viewport);    
     
     let command_buffer_allocator =
@@ -457,3 +447,40 @@ fn select_device_and_queue(
     })
    .ok_or_else(|| Box::<dyn Error>::from("No suitable device!"))
 }
+
+fn load_vertex_shader(device: Arc<Device>)
+-> Result<Arc<ShaderModule>, ShaderCreationError> {
+    mod vs {
+        vulkano_shaders::shader! {
+            ty: "vertex",
+            src: 
+            "#version 450
+
+            layout(location = 0) in vec2 position;
+
+            void main(){
+                gl_Position = vec4(position, 0.0, 1.0);
+            }"
+        }
+    }
+    vs::load(device.clone())
+}
+
+/*
+fn load_fragment_shader(device: Arc<Device>){
+    mod fs {
+        vulkano_shaders::shader! {
+            ty: "fragment",
+            src:
+            "#version 450
+
+            layout(location = 0) out vec4 f_color;
+            
+            void main(){
+                f_color = vec4(1.0, 0.0, 0.0, 1.0);
+            }"
+        }
+    }
+    return fs::load(device.clone());
+}
+*/
