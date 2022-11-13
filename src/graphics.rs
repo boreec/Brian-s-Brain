@@ -12,14 +12,14 @@ use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer, TypedBufferAccess};
 use vulkano::command_buffer::{allocator::StandardCommandBufferAllocator, 
     AutoCommandBufferBuilder, CommandBufferUsage, RenderPassBeginInfo, SubpassContents};
 use vulkano::device::DeviceExtensions;
-use vulkano::image::{ImageAccess, ImageUsage, SwapchainImage, view::ImageView};
+use vulkano::image::{ImageAccess, SwapchainImage, view::ImageView};
 use vulkano::impl_vertex;
 use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::{GraphicsPipeline, graphics::{input_assembly::InputAssemblyState, 
     viewport::{Viewport, ViewportState}, vertex_input::BuffersDefinition}};
 use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, Subpass};
-use vulkano::swapchain::{acquire_next_image, AcquireError, Swapchain, 
-    SwapchainCreateInfo, SwapchainCreationError, SwapchainPresentInfo};
+use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo,
+     SwapchainCreationError, SwapchainPresentInfo};
 use vulkano::sync::{FlushError, GpuFuture, self};
 
 use vulkano_win::VkSurfaceBuild;
@@ -86,46 +86,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         .next()
         .ok_or_else(|| Box::<dyn Error>::from("failed to retrieve queue!"))?;
     
-    let (mut swapchain, images) = {
-        let surface_capabilities = device
-            .physical_device()
-            .surface_capabilities(&surface, Default::default())
-            .unwrap();
-        
-        let image_format = Some(
-            device
-                .physical_device()
-                .surface_formats(&surface, Default::default())
-                .unwrap()[0]
-                .0,  
-        );
-            
-        let window = surface
-            .object()
-            .unwrap()
-            .downcast_ref::<Window>()
-            .ok_or_else(|| Box::<dyn Error>::from("failed to create window from surface!"))?;
-        
-        Swapchain::new(
-            device.clone(),
-            surface.clone(),
-            SwapchainCreateInfo {
-                min_image_count: surface_capabilities.min_image_count,
-                image_format,
-                image_extent: window.inner_size().into(),
-                image_usage: ImageUsage {
-                    color_attachment: true,
-                    ..Default::default()
-                },
-                composite_alpha: surface_capabilities
-                    .supported_composite_alpha
-                    .iter()
-                    .next()
-                    .unwrap(),
-                ..Default::default()  
-            },
-        )? // SwapchainCreationError
-    };
+    let (mut swapchain, images) = create_swapchain_and_images(device.clone(), surface.clone())?;
     
     let vertex_buffer = CpuAccessibleBuffer::from_iter(
         &StandardMemoryAllocator::new_default(device.clone()),

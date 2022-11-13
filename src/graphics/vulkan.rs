@@ -6,10 +6,13 @@ use vulkano::device::{Device, DeviceCreateInfo, DeviceCreationError, DeviceExten
     physical::{PhysicalDevice, PhysicalDeviceType}, Queue, QueueCreateInfo};
 use vulkano::instance::{Instance, InstanceCreateInfo, 
     InstanceCreationError, InstanceExtensions};
+use vulkano::image::{ImageUsage, SwapchainImage};
 use vulkano::pipeline::graphics::viewport::Viewport;
 use vulkano::render_pass::{RenderPass, RenderPassCreationError};
 use vulkano::shader::{ShaderCreationError, ShaderModule};
-use vulkano::swapchain::{Surface, Swapchain};
+use vulkano::swapchain::{Surface, Swapchain, SwapchainCreateInfo};
+
+use winit::window::Window;
 
 /// Create a vulkan instance based on the installed 
 /// vulkan library and required extensions for the application.
@@ -105,6 +108,48 @@ pub fn create_render_pass(device: Arc<Device>, swapchain: Arc<Swapchain>)
     )
 }
 
+pub fn create_swapchain_and_images(device: Arc<Device>, surface: Arc<Surface>)
+-> Result<(Arc<Swapchain>,Vec<Arc<SwapchainImage>>), Box::<dyn Error>>
+{
+    let surface_capabilities = device
+        .physical_device()
+        .surface_capabilities(&surface, Default::default())
+        .unwrap();
+        
+    let image_format = Some(
+        device
+            .physical_device()
+            .surface_formats(&surface, Default::default())
+            .unwrap()[0]
+            .0,  
+    );
+            
+    let window = surface
+        .object()
+        .unwrap()
+        .downcast_ref::<Window>()
+        .ok_or_else(|| Box::<dyn Error>::from("failed to create window from surface!"))?;
+        
+    Ok(Swapchain::new(
+        device.clone(),
+        surface.clone(),
+        SwapchainCreateInfo {
+            min_image_count: surface_capabilities.min_image_count,
+            image_format,
+            image_extent: window.inner_size().into(),
+            image_usage: ImageUsage {
+                color_attachment: true,
+                ..Default::default()
+            },
+            composite_alpha: surface_capabilities
+                .supported_composite_alpha
+                .iter()
+                .next()
+                .unwrap(),
+            ..Default::default()  
+        },
+    )?)
+}
 pub fn load_vertex_shader(device: Arc<Device>)
 -> Result<Arc<ShaderModule>, ShaderCreationError> {
     mod vs {
