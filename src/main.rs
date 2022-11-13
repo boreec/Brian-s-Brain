@@ -64,14 +64,18 @@ fn main() {
     }
     
     if args.cli {
+        run_cli(&mut ws, args.iter, args.framerate);
+    }
+}
+
+fn run_cli(ws: &mut WorldState, iteration: u16, framerate: u64){
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
         println!("{}", ws);
-        thread::sleep(Duration::from_millis(args.framerate));
-        for _ in 0..args.iter {
+        thread::sleep(Duration::from_millis(framerate));
+        for _ in 0..iteration {
             ws.next();
             print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
             println!("{}", ws);
-            thread::sleep(Duration::from_millis(args.framerate));
+            thread::sleep(Duration::from_millis(framerate));
         }
-    }
 }
