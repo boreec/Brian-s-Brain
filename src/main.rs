@@ -1,4 +1,4 @@
-use crate::graphics::init_vulkan;
+use crate::graphics::run_gui;
 use crate::world_state::WorldState;
 
 use clap::Parser;
@@ -51,7 +51,7 @@ fn main() {
     ws.randomize(0.5);
 
     if args.gui || (!args.gui && !args.cli){
-        match init_vulkan(&mut ws, args.framerate) {
+        match run_gui(&mut ws, args.framerate) {
             Ok(()) => {}
             Err(e) => {
                 panic!(
@@ -62,6 +62,7 @@ fn main() {
             }
         }
     }
+    
     if args.cli {
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
         println!("{}", ws);
@@ -74,5 +75,3 @@ fn main() {
         }
     }
 }
-
-
