@@ -22,7 +22,8 @@ use vulkano::instance::{Instance, InstanceCreateInfo,
 use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::{GraphicsPipeline, graphics::{input_assembly::InputAssemblyState,
     vertex_input::BuffersDefinition, viewport::{Viewport, ViewportState}}};
-use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, Subpass};
+use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, 
+    RenderPassCreationError, Subpass};
 use vulkano::shader::{ShaderCreationError, ShaderModule};
 use vulkano::sync::{self, FlushError, GpuFuture};
 use vulkano::swapchain::{AcquireError, Surface, Swapchain, SwapchainCreationError,
@@ -158,20 +159,6 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         ws.as_vertices().0,
     )?; // AllocationCreationError is thrown.
     
-    mod fs {
-        vulkano_shaders::shader! {
-            ty: "fragment",
-            src:
-            "#version 450
-
-            layout(location = 0) out vec4 f_color;
-            
-            void main(){
-                f_color = vec4(1.0, 0.0, 0.0, 1.0);
-            }"
-        }
-    }
-    
     let vs = load_vertex_shader(device.clone())?;
     let fs = load_fragment_shader(device.clone())?;
     
@@ -180,22 +167,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     // 1 - List of attachments (image views)
     // 2 - Subpasses
     // 3 - Dependencies
-    let render_pass = vulkano::single_pass_renderpass!(
-        device.clone(),
-        attachments: {
-            color: {
-                load: Clear,
-                store: Store,
-                format: swapchain.image_format(),
-                samples: 1,
-            }
-        },
-        pass : {
-            color: [color],
-            depth_stencil: {}
-        }
-    )
-    .unwrap();
+    let render_pass = create_render_pass(device.clone(), swapchain.clone())?;
     
     // Create a GraphicsPipeline object to define how the
     // implementation should perform a draw operation.
@@ -444,6 +416,26 @@ fn select_device_and_queue(
         }
     })
    .ok_or_else(|| Box::<dyn Error>::from("No suitable device!"))
+}
+
+fn create_render_pass(device: Arc<Device>, swapchain: Arc<Swapchain>)
+ -> Result<Arc<RenderPass>, RenderPassCreationError>
+{
+    vulkano::single_pass_renderpass!(
+        device.clone(),
+        attachments: {
+            color: {
+            load: Clear,
+            store: Store,
+            format: swapchain.image_format(),
+            samples: 1,
+            }
+        },
+        pass : {
+            color: [color],
+            depth_stencil: {}
+        }
+    )
 }
 
 fn load_vertex_shader(device: Arc<Device>)
