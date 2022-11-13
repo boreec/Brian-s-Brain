@@ -181,12 +181,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         .build(device.clone())
         .unwrap();
     
-    
-    let mut viewport = Viewport {
-        origin: [0.0, 0.0],
-        dimensions: [0.0, 0.0],
-        depth_range: 0.0..1.0,
-    };
+    let mut viewport = create_viewport(); 
     
     let mut framebuffers = window_size_dependent_setup(&images, render_pass.clone(), &mut viewport);    
     
@@ -472,4 +467,12 @@ fn load_fragment_shader(device: Arc<Device>)
         }
     }
     fs::load(device.clone())
+}
+
+fn create_viewport() -> Viewport {
+    Viewport {
+        origin: [0.0, 0.0],
+        dimensions: [0.0, 0.0],
+        depth_range: 0.0..1.0,
+    }
 }
