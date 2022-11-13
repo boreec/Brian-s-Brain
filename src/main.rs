@@ -51,7 +51,16 @@ fn main() {
     ws.randomize(0.5);
 
     if args.gui || (!args.gui && !args.cli){
-        init_vulkan(&mut ws).unwrap();
+        match init_vulkan(&mut ws) {
+            Ok(()) => {}
+            Err(e) => {
+                panic!(
+                    "Can't run the program with a graphical
+                    interface because of the following error.
+                    Try to run it in the terminal with --cli.
+                    \n{}", e);
+            }
+        }
     }
     if args.cli {
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
