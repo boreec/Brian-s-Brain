@@ -51,7 +51,7 @@ fn main() {
     ws.randomize(0.5);
 
     if args.gui || (!args.gui && !args.cli){
-        match init_vulkan(&mut ws) {
+        match init_vulkan(&mut ws, args.framerate) {
             Ok(()) => {}
             Err(e) => {
                 panic!(
