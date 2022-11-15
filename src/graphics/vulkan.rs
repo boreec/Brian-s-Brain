@@ -128,13 +128,13 @@ pub fn create_swapchain_and_images(device: &Arc<Device>, surface: &Arc<Surface>)
 {
     let surface_capabilities = device
         .physical_device()
-        .surface_capabilities(&surface, Default::default())
+        .surface_capabilities(surface, Default::default())
         .unwrap();
         
     let image_format = Some(
         device
             .physical_device()
-            .surface_formats(&surface, Default::default())
+            .surface_formats(surface, Default::default())
             .unwrap()[0]
             .0,  
     );
