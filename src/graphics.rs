@@ -63,9 +63,9 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
 
     let (physical_device, queue_family_index) = 
         select_physical_device(
-            instance, 
+            &instance, 
+            &surface,
             &device_extensions,
-            surface.clone(),
         )?;
         
     println!(

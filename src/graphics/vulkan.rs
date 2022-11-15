@@ -50,9 +50,9 @@ pub fn initialize_logical_device(
 }
 
 pub fn select_physical_device(
-    instance: Arc<Instance>,
-    device_extensions: &DeviceExtensions,
-    surface: Arc<Surface>
+    instance: &Arc<Instance>,
+    surface: &Arc<Surface>,
+    device_extensions: &DeviceExtensions
 ) -> Result<(Arc<PhysicalDevice>, u32), Box<dyn Error>>
 {
     instance
