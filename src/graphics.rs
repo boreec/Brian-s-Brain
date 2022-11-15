@@ -62,7 +62,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     };
 
     let (physical_device, queue_family_index) = 
-        select_device_and_queue(
+        select_physical_device(
             instance, 
             &device_extensions,
             surface.clone(),

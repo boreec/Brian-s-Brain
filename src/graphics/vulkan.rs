@@ -49,7 +49,7 @@ pub fn initialize_logical_device(
         },)
 }
 
-pub fn select_device_and_queue(
+pub fn select_physical_device(
     instance: Arc<Instance>,
     device_extensions: &DeviceExtensions,
     surface: Arc<Surface>
