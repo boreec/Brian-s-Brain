@@ -47,12 +47,12 @@ pub fn create_instance(
 }
 
 pub fn initialize_logical_device(
-    physical_device: Arc<PhysicalDevice>,
+    physical_device: &Arc<PhysicalDevice>,
     device_extensions: &DeviceExtensions,
     queue_family_index: u32,
 ) -> Result<(Arc<Device>, impl ExactSizeIterator<Item = Arc<Queue>>), DeviceCreationError> {
         Device::new(
-        physical_device,
+        physical_device.clone(),
         DeviceCreateInfo {
             enabled_extensions: *device_extensions,
             queue_create_infos: vec![QueueCreateInfo {
