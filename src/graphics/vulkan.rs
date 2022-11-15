@@ -46,7 +46,7 @@ pub fn create_instance(
     )
 }
 
-pub fn initialize_logical_device(
+pub fn create_logical_device(
     physical_device: &Arc<PhysicalDevice>,
     device_extensions: &DeviceExtensions,
     queue_family_index: u32,

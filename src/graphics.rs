@@ -47,7 +47,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     
     // Create logical device
     let (device, mut queues) = 
-        initialize_logical_device(&physical_device, &device_extensions, queue_family_index)?;
+        create_logical_device(&physical_device, &device_extensions, queue_family_index)?;
             
     let queue = queues
         .next()
