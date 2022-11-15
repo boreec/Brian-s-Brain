@@ -106,7 +106,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     // 1 - List of attachments (image views)
     // 2 - Subpasses
     // 3 - Dependencies
-    let render_pass = create_render_pass(device.clone(), swapchain.clone())?;
+    let render_pass = create_render_pass(&device, &swapchain)?;
     
     // Create a GraphicsPipeline object to define how the
     // implementation should perform a draw operation.

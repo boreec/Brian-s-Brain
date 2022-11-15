@@ -88,7 +88,7 @@ pub fn select_physical_device(
    .ok_or_else(|| Box::<dyn Error>::from("No suitable device!"))
 }
 
-pub fn create_render_pass(device: Arc<Device>, swapchain: Arc<Swapchain>)
+pub fn create_render_pass(device: &Arc<Device>, swapchain: &Arc<Swapchain>)
  -> Result<Arc<RenderPass>, RenderPassCreationError>
 {
     vulkano::single_pass_renderpass!(
