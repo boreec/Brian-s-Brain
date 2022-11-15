@@ -86,7 +86,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         .next()
         .ok_or_else(|| Box::<dyn Error>::from("failed to retrieve queue!"))?;
     
-    let (mut swapchain, images) = create_swapchain_and_images(device.clone(), surface.clone())?;
+    let (mut swapchain, images) = create_swapchain_and_images(&device, &surface)?;
     
     let vertex_buffer = CpuAccessibleBuffer::from_iter(
         &StandardMemoryAllocator::new_default(device.clone()),

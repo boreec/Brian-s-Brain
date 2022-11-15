@@ -106,7 +106,7 @@ pub fn create_render_pass(device: &Arc<Device>, swapchain: &Arc<Swapchain>)
     )
 }
 
-pub fn create_swapchain_and_images(device: Arc<Device>, surface: Arc<Surface>)
+pub fn create_swapchain_and_images(device: &Arc<Device>, surface: &Arc<Surface>)
 -> Result<(Arc<Swapchain>,Vec<Arc<SwapchainImage>>), Box::<dyn Error>>
 {
     let surface_capabilities = device
@@ -129,7 +129,7 @@ pub fn create_swapchain_and_images(device: Arc<Device>, surface: Arc<Surface>)
         .ok_or_else(|| Box::<dyn Error>::from("failed to create window from surface!"))?;
         
     Ok(Swapchain::new(
-        device,
+        device.clone(),
         surface.clone(),
         SwapchainCreateInfo {
             min_image_count: surface_capabilities.min_image_count,
