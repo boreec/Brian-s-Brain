@@ -25,15 +25,18 @@ pub mod vulkan;
 mod window;
 
 pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>>{
+    
     let library = VulkanLibrary::new()?;   
     let required_extensions = vulkano_win::required_extensions(&library);
     
+    // 1. Create an instance of a Vulkan context.
     let instance = create_instance(&library, &required_extensions)?;
 
     let event_loop = EventLoop::new();
 
+    // 2. Create a Surface, a platform-agnostic window's representation.
     let surface = create_surface(&instance, &event_loop)?;
-        
+    
     let device_extensions = create_device_extensions();
 
     let (physical_device, queue_family_index) = 
