@@ -103,6 +103,13 @@ pub fn select_physical_device(
    .ok_or_else(|| Box::<dyn Error>::from("No suitable device!"))
 }
 
+pub fn select_queue(queues: &mut(impl ExactSizeIterator + Iterator<Item = Arc<Queue>>))
+-> Result<Arc<Queue>, Box<dyn Error>> {
+    queues
+        .next()
+        .ok_or_else(|| Box::<dyn Error>::from("failed to retrieve queue!"))
+}
+
 pub fn create_render_pass(device: &Arc<Device>, swapchain: &Arc<Swapchain>)
  -> Result<Arc<RenderPass>, RenderPassCreationError>
 {

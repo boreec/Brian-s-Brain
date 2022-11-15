@@ -55,9 +55,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     let (device, mut queues) = 
         create_logical_device(&physical_device, &device_extensions, queue_family_index)?;
             
-    let queue = queues
-        .next()
-        .ok_or_else(|| Box::<dyn Error>::from("failed to retrieve queue!"))?;
+    let queue = select_queue(&mut queues)?;
     
     let (mut swapchain, images) = create_swapchain_and_images(&device, &surface)?;
     
