@@ -75,8 +75,7 @@ pub fn select_physical_device(
                 q.queue_flags.graphics && p.surface_support(i as u32, surface).unwrap_or(false)
             })
             .map(|i| (p, i as u32))
-    })
-    // Set a priority for each physical device according to its type.
+    }) // set a priority for each device according to its type
     .min_by_key(|(p, _)| {
         match p.properties().device_type {
             PhysicalDeviceType::DiscreteGpu => 0,
