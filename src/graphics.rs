@@ -3,15 +3,11 @@ use crate::graphics::vulkan::*;
 use crate::graphics::window::*;
 
 use std::error::Error;
-use std::sync::Arc;
 
 use vulkano::VulkanLibrary;
 use vulkano::buffer::TypedBufferAccess;
 use vulkano::command_buffer::{allocator::StandardCommandBufferAllocator, 
     AutoCommandBufferBuilder, CommandBufferUsage, RenderPassBeginInfo, SubpassContents};
-use vulkano::image::{ImageAccess, SwapchainImage, view::ImageView};
-use vulkano::pipeline::graphics::viewport::Viewport;
-use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass};
 use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo, SwapchainCreationError, SwapchainPresentInfo};
 use vulkano::sync::{FlushError, GpuFuture, self};
 
@@ -204,29 +200,5 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         }
     });
     Ok(())
-}
-
-fn get_framebuffers(
-    images: &[Arc<SwapchainImage>],
-    render_pass: &Arc<RenderPass>,
-    viewport: &mut Viewport,
-) -> Vec<Arc<Framebuffer>> {
-    let dimensions = images[0].dimensions().width_height();
-    viewport.dimensions = [dimensions[0] as f32, dimensions[1] as f32];
-    
-    images
-        .iter()
-        .map(|image| {
-            let view = ImageView::new_default(image.clone()).unwrap();
-            Framebuffer::new(
-                render_pass.clone(),
-                FramebufferCreateInfo {
-                    attachments: vec![view],
-                    ..Default::default()
-                },
-            )
-            .unwrap()
-        })
-    .collect::<Vec<_>>()
 }
 

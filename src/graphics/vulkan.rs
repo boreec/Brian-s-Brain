@@ -9,7 +9,8 @@ use vulkano::device::{Device, DeviceCreateInfo, DeviceCreationError, DeviceExten
     physical::{PhysicalDevice, PhysicalDeviceType}, Queue, QueueCreateInfo};
 use vulkano::instance::{Instance, InstanceCreateInfo, 
     InstanceCreationError, InstanceExtensions};
-use vulkano::image::{ImageUsage, SwapchainImage};
+use vulkano::image::{ImageAccess, ImageUsage, SwapchainImage};
+use vulkano::image::view::ImageView;
 use vulkano::impl_vertex;
 use vulkano::memory::allocator::{AllocationCreationError, StandardMemoryAllocator};
 use vulkano::pipeline::GraphicsPipeline;
@@ -17,7 +18,8 @@ use vulkano::pipeline::graphics::GraphicsPipelineCreationError;
 use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
 use vulkano::pipeline::graphics::vertex_input::BuffersDefinition;
 use vulkano::pipeline::graphics::viewport::{Viewport, ViewportState};
-use vulkano::render_pass::{RenderPass, RenderPassCreationError, Subpass};
+use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, 
+    RenderPassCreationError, Subpass};
 use vulkano::shader::{ShaderCreationError, ShaderModule};
 use vulkano::swapchain::{Surface, Swapchain, SwapchainCreateInfo};
 
@@ -254,4 +256,28 @@ pub fn create_graphics_pipeline(
         .viewport_state(ViewportState::viewport_dynamic_scissor_irrelevant())
         .fragment_shader(fs.entry_point("main").unwrap(), ())
         .build(device.clone())
+}
+
+pub fn get_framebuffers(
+    images: &[Arc<SwapchainImage>],
+    render_pass: &Arc<RenderPass>,
+    viewport: &mut Viewport,
+) -> Vec<Arc<Framebuffer>> {
+    let dimensions = images[0].dimensions().width_height();
+    viewport.dimensions = [dimensions[0] as f32, dimensions[1] as f32];
+    
+    images
+        .iter()
+        .map(|image| {
+            let view = ImageView::new_default(image.clone()).unwrap();
+            Framebuffer::new(
+                render_pass.clone(),
+                FramebufferCreateInfo {
+                    attachments: vec![view],
+                    ..Default::default()
+                },
+            )
+            .unwrap()
+        })
+    .collect::<Vec<_>>()
 }
