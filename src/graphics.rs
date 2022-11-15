@@ -34,7 +34,8 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
 
     let event_loop = EventLoop::new();
 
-    // 2. Create a Surface, a platform-agnostic window's representation.
+    // 2. Create a Surface, a platform-agnostic representation of the
+    //    location where the image will show up (a window or a monitor).
     let surface = create_surface(&instance, &event_loop)?;
     
     let device_extensions = create_device_extensions();
@@ -58,6 +59,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     // 5. Select a queue in order to submit commands buffer to the device.
     let queue = select_queue(&mut queues)?;
     
+    // 6. Create a swapchain in order to render onto the Surface.
     let (mut swapchain, images) = create_swapchain_and_images(&device, &surface)?;
     
     let vertex_buffer = CpuAccessibleBuffer::from_iter(
