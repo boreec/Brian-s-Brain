@@ -66,6 +66,9 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     //    of the graphics pipeline. 
     let render_pass = create_render_pass(&device, &swapchain)?;
     
+    let mut viewport = create_viewport(); 
+    let mut framebuffers = window_size_dependent_setup(&images, &render_pass, &mut viewport);    
+
     let vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0)?;
     
     let vs = load_vertex_shader(&device)?;
@@ -76,9 +79,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     // implementation should perform a draw operation.
     let pipeline = create_graphics_pipeline(&device, &render_pass, &vs, &fs)?;
     
-    let mut viewport = create_viewport(); 
     
-    let mut framebuffers = window_size_dependent_setup(&images, render_pass.clone(), &mut viewport);    
     
     let command_buffer_allocator =
         StandardCommandBufferAllocator::new(device.clone(), Default::default());
@@ -129,7 +130,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                     swapchain = new_swapchain;
                     framebuffers = window_size_dependent_setup(
                         &new_images,
-                        render_pass.clone(),
+                        &render_pass,
                         &mut viewport
                     );
                     recreate_swapchain = false;
@@ -211,7 +212,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
 
 fn window_size_dependent_setup(
     images: &[Arc<SwapchainImage>],
-    render_pass: Arc<RenderPass>,
+    render_pass: &Arc<RenderPass>,
     viewport: &mut Viewport,
 ) -> Vec<Arc<Framebuffer>> {
     let dimensions = images[0].dimensions().width_height();
