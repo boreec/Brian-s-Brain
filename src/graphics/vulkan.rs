@@ -32,12 +32,12 @@ impl_vertex!(Vertex, position);
 /// vulkan library and required extensions for the application.
 /// An error can be returned if the creation failed for any reason.
 pub fn create_instance(
-    library: Arc<VulkanLibrary>, 
+    library: &Arc<VulkanLibrary>, 
     required_extensions: &InstanceExtensions
 ) -> Result <Arc<Instance>, InstanceCreationError>
  {    
     Instance::new(
-        library,
+        library.clone(),
         InstanceCreateInfo {
             enabled_extensions: *required_extensions,
             enumerate_portability: true,

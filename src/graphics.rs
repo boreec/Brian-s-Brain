@@ -30,7 +30,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     let library = VulkanLibrary::new()?;   
     let required_extensions = vulkano_win::required_extensions(&library);
     
-    let instance = create_instance(library, &required_extensions)?;
+    let instance = create_instance(&library, &required_extensions)?;
 
     let event_loop = EventLoop::new();
 
