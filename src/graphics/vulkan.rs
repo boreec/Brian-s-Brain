@@ -187,6 +187,13 @@ pub fn load_fragment_shader(device: Arc<Device>)
     fs::load(device)
 }
 
+pub fn create_device_extensions() -> DeviceExtensions {
+    DeviceExtensions {
+        khr_swapchain: true,
+        ..DeviceExtensions::empty()
+    }
+}
+
 pub fn create_viewport() -> Viewport {
     Viewport {
         origin: [0.0, 0.0],

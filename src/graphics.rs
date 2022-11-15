@@ -11,7 +11,6 @@ use vulkano::VulkanLibrary;
 use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer, TypedBufferAccess};
 use vulkano::command_buffer::{allocator::StandardCommandBufferAllocator, 
     AutoCommandBufferBuilder, CommandBufferUsage, RenderPassBeginInfo, SubpassContents};
-use vulkano::device::DeviceExtensions;
 use vulkano::image::{ImageAccess, SwapchainImage, view::ImageView};
 use vulkano::impl_vertex;
 use vulkano::memory::allocator::StandardMemoryAllocator;
@@ -56,10 +55,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         .with_title(String::from(WINDOW_TITLE))
         .build_vk_surface(&event_loop, instance.clone())?;
         
-    let device_extensions = DeviceExtensions {
-        khr_swapchain: true,
-        ..DeviceExtensions::empty()    
-    };
+    let device_extensions = create_device_extensions();
 
     let (physical_device, queue_family_index) = 
         select_physical_device(
