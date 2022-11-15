@@ -165,7 +165,7 @@ pub fn load_vertex_shader(device: Arc<Device>)
             }"
         }
     }
-    vs::load(device.clone())
+    vs::load(device)
 }
 
 pub fn load_fragment_shader(device: Arc<Device>)
@@ -183,7 +183,7 @@ pub fn load_fragment_shader(device: Arc<Device>)
             }"
         }
     }
-    fs::load(device.clone())
+    fs::load(device)
 }
 
 pub fn create_viewport() -> Viewport {
