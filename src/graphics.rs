@@ -17,11 +17,9 @@ use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo,
      SwapchainCreationError, SwapchainPresentInfo};
 use vulkano::sync::{FlushError, GpuFuture, self};
 
-use vulkano_win::VkSurfaceBuild;
-
 use winit::event::{Event, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
-use winit::window::{Window, WindowBuilder};
+use winit::window::Window; 
 
 use winit_input_helper::WinitInputHelper;
 
@@ -36,12 +34,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
 
     let event_loop = EventLoop::new();
 
-    let surface = WindowBuilder::new()
-        .with_resizable(false)
-        .with_min_inner_size(WINDOW_INNER_SIZE)
-        .with_max_inner_size(WINDOW_INNER_SIZE)
-        .with_title(String::from(WINDOW_TITLE))
-        .build_vk_surface(&event_loop, instance.clone())?;
+    let surface = create_surface(&instance, &event_loop)?;
         
     let device_extensions = create_device_extensions();
 

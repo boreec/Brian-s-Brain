@@ -1,4 +1,14 @@
+use std::sync::Arc;
+
+use vulkano::instance::Instance;
+use vulkano::swapchain::Surface;
+
+use vulkano_win::CreationError;
+use vulkano_win::VkSurfaceBuild;
+
 use winit::dpi::{Size, PhysicalSize};
+use winit::event_loop::EventLoop;
+use winit::window::WindowBuilder;
 
 /// The window's title.
 pub const WINDOW_TITLE: &str = "Brian's Brain, by Cyprien Borée";
@@ -16,3 +26,14 @@ pub const WINDOW_INNER_SIZE: Size = Size::Physical(
         height: WINDOW_HEIGHT, 
     }
 );
+
+pub fn create_surface(instance: &Arc<Instance>, event_loop: &EventLoop<()>)
+-> Result<Arc<Surface>, CreationError> 
+{
+    WindowBuilder::new()
+        .with_resizable(false)
+        .with_min_inner_size(WINDOW_INNER_SIZE)
+        .with_max_inner_size(WINDOW_INNER_SIZE)
+        .with_title(String::from(WINDOW_TITLE))
+        .build_vk_surface(event_loop, instance.clone())
+}
