@@ -6,11 +6,10 @@ use std::error::Error;
 use std::sync::Arc;
 
 use vulkano::VulkanLibrary;
-use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer, TypedBufferAccess};
+use vulkano::buffer::TypedBufferAccess;
 use vulkano::command_buffer::{allocator::StandardCommandBufferAllocator, 
     AutoCommandBufferBuilder, CommandBufferUsage, RenderPassBeginInfo, SubpassContents};
 use vulkano::image::{ImageAccess, SwapchainImage, view::ImageView};
-use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::graphics::viewport::Viewport;
 use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass};
 use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo, SwapchainCreationError, SwapchainPresentInfo};
