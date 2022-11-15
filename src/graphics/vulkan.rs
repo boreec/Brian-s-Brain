@@ -68,9 +68,7 @@ pub fn select_physical_device(
             .iter()
             .enumerate()
             .position(|(i, q)|{
-                q.queue_flags.graphics == true
-                    && p.surface_support(i as u32, &surface)
-                        .unwrap_or(false)
+                q.queue_flags.graphics && p.surface_support(i as u32, surface).unwrap_or(false)
             })
             .map(|i| (p, i as u32))
     })
