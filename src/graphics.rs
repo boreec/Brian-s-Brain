@@ -13,13 +13,11 @@ use vulkano::image::{ImageAccess, SwapchainImage, view::ImageView};
 use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::pipeline::graphics::viewport::Viewport;
 use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass};
-use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo,
-     SwapchainCreationError, SwapchainPresentInfo};
+use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo, SwapchainCreationError, SwapchainPresentInfo};
 use vulkano::sync::{FlushError, GpuFuture, self};
 
 use winit::event::{Event, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
-use winit::window::Window; 
 
 use winit_input_helper::WinitInputHelper;
 
@@ -112,8 +110,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                 recreate_swapchain = true;
             }
             Event::RedrawEventsCleared => {
-                let window = surface.object().unwrap().downcast_ref::<Window>().unwrap();
-                let dimensions = window.inner_size();
+                let dimensions = get_window_dimensions(&surface);
                 // Don't draw frame if one dimension is equal to 0.
                 if dimensions.width == 0 || dimensions.height == 0 {
                     return;
