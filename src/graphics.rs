@@ -67,15 +67,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     //    of the graphics pipeline. 
     let render_pass = create_render_pass(&device, &swapchain)?;
     
-    let vertex_buffer = CpuAccessibleBuffer::from_iter(
-        &StandardMemoryAllocator::new_default(device.clone()),
-        BufferUsage {
-            vertex_buffer: true,
-            ..Default::default()
-        },
-        false,
-        ws.as_vertices().0,
-    )?; // AllocationCreationError is thrown.
+    let vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0)?;
     
     let vs = load_vertex_shader(&device)?;
     let fs = load_fragment_shader(&device)?;

@@ -4,12 +4,14 @@ use std::error::Error;
 use std::sync::Arc;
 
 use vulkano::VulkanLibrary;
+use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer};
 use vulkano::device::{Device, DeviceCreateInfo, DeviceCreationError, DeviceExtensions, 
     physical::{PhysicalDevice, PhysicalDeviceType}, Queue, QueueCreateInfo};
 use vulkano::instance::{Instance, InstanceCreateInfo, 
     InstanceCreationError, InstanceExtensions};
 use vulkano::image::{ImageUsage, SwapchainImage};
 use vulkano::impl_vertex;
+use vulkano::memory::allocator::{AllocationCreationError, StandardMemoryAllocator};
 use vulkano::pipeline::GraphicsPipeline;
 use vulkano::pipeline::graphics::GraphicsPipelineCreationError;
 use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
@@ -172,6 +174,21 @@ pub fn create_swapchain_and_images(device: &Arc<Device>, surface: &Arc<Surface>)
         },
     )?)
 }
+
+pub fn create_vertex_buffer(device: &Arc<Device>, vertices: Vec<Vertex>)
+-> Result<Arc<CpuAccessibleBuffer<[Vertex]>>, AllocationCreationError>
+{
+    CpuAccessibleBuffer::from_iter(
+        &StandardMemoryAllocator::new_default(device.clone()),
+        BufferUsage {
+            vertex_buffer: true,
+            ..Default::default()
+        },
+        false,
+        vertices
+    )
+}
+
 pub fn load_vertex_shader(device: &Arc<Device>)
 -> Result<Arc<ShaderModule>, ShaderCreationError> {
     mod vs {
