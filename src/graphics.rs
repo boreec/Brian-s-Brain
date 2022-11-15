@@ -39,11 +39,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     let device_extensions = create_device_extensions();
 
     let (physical_device, queue_family_index) = 
-        select_physical_device(
-            &instance, 
-            &surface,
-            &device_extensions,
-        )?;
+        select_physical_device(&instance, &surface, &device_extensions)?;
         
     println!(
         "using device: {} (type: {:?})",
@@ -53,11 +49,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     
     // Create logical device
     let (device, mut queues) = 
-        initialize_logical_device(
-            physical_device, 
-            &device_extensions, 
-            queue_family_index
-        )?; // failed to create logical device
+        initialize_logical_device(physical_device, &device_extensions, queue_family_index)?;
             
     let queue = queues
         .next()
@@ -144,7 +136,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                     framebuffers = window_size_dependent_setup(
                         &new_images,
                         render_pass.clone(),
-                        &mut viewport,
+                        &mut viewport
                     );
                     recreate_swapchain = false;
                 }
