@@ -1,5 +1,3 @@
-use bytemuck::{Pod, Zeroable};
-
 use crate::WorldState;
 use crate::graphics::vulkan::*;
 use crate::graphics::window::*;
@@ -12,11 +10,9 @@ use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer, TypedBufferAccess};
 use vulkano::command_buffer::{allocator::StandardCommandBufferAllocator, 
     AutoCommandBufferBuilder, CommandBufferUsage, RenderPassBeginInfo, SubpassContents};
 use vulkano::image::{ImageAccess, SwapchainImage, view::ImageView};
-use vulkano::impl_vertex;
 use vulkano::memory::allocator::StandardMemoryAllocator;
-use vulkano::pipeline::{GraphicsPipeline, graphics::{input_assembly::InputAssemblyState, 
-    viewport::{Viewport, ViewportState}, vertex_input::BuffersDefinition}};
-use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, Subpass};
+use vulkano::pipeline::graphics::viewport::Viewport;
+use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass};
 use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo,
      SwapchainCreationError, SwapchainPresentInfo};
 use vulkano::sync::{FlushError, GpuFuture, self};
@@ -29,16 +25,8 @@ use winit::window::{Window, WindowBuilder};
 
 use winit_input_helper::WinitInputHelper;
 
-mod vulkan;
+pub mod vulkan;
 mod window;
-
-// use repr(C) to prevent rust to mess with the data.
-#[repr(C)]
-#[derive(Clone, Copy, Debug, Default, PartialEq, Zeroable, Pod)]
-pub struct Vertex {
-    pub position: [f32; 2],
-}
-impl_vertex!(Vertex, position);
 
 pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>>{
     let library = VulkanLibrary::new()?;   
@@ -106,15 +94,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     
     // Create a GraphicsPipeline object to define how the
     // implementation should perform a draw operation.
-    let pipeline = GraphicsPipeline::start()
-        .render_pass(Subpass::from(render_pass.clone(), 0).unwrap())
-        .vertex_input_state(BuffersDefinition::new().vertex::<Vertex>())
-        .input_assembly_state(InputAssemblyState::new())
-        .vertex_shader(vs.entry_point("main").unwrap(), ())
-        .viewport_state(ViewportState::viewport_dynamic_scissor_irrelevant())
-        .fragment_shader(fs.entry_point("main").unwrap(), ())
-        .build(device.clone())
-        .unwrap();
+    let pipeline = create_graphics_pipeline(&device, &render_pass, &vs, &fs)?;
     
     let mut viewport = create_viewport(); 
     

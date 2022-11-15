@@ -1,3 +1,5 @@
+use bytemuck::{Pod, Zeroable};
+
 use std::error::Error;
 use std::sync::Arc;
 
@@ -7,14 +9,26 @@ use vulkano::device::{Device, DeviceCreateInfo, DeviceCreationError, DeviceExten
 use vulkano::instance::{Instance, InstanceCreateInfo, 
     InstanceCreationError, InstanceExtensions};
 use vulkano::image::{ImageUsage, SwapchainImage};
-use vulkano::pipeline::graphics::viewport::Viewport;
-use vulkano::render_pass::{RenderPass, RenderPassCreationError};
+use vulkano::impl_vertex;
+use vulkano::pipeline::GraphicsPipeline;
+use vulkano::pipeline::graphics::GraphicsPipelineCreationError;
+use vulkano::pipeline::graphics::input_assembly::InputAssemblyState;
+use vulkano::pipeline::graphics::vertex_input::BuffersDefinition;
+use vulkano::pipeline::graphics::viewport::{Viewport, ViewportState};
+use vulkano::render_pass::{RenderPass, RenderPassCreationError, Subpass};
 use vulkano::shader::{ShaderCreationError, ShaderModule};
 use vulkano::swapchain::{Surface, Swapchain, SwapchainCreateInfo};
 
 use winit::window::Window;
 
-/// Create a vulkan instance based on the installed 
+// use repr(C) to prevent rust to mess with the data.
+#[repr(C)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Zeroable, Pod)]
+pub struct Vertex {
+    pub position: [f32; 2],
+}
+impl_vertex!(Vertex, position);
+
 /// vulkan library and required extensions for the application.
 /// An error can be returned if the creation failed for any reason.
 pub fn create_instance(
@@ -200,4 +214,20 @@ pub fn create_viewport() -> Viewport {
         dimensions: [0.0, 0.0],
         depth_range: 0.0..1.0,
     }
+}
+
+pub fn create_graphics_pipeline(
+    device: &Arc<Device>,
+    render_pass: &Arc<RenderPass>,
+    vs: &Arc<ShaderModule>,
+    fs: &Arc<ShaderModule>
+) -> Result<Arc<GraphicsPipeline>, GraphicsPipelineCreationError> {
+        GraphicsPipeline::start()
+        .render_pass(Subpass::from(render_pass.clone(), 0).unwrap())
+        .vertex_input_state(BuffersDefinition::new().vertex::<Vertex>())
+        .input_assembly_state(InputAssemblyState::new())
+        .vertex_shader(vs.entry_point("main").unwrap(), ())
+        .viewport_state(ViewportState::viewport_dynamic_scissor_irrelevant())
+        .fragment_shader(fs.entry_point("main").unwrap(), ())
+        .build(device.clone())
 }

@@ -1,4 +1,4 @@
-use crate::graphics::Vertex;
+use crate::graphics::vulkan::Vertex;
 
 use rand::prelude::SliceRandom;
 use rand::thread_rng;
