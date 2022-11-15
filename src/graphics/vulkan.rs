@@ -49,6 +49,10 @@ pub fn initialize_logical_device(
         },)
 }
 
+/// Select the best physical device suited for the designed tasks.
+/// In other words, find if there's a device supporting the given
+/// extensions. If more than one device is found, the *best* one is
+/// returned, otherwise if no device has been found, an error is propagated.
 pub fn select_physical_device(
     instance: &Arc<Instance>,
     surface: &Arc<Surface>,
