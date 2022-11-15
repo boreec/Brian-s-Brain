@@ -198,6 +198,5 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
             _ => {}
         }
     });
-    Ok(())
 }
 
