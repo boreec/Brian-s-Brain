@@ -55,6 +55,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     let (device, mut queues) = 
         create_logical_device(&physical_device, &device_extensions, queue_family_index)?;
             
+    // 5. Select a queue in order to submit commands buffer to the device.
     let queue = select_queue(&mut queues)?;
     
     let (mut swapchain, images) = create_swapchain_and_images(&device, &surface)?;
