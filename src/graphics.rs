@@ -67,8 +67,8 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         ws.as_vertices().0,
     )?; // AllocationCreationError is thrown.
     
-    let vs = load_vertex_shader(device.clone())?;
-    let fs = load_fragment_shader(device.clone())?;
+    let vs = load_vertex_shader(&device)?;
+    let fs = load_fragment_shader(&device)?;
     
     // Build a RenderPass object to represent the steps in which
     // the rendering is done. It contains three parts: 

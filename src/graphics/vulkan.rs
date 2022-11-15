@@ -165,7 +165,7 @@ pub fn create_swapchain_and_images(device: &Arc<Device>, surface: &Arc<Surface>)
         },
     )?)
 }
-pub fn load_vertex_shader(device: Arc<Device>)
+pub fn load_vertex_shader(device: &Arc<Device>)
 -> Result<Arc<ShaderModule>, ShaderCreationError> {
     mod vs {
         vulkano_shaders::shader! {
@@ -180,10 +180,10 @@ pub fn load_vertex_shader(device: Arc<Device>)
             }"
         }
     }
-    vs::load(device)
+    vs::load(device.clone())
 }
 
-pub fn load_fragment_shader(device: Arc<Device>)
+pub fn load_fragment_shader(device: &Arc<Device>)
 -> Result<Arc<ShaderModule>, ShaderCreationError> {
     mod fs {
         vulkano_shaders::shader! {
@@ -198,7 +198,7 @@ pub fn load_fragment_shader(device: Arc<Device>)
             }"
         }
     }
-    fs::load(device)
+    fs::load(device.clone())
 }
 
 pub fn create_device_extensions() -> DeviceExtensions {
