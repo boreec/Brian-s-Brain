@@ -61,6 +61,11 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     
     // 6. Create a swapchain in order to render onto the Surface.
     let (mut swapchain, images) = create_swapchain_and_images(&device, &surface)?;
+
+    // 7. Create a RenderPass object that describes the steps in
+    //    which the rendering is done and subsequently the output
+    //    of the graphics pipeline. 
+    let render_pass = create_render_pass(&device, &swapchain)?;
     
     let vertex_buffer = CpuAccessibleBuffer::from_iter(
         &StandardMemoryAllocator::new_default(device.clone()),
@@ -75,12 +80,6 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     let vs = load_vertex_shader(&device)?;
     let fs = load_fragment_shader(&device)?;
     
-    // Build a RenderPass object to represent the steps in which
-    // the rendering is done. It contains three parts: 
-    // 1 - List of attachments (image views)
-    // 2 - Subpasses
-    // 3 - Dependencies
-    let render_pass = create_render_pass(&device, &swapchain)?;
     
     // Create a GraphicsPipeline object to define how the
     // implementation should perform a draw operation.
