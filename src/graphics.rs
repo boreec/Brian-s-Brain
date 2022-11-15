@@ -66,9 +66,9 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     //    of the graphics pipeline. 
     let render_pass = create_render_pass(&device, &swapchain)?;
     
-    let mut viewport = create_viewport(); 
-    let mut framebuffers = window_size_dependent_setup(&images, &render_pass, &mut viewport);    
-
+    let mut viewport = create_viewport();
+    let mut framebuffers = get_framebuffers(&images, &render_pass, &mut viewport);
+    
     let vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0)?;
     
     let vs = load_vertex_shader(&device)?;
@@ -128,11 +128,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                         };
                     
                     swapchain = new_swapchain;
-                    framebuffers = window_size_dependent_setup(
-                        &new_images,
-                        &render_pass,
-                        &mut viewport
-                    );
+                    framebuffers = get_framebuffers(&new_images, &render_pass, &mut viewport);
                     recreate_swapchain = false;
                 }
                 
@@ -210,7 +206,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     Ok(())
 }
 
-fn window_size_dependent_setup(
+fn get_framebuffers(
     images: &[Arc<SwapchainImage>],
     render_pass: &Arc<RenderPass>,
     viewport: &mut Viewport,
