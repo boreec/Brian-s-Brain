@@ -39,6 +39,8 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     
     let device_extensions = create_device_extensions();
 
+    // 3. Find a physical device that can handle Vulkan's API and
+    //    the required extensions for drawings.
     let (physical_device, queue_family_index) = 
         select_physical_device(&instance, &surface, &device_extensions)?;
         
@@ -48,7 +50,8 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
         physical_device.properties().device_type,
     );
     
-    // Create logical device
+    // 4. Create a logical device, which is used as a communication channel
+    //    with a physical device.
     let (device, mut queues) = 
         create_logical_device(&physical_device, &device_extensions, queue_family_index)?;
             
