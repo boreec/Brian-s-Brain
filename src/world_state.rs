@@ -185,11 +185,7 @@ impl WorldState {
         
         Some(&self.world[(row * col + col) as usize])
     }
-    
-    fn count(&self, state: CellState) -> usize {
-        self.world.iter().filter(|&c| *c == state).count()
-    }
-    
+        
     /// Return vertices of the cells with `CellState::On` and 
     /// `CellState::Dying` values as two distinct vectors.
     /// Moreover, each cell is represented by 6 vertices (3 triangles).
@@ -229,26 +225,31 @@ mod tests {
     
     use super::*;
     
+    fn count(ws: &WorldState, c: CellState) -> usize {
+        let ws_str = ws.to_string();
+        ws_str.matches(&c.to_string()).count()
+    }
+    
     #[test]
     fn test_randomize_for_rate_equal_one() {
         let mut ws = WorldState::new(100);
         ws.randomize(1.0);
-        assert_eq!(ws.count(CellState::On), 10_000);
+        assert_eq!(count(&ws, CellState::On), 10_000);
     }
 
     #[test]
     fn test_randomize_for_rate_equal_zero() {
         let mut ws = WorldState::new(100);
         ws.randomize(0.0);
-        assert_eq!(ws.count(CellState::Off), 10_000);    
+        assert_eq!(count(&ws, CellState::Off), 10_000);    
     }
     
     #[test]
     fn test_randomize_for_rate_equal_one_point_five() {
         let mut ws = WorldState::new(100);
         ws.randomize(0.5);
-        assert_eq!(ws.count(CellState::Off), 5_000);    
-        assert_eq!(ws.count(CellState::On), 5_000);    
+        assert_eq!(count(&ws, CellState::Off), 5_000);    
+        assert_eq!(count(&ws, CellState::On), 5_000);    
     }
     
     #[test]
