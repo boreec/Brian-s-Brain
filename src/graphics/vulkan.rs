@@ -290,7 +290,7 @@ pub fn get_command_buffer(
     pipeline: &Arc<GraphicsPipeline>,
     vertex_buffer: &Arc<CpuAccessibleBuffer<[Vertex]>>,
     viewport: &Viewport,
-    framebuffers: &Vec<Arc<Framebuffer>>,
+    framebuffers: &[Arc<Framebuffer>],
     image_index: u32
 )
 -> Result<PrimaryAutoCommandBuffer, BuildError>
