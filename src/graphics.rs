@@ -77,9 +77,6 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     // 11. Create the graphics pipeline.
     let pipeline = create_graphics_pipeline(&device, &render_pass, &vs, &fs)?;    
     
-    let command_buffer_allocator =
-        StandardCommandBufferAllocator::new(device.clone(), Default::default());
-    
     let mut recreate_swapchain = false;
     let mut previous_frame_end = Some(sync::now(device.clone()).boxed());
     
@@ -128,7 +125,6 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                     recreate_swapchain = false;
                 }
                 
-                // Try to acquire image from Swapchain
                 let (image_index, suboptimal, acquire_future) = 
                     match acquire_next_image(swapchain.clone(), None) {
                         Ok(r) => r,
@@ -138,39 +134,27 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                         }
                         Err(e) => panic!("Failed to acquire next image: {:?}", e),
                     };
-            
+
                 if suboptimal {
                     recreate_swapchain = true;
                 }
                 
-                let mut builder = AutoCommandBufferBuilder::primary(
-                    &command_buffer_allocator,
-                    queue.queue_family_index(),
-                    CommandBufferUsage::OneTimeSubmit,
-                )
-                .unwrap();
+                let command_buffer = get_command_buffer(
+                    &device, 
+                    &queue,
+                    &swapchain,
+                    &pipeline,
+                    &vertex_buffer,
+                    &viewport,
+                    &framebuffers, 
+                    image_index
+                );
                 
-                builder
-                    .begin_render_pass(
-                        RenderPassBeginInfo {
-                            clear_values: vec![Some([0.,0.,0.,1.].into())],
-                            ..RenderPassBeginInfo::framebuffer(
-                                framebuffers[image_index as usize].clone(),
-                            )
-                        },
-                        SubpassContents::Inline,
-                    )
-                    .unwrap()
-                    .set_viewport(0, [viewport.clone()])
-                    .bind_pipeline_graphics(pipeline.clone())
-                    .bind_vertex_buffers(0, vertex_buffer.clone())
-                    .draw(vertex_buffer.len() as u32, 1, 0, 0)
-                    .unwrap()
-                    .end_render_pass()
-                    .unwrap();
-                
-                let command_buffer = builder.build().unwrap();
-                
+                let command_buffer = match command_buffer {
+                    Ok(r) => r,
+                    Err(e) => {panic!("Failed to create command buffer: {:?}", e);}
+                };
+
                 let future = previous_frame_end
                     .take()
                     .unwrap()

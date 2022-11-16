@@ -4,7 +4,10 @@ use std::error::Error;
 use std::sync::Arc;
 
 use vulkano::VulkanLibrary;
-use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer};
+use vulkano::buffer::{BufferUsage, CpuAccessibleBuffer, TypedBufferAccess};
+use vulkano::command_buffer::{allocator::StandardCommandBufferAllocator,
+    AutoCommandBufferBuilder, BuildError, CommandBufferUsage, 
+    PrimaryAutoCommandBuffer, RenderPassBeginInfo, SubpassContents};
 use vulkano::device::{Device, DeviceCreateInfo, DeviceCreationError, DeviceExtensions, 
     physical::{PhysicalDevice, PhysicalDeviceType}, Queue, QueueCreateInfo};
 use vulkano::instance::{Instance, InstanceCreateInfo, 
@@ -21,7 +24,8 @@ use vulkano::pipeline::graphics::viewport::{Viewport, ViewportState};
 use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, 
     RenderPassCreationError, Subpass};
 use vulkano::shader::{ShaderCreationError, ShaderModule};
-use vulkano::swapchain::{Surface, Swapchain, SwapchainCreateInfo};
+use vulkano::swapchain::{acquire_next_image, AcquireError, Surface, 
+    Swapchain, SwapchainCreateInfo};
 
 use winit::window::Window;
 
@@ -280,4 +284,50 @@ pub fn get_framebuffers(
             .unwrap()
         })
     .collect::<Vec<_>>()
+}
+
+pub fn get_command_buffer(
+    device: &Arc<Device>,
+    queue: &Arc<Queue>,
+    swapchain: &Arc<Swapchain>,
+    pipeline: &Arc<GraphicsPipeline>,
+    vertex_buffer: &Arc<CpuAccessibleBuffer<[Vertex]>>,
+    viewport: &Viewport,
+    framebuffers: &Vec<Arc<Framebuffer>>,
+    image_index: u32
+)
+-> Result<PrimaryAutoCommandBuffer, BuildError>
+{
+    // Try to acquire image from Swapchain
+    
+    let command_buffer_allocator =
+        StandardCommandBufferAllocator::new(device.clone(), Default::default());
+
+    let mut builder = AutoCommandBufferBuilder::primary(
+        &command_buffer_allocator,
+        queue.queue_family_index(),
+        CommandBufferUsage::OneTimeSubmit,
+    )
+    .unwrap();
+
+    builder
+        .begin_render_pass(
+            RenderPassBeginInfo {
+                clear_values: vec![Some([0.,0.,0.,1.].into())],
+                ..RenderPassBeginInfo::framebuffer(
+                    framebuffers[image_index as usize].clone(),
+                )
+            },
+            SubpassContents::Inline,
+        )
+        .unwrap()
+        .set_viewport(0, [viewport.clone()])
+        .bind_pipeline_graphics(pipeline.clone())
+        .bind_vertex_buffers(0, vertex_buffer.clone())
+        .draw(vertex_buffer.len() as u32, 1, 0, 0)
+        .unwrap()
+        .end_render_pass()
+        .unwrap();
+
+    builder.build()
 }
