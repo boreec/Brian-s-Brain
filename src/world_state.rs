@@ -226,8 +226,7 @@ mod tests {
     use super::*;
     
     fn count(ws: &WorldState, c: CellState) -> usize {
-        let ws_str = ws.to_string();
-        ws_str.matches(&c.to_string()).count()
+        ws.to_string().matches(&c.to_string()).count()
     }
     
     #[test]
