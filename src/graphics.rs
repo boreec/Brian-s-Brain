@@ -67,13 +67,14 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     // 8. Create the actual buffers to be able to display images.
     let mut framebuffers = get_framebuffers(&images, &render_pass, &mut viewport);
     
+    // 9. Create the vertex buffer
     let vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0)?;
     
+    // 10. Load the shaders.
     let vs = load_vertex_shader(&device)?;
     let fs = load_fragment_shader(&device)?;
     
-    // Create a GraphicsPipeline object to define how the
-    // implementation should perform a draw operation.
+    // 11. Create the graphics pipeline.
     let pipeline = create_graphics_pipeline(&device, &render_pass, &vs, &fs)?;    
     
     let command_buffer_allocator =
