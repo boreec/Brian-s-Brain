@@ -50,7 +50,7 @@ fn main() {
     let mut ws = WorldState::new(args.size);
     ws.randomize(0.5);
 
-    if args.gui || (!args.gui && !args.cli){
+    if args.gui || !args.cli {
         match run_gui(&mut ws, args.framerate) {
             Ok(()) => {}
             Err(e) => {
