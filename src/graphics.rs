@@ -139,7 +139,6 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                 let command_buffer = get_command_buffer(
                     &device, 
                     &queue,
-                    &swapchain,
                     &pipeline,
                     &vertex_buffer,
                     &viewport,

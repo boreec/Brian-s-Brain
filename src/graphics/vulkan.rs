@@ -35,7 +35,6 @@ pub struct Vertex {
     pub position: [f32; 2],
 }
 impl_vertex!(Vertex, position);
-
 /// vulkan library and required extensions for the application.
 /// An error can be returned if the creation failed for any reason.
 pub fn create_instance(
@@ -288,7 +287,6 @@ pub fn get_framebuffers(
 pub fn get_command_buffer(
     device: &Arc<Device>,
     queue: &Arc<Queue>,
-    swapchain: &Arc<Swapchain>,
     pipeline: &Arc<GraphicsPipeline>,
     vertex_buffer: &Arc<CpuAccessibleBuffer<[Vertex]>>,
     viewport: &Viewport,
