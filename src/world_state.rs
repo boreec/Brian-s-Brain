@@ -186,10 +186,6 @@ impl WorldState {
         Some(&self.world[(row * col + col) as usize])
     }
     
-    fn get_size(&self) -> u16 {
-        self.size
-    }
-    
     fn count(&self, state: CellState) -> usize {
         self.world.iter().filter(|&c| *c == state).count()
     }
