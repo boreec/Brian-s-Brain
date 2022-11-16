@@ -24,8 +24,7 @@ use vulkano::pipeline::graphics::viewport::{Viewport, ViewportState};
 use vulkano::render_pass::{Framebuffer, FramebufferCreateInfo, RenderPass, 
     RenderPassCreationError, Subpass};
 use vulkano::shader::{ShaderCreationError, ShaderModule};
-use vulkano::swapchain::{acquire_next_image, AcquireError, Surface, 
-    Swapchain, SwapchainCreateInfo};
+use vulkano::swapchain::{Surface, Swapchain, SwapchainCreateInfo};
 
 use winit::window::Window;
 

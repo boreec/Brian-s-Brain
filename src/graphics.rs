@@ -5,9 +5,6 @@ use crate::graphics::window::*;
 use std::error::Error;
 
 use vulkano::VulkanLibrary;
-use vulkano::buffer::TypedBufferAccess;
-use vulkano::command_buffer::{allocator::StandardCommandBufferAllocator, 
-    AutoCommandBufferBuilder, CommandBufferUsage, RenderPassBeginInfo, SubpassContents};
 use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo, SwapchainCreationError, SwapchainPresentInfo};
 use vulkano::sync::{FlushError, GpuFuture, self};
 
