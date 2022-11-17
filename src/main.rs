@@ -47,11 +47,11 @@ struct Args {
 fn main() {
     let args = Args::parse();
     
+    if args.gui || !args.cli {
+
     let mut ws = WorldState::new(args.size);
     ws.randomize(0.5);
-
-    if args.gui || !args.cli {
-        match run_gui(&mut ws, args.framerate) {
+        match run_gui(ws, args.framerate) {
             Ok(()) => {}
             Err(e) => {
                 panic!(
@@ -64,6 +64,8 @@ fn main() {
     }
     
     if args.cli {
+    let mut ws = WorldState::new(args.size);
+    ws.randomize(0.5);
         run_cli(&mut ws, args.iter, args.framerate);
     }
 }

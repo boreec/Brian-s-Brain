@@ -16,7 +16,7 @@ use winit_input_helper::WinitInputHelper;
 pub mod vulkan;
 mod window;
 
-pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>>{
+pub fn run_gui(mut ws: WorldState, framerate: u64) -> Result<(), Box<dyn Error>>{
     
     let library = VulkanLibrary::new()?;   
     let required_extensions = vulkano_win::required_extensions(&library);
@@ -65,7 +65,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
     let mut framebuffers = get_framebuffers(&images, &render_pass, &mut viewport);
     
     // 9. Create the vertex buffer
-    let vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0)?;
+    let mut vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0)?;
     
     // 10. Load the shaders.
     let vs = load_vertex_shader(&device)?;
@@ -166,6 +166,8 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                 match future {
                     Ok(future) => {
                         previous_frame_end = Some(future.boxed());
+                        ws.next();
+                        vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0).unwrap();
                     }
                     Err(FlushError::OutOfDate) => {
                         recreate_swapchain = true;
@@ -175,6 +177,7 @@ pub fn run_gui(ws: &mut WorldState, framerate: u64) -> Result<(), Box<dyn Error>
                         panic!("Failed to flush future: {:?}", e);
                     }
                 }
+                
             }
             _ => {}
         }
