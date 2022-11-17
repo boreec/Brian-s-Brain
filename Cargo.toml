@@ -6,7 +6,7 @@ authors = ["Cyprien Borée <cyprien.boree@tuta.io>"]
 
 [dependencies]
 bytemuck = "1.12.3"
-clap = { version = "4.0.25", features = ["derive"] }
+clap = { version = "4.0.26", features = ["derive"] }
 rand = "0.8.5"
 vulkano = "0.32.1"
 vulkano-win = "0.32.0"
