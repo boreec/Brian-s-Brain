@@ -65,7 +65,7 @@ pub fn run_gui(mut ws: WorldState, framerate: u64) -> Result<(), Box<dyn Error>>
     let mut framebuffers = get_framebuffers(&images, &render_pass, &mut viewport);
     
     // 9. Create the vertex buffer
-    let mut vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0)?;
+    let mut vertex_buffer = create_vertex_buffer(&device, ws.as_vertices())?;
     
     // 10. Load the shaders.
     let vs = load_vertex_shader(&device)?;
@@ -167,7 +167,7 @@ pub fn run_gui(mut ws: WorldState, framerate: u64) -> Result<(), Box<dyn Error>>
                     Ok(future) => {
                         previous_frame_end = Some(future.boxed());
                         ws.next();
-                        vertex_buffer = create_vertex_buffer(&device, ws.as_vertices().0).unwrap();
+                        vertex_buffer = create_vertex_buffer(&device, ws.as_vertices()).unwrap();
                     }
                     Err(FlushError::OutOfDate) => {
                         recreate_swapchain = true;

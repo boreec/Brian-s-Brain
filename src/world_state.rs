@@ -186,37 +186,55 @@ impl WorldState {
         Some(&self.world[(row * col + col) as usize])
     }
         
-    /// Return vertices of the cells with `CellState::On` and 
-    /// `CellState::Dying` values as two distinct vectors.
-    /// Moreover, each cell is represented by 6 vertices (3 triangles).
-    pub fn as_vertices(&self) -> (Vec<Vertex>, Vec<Vertex>) {
-        let mut on_cells: Vec<Vertex> = vec![];
-        let mut dying_cells: Vec<Vertex> = vec![];
+    /// Return vertices of the cells with `CellState::On` or `CellState::Dying`.
+    /// Moreover, each cell is represented by 6 vertices (2 triangles).
+    pub fn as_vertices(&self) -> Vec<Vertex> {
+        let mut updated_cells: Vec<Vertex> = vec![];
         
         let cell_w = 2.0 / self.size as f32;
         let cell_h = 2.0 / self.size as f32;
         for (i, item) in self.world.iter().enumerate() {
             let cell_x = (i % self.size as usize) as f32;
             let cell_y = (i / self.size as usize) as f32;
+            
             // left triangle : ◺
-            let v1 = Vertex { position: [-1.0 + cell_w * cell_x, -1.0 + cell_h * cell_y] };
-            let v2 = Vertex { position: [-1.0 + cell_w * cell_x, -1.0 + cell_h * (cell_y + 1.0)] };
-            let v3 = Vertex { position: [-1.0 + cell_w * (cell_x + 1.0), -1.0 + cell_h * (cell_y + 1.0)]};
+            let (x1, y1) = (-1.0 + cell_w * cell_x, -1.0 + cell_h * cell_y);
+            let (x2, y2) = (-1.0 + cell_w * cell_x, -1.0 + cell_h * (cell_y + 1.0));
+            let (x3, y3) = (-1.0 + cell_w * (cell_x + 1.0), -1.0 + cell_h * (cell_y + 1.0));
             // right triangle : ◹ 
-            let v4 = v1;
-            let v5 = Vertex { position: [-1.0 + cell_w * (cell_x + 1.0), -1.0 + cell_h * cell_y] };
-            let v6 = v3;
+            let (x4, y4) = (x1, y1);
+            let (x5, y5) = (-1.0 + cell_w * (cell_x + 1.0), -1.0 + cell_h * cell_y);
+            let (x6, y6) = (x3, y3);
+            
             match item {
                 CellState::On => {
-                    on_cells.extend_from_slice(&[v1, v2, v3, v4, v5, v6]);
+                    let c = [1.0, 0.0, 0.0];
+                    let mut cell_vertices = vec![
+                        Vertex { position: [x1, y1], color: c},
+                        Vertex { position: [x2, y2], color: c},  
+                        Vertex { position: [x3, y3], color: c},  
+                        Vertex { position: [x4, y4], color: c},  
+                        Vertex { position: [x5, y5], color: c},  
+                        Vertex { position: [x6, y6], color: c},  
+                    ];
+                    updated_cells.append(&mut cell_vertices);
                 }
                 CellState::Dying => {
-                    dying_cells.extend_from_slice(&[v1, v2, v3, v4, v5, v6]);
+                    let c = [0.2, 0.0, 0.0];
+                    let mut cell_vertices = vec![
+                        Vertex { position: [x1, y1], color: c},
+                        Vertex { position: [x2, y2], color: c},  
+                        Vertex { position: [x3, y3], color: c},  
+                        Vertex { position: [x4, y4], color: c},  
+                        Vertex { position: [x5, y5], color: c},  
+                        Vertex { position: [x6, y6], color: c},  
+                    ];
+                    updated_cells.append(&mut cell_vertices);
                 }
                 CellState::Off => {}
             }
         }    
-        (on_cells, dying_cells)
+        updated_cells
     }
 }
 
@@ -367,37 +385,34 @@ mod tests {
         let mut ws = WorldState::new(1);
         // set the cell to On state.
         ws.randomize(1.0);
-        let (on_cells, dying_cells) = ws.as_vertices();
-        assert_eq!(on_cells.len(), 6);
-        assert_eq!(dying_cells.len(), 0);
+        let cells = ws.as_vertices();
+        assert_eq!(cells.len(), 6);
         
         // advance to next iteration: the cell must be in dying mode.
         ws.next();
-        let (on_cells, dying_cells) = ws.as_vertices();
-        assert_eq!(on_cells.len(), 0);
-        assert_eq!(dying_cells.len(), 6);
+        let cells = ws.as_vertices();
+        assert_eq!(cells.len(), 6);
         
         // advance to next iteration: the cell must be dead.
         ws.next();
-        let (on_cells, dying_cells) = ws.as_vertices();
-        assert_eq!(on_cells.len(), 0);
-        assert_eq!(dying_cells.len(), 0);
+        let cells = ws.as_vertices();
+        assert_eq!(cells.len(), 0);
     }
     
     #[test]
     fn test_as_vertices_good_coordinates_for_one_cell_world() {
         let mut ws = WorldState::new(1);
         ws.randomize(1.0);
-        let (on_cells,_) = ws.as_vertices();
-        assert!(on_cells.contains( &Vertex { position: [-1.0, -1.0] }));
-        assert!(on_cells.contains( &Vertex { position: [-1.0, 1.0] }));
-        assert!(on_cells.contains( &Vertex { position: [1.0, -1.0] }));
-        assert!(on_cells.contains( &Vertex { position: [1.0, 1.0] }));
+        let cells = ws.as_vertices();
+        assert!(cells.contains( &Vertex { position: [-1.0, -1.0], color:.. }));
+        assert!(cells.contains( &Vertex { position: [-1.0, 1.0] }));
+        assert!(cells.contains( &Vertex { position: [1.0, -1.0] }));
+        assert!(cells.contains( &Vertex { position: [1.0, 1.0] }));
         ws.next();
-        let(_, dying_cells) = ws.as_vertices();
-        assert!(dying_cells.contains( &Vertex { position: [-1.0, -1.0] }));
-        assert!(dying_cells.contains( &Vertex { position: [-1.0, 1.0] }));
-        assert!(dying_cells.contains( &Vertex { position: [1.0, -1.0] }));
-        assert!(dying_cells.contains( &Vertex { position: [1.0, 1.0] }));
+        let cells = ws.as_vertices();
+        assert!(cells.contains( &Vertex { position: [-1.0, -1.0] }));
+        assert!(cells.contains( &Vertex { position: [-1.0, 1.0] }));
+        assert!(cells.contains( &Vertex { position: [1.0, -1.0] }));
+        assert!(cells.contains( &Vertex { position: [1.0, 1.0] }));
     }
 }

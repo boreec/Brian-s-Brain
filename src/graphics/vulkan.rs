@@ -33,6 +33,7 @@ use winit::window::Window;
 #[derive(Clone, Copy, Debug, Default, PartialEq, Zeroable, Pod)]
 pub struct Vertex {
     pub position: [f32; 2],
+    pub color: [f32; 3],
 }
 impl_vertex!(Vertex, position);
 /// vulkan library and required extensions for the application.
