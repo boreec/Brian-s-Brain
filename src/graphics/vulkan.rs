@@ -35,7 +35,7 @@ pub struct Vertex {
     pub position: [f32; 2],
     pub color: [f32; 3],
 }
-impl_vertex!(Vertex, position);
+impl_vertex!(Vertex, position, color);
 /// vulkan library and required extensions for the application.
 /// An error can be returned if the creation failed for any reason.
 pub fn create_instance(
@@ -203,9 +203,12 @@ pub fn load_vertex_shader(device: &Arc<Device>)
             "#version 450
 
             layout(location = 0) in vec2 position;
-
+            layout(location = 1) in vec3 color;
+            
+            layout(location = 2) out vec3 out_color;
             void main(){
                 gl_Position = vec4(position, 0.0, 1.0);
+                out_color = color;
             }"
         }
     }
@@ -221,9 +224,9 @@ pub fn load_fragment_shader(device: &Arc<Device>)
             "#version 450
 
             layout(location = 0) out vec4 f_color;
-            
+            layout(location = 2) in vec3 out_color;
             void main(){
-                f_color = vec4(1.0, 0.0, 0.0, 1.0);
+                f_color = vec4(out_color, 1.0);
             }"
         }
     }

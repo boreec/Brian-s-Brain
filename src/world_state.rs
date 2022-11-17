@@ -220,7 +220,7 @@ impl WorldState {
                     updated_cells.append(&mut cell_vertices);
                 }
                 CellState::Dying => {
-                    let c = [0.2, 0.0, 0.0];
+                    let c = [0.5, 0.0, 0.0];
                     let mut cell_vertices = vec![
                         Vertex { position: [x1, y1], color: c},
                         Vertex { position: [x2, y2], color: c},  
