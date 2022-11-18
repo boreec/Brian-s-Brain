@@ -45,6 +45,9 @@ pub struct WorldState {
     /// This value is *one side* of the world, and thus the *real* size
     /// is this value squared (because the world is 2D).
     size: u16,
+    
+    /// The actual representation of the Cellular Automaton at a given time.
+    /// It consists of a 1D vector of `CellState` values.
     world: Vec<CellState>,
 }
 
