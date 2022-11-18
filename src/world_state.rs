@@ -178,14 +178,6 @@ impl WorldState {
         }
     }   
     
-    fn get_cell(&self, row: u16, col: u16) -> Option<&CellState> {
-        if row * col + col > self.size.pow(2) {
-            return None;
-        }
-        
-        Some(&self.world[(row * col + col) as usize])
-    }
-        
     /// Return vertices of the cells with `CellState::On` or `CellState::Dying`.
     /// Moreover, each cell is represented by 6 vertices (2 triangles).
     pub fn as_vertices(&self) -> Vec<Vertex> {
