@@ -6,6 +6,7 @@ use rand::thread_rng;
 use std::fmt;
 
 const ALIVE_COLOR: [f32; 3] = [1.0, 0.0, 0.0];
+const DYING_COLOR: [f32; 3] = [0.5, 0.0, 0.0];
 
 /// The three states a cell can take.
 /// Each cell is considered to have 8 neighbors (the Moore neighborhood).
@@ -213,14 +214,13 @@ impl WorldState {
                     updated_cells.append(&mut cell_vertices);
                 }
                 CellState::Dying => {
-                    let c = [0.5, 0.0, 0.0];
                     let mut cell_vertices = vec![
-                        Vertex { position: [x1, y1], color: c},
-                        Vertex { position: [x2, y2], color: c},  
-                        Vertex { position: [x3, y3], color: c},  
-                        Vertex { position: [x4, y4], color: c},  
-                        Vertex { position: [x5, y5], color: c},  
-                        Vertex { position: [x6, y6], color: c},  
+                        Vertex { position: [x1, y1], color: DYING_COLOR},
+                        Vertex { position: [x2, y2], color: DYING_COLOR},  
+                        Vertex { position: [x3, y3], color: DYING_COLOR},  
+                        Vertex { position: [x4, y4], color: DYING_COLOR},  
+                        Vertex { position: [x5, y5], color: DYING_COLOR},  
+                        Vertex { position: [x6, y6], color: DYING_COLOR},  
                     ];
                     updated_cells.append(&mut cell_vertices);
                 }
