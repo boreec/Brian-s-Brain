@@ -5,6 +5,8 @@ use rand::thread_rng;
 
 use std::fmt;
 
+const ALIVE_COLOR: [f32; 3] = [1.0, 0.0, 0.0];
+
 /// The three states a cell can take.
 /// Each cell is considered to have 8 neighbors (the Moore neighborhood).
 /// In each time step, a cell turns on if it was **Off** but had exactly two neighbors
@@ -200,14 +202,13 @@ impl WorldState {
             
             match item {
                 CellState::On => {
-                    let c = [1.0, 0.0, 0.0];
                     let mut cell_vertices = vec![
-                        Vertex { position: [x1, y1], color: c},
-                        Vertex { position: [x2, y2], color: c},  
-                        Vertex { position: [x3, y3], color: c},  
-                        Vertex { position: [x4, y4], color: c},  
-                        Vertex { position: [x5, y5], color: c},  
-                        Vertex { position: [x6, y6], color: c},  
+                        Vertex { position: [x1, y1], color: ALIVE_COLOR},
+                        Vertex { position: [x2, y2], color: ALIVE_COLOR},  
+                        Vertex { position: [x3, y3], color: ALIVE_COLOR},  
+                        Vertex { position: [x4, y4], color: ALIVE_COLOR},  
+                        Vertex { position: [x5, y5], color: ALIVE_COLOR},  
+                        Vertex { position: [x6, y6], color: ALIVE_COLOR},  
                     ];
                     updated_cells.append(&mut cell_vertices);
                 }
@@ -396,7 +397,7 @@ mod tests {
         let mut ws = WorldState::new(1);
         ws.randomize(1.0);
         let cells = ws.as_vertices();
-        assert!(cells.contains( &Vertex { position: [-1.0, -1.0], color:.. }));
+        assert!(cells.contains( &Vertex { position: [-1.0, -1.0] }));
         assert!(cells.contains( &Vertex { position: [-1.0, 1.0] }));
         assert!(cells.contains( &Vertex { position: [1.0, -1.0] }));
         assert!(cells.contains( &Vertex { position: [1.0, 1.0] }));
