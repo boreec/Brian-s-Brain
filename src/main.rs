@@ -71,6 +71,7 @@ fn main() {
     }
 }
 
+/// Run the cellular automaton in the terminal.
 fn run_cli(ws: &mut WorldState, iteration: u16, framerate: u64){
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
         println!("{}", ws);
