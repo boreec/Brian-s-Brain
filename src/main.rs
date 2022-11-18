@@ -44,6 +44,7 @@ struct Args {
     cli: bool,
 }
 
+/// Entry point of the program.
 fn main() {
     let args = Args::parse();
     
