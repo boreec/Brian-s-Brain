@@ -397,15 +397,15 @@ mod tests {
         let mut ws = WorldState::new(1);
         ws.randomize(1.0);
         let cells = ws.as_vertices();
-        assert!(cells.contains( &Vertex { position: [-1.0, -1.0] }));
-        assert!(cells.contains( &Vertex { position: [-1.0, 1.0] }));
-        assert!(cells.contains( &Vertex { position: [1.0, -1.0] }));
-        assert!(cells.contains( &Vertex { position: [1.0, 1.0] }));
+        assert!(cells.contains( &Vertex { position: [-1.0, -1.0], color: ALIVE_COLOR }));
+        assert!(cells.contains( &Vertex { position: [-1.0, 1.0], color: ALIVE_COLOR }));
+        assert!(cells.contains( &Vertex { position: [1.0, -1.0], color: ALIVE_COLOR }));
+        assert!(cells.contains( &Vertex { position: [1.0, 1.0], color: ALIVE_COLOR }));
         ws.next();
         let cells = ws.as_vertices();
-        assert!(cells.contains( &Vertex { position: [-1.0, -1.0] }));
-        assert!(cells.contains( &Vertex { position: [-1.0, 1.0] }));
-        assert!(cells.contains( &Vertex { position: [1.0, -1.0] }));
-        assert!(cells.contains( &Vertex { position: [1.0, 1.0] }));
+        assert!(cells.contains( &Vertex { position: [-1.0, -1.0], color: DYING_COLOR }));
+        assert!(cells.contains( &Vertex { position: [-1.0, 1.0], color: DYING_COLOR }));
+        assert!(cells.contains( &Vertex { position: [1.0, -1.0], color: DYING_COLOR }));
+        assert!(cells.contains( &Vertex { position: [1.0, 1.0], color: DYING_COLOR }));
     }
 }
