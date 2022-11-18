@@ -8,6 +8,9 @@ use std::fmt;
 /// The color used to represent on a GUI the cells alive.
 /// The content is an array representing the RGB values.
 const ALIVE_COLOR: [f32; 3] = [1.0, 0.0, 0.0];
+
+/// The color used to represent on a GUI the cells dying.
+/// The content is an array representing the RGB values.
 const DYING_COLOR: [f32; 3] = [0.5, 0.0, 0.0];
 
 /// The three states a cell can take.
