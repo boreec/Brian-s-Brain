@@ -40,6 +40,10 @@ impl fmt::Display for CellState {
 
 /// This struct represents the entire Cellular Automaton. 
 pub struct WorldState {
+    
+    /// The size of the world representing the Cellular Automaton.
+    /// This value is *one side* of the world, and thus the *real* size
+    /// is this value squared (because the world is 2D).
     size: u16,
     world: Vec<CellState>,
 }
