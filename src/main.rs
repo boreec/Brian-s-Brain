@@ -43,6 +43,8 @@ struct Args {
     #[arg(short, long, action, default_value_t = false)]
     cli: bool,
     
+    /// Run the program with a specific start.
+    /// `---example=1` depicts 5 period-3 oscillators. 
     #[arg(short, long, action, default_value_t = 0)]
     example: u16
 }
