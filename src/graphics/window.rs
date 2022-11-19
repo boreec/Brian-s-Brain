@@ -34,7 +34,7 @@ pub fn create_surface(instance: &Arc<Instance>, event_loop: &EventLoop<()>)
 -> Result<Arc<Surface>, Box<dyn Error>> 
 {
     
-    let monitor = select_best_monitor(event_loop)
+    let monitor = select_biggest_monitor(event_loop)
         .ok_or_else(|| Box::<dyn Error>::from("No monitors found for GUI."))?;
     
     let monitor_size = monitor.size();
@@ -56,7 +56,8 @@ pub fn create_surface(instance: &Arc<Instance>, event_loop: &EventLoop<()>)
     Ok(window)
 }
 
-fn select_best_monitor(event_loop: &EventLoop<()>) -> Option<MonitorHandle> {
+/// Select the biggest monitor to display the window.
+fn select_biggest_monitor(event_loop: &EventLoop<()>) -> Option<MonitorHandle> {
     let mut monitors = event_loop.available_monitors();
     let mut best_monitor = monitors.next();
     while monitors.size_hint().0 > 0 {
