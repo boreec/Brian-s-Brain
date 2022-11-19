@@ -21,7 +21,7 @@ const DYING_COLOR: [f32; 3] = [0.5, 0.0, 0.0];
 /// born there. Cells that were in the **Dying** state go into the **Off** state. 
 #[derive(Clone, Debug, PartialEq, Eq)]
 enum CellState {
-    On,
+    Alive,
     Dying,
     Off,
 }
@@ -29,7 +29,7 @@ enum CellState {
 impl fmt::Display for CellState {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let c = match self {
-            CellState::On => { 'O' }
+            CellState::Alive => { 'O' }
             CellState::Off => {'.'}
             CellState::Dying => {'X'}
         };
@@ -83,7 +83,7 @@ impl WorldState {
     /// between 0 and 1. Any value outside that range will cause a panic.
     pub fn randomize(&mut self, on_rate: f64) {
         if on_rate == 1.0 {
-            self.world = vec![CellState::On; self.world.len()];
+            self.world = vec![CellState::Alive; self.world.len()];
             return;
         }
         let mut cell_indexes: Vec<_> = (0..self.world.len()).collect();
@@ -91,7 +91,7 @@ impl WorldState {
         
         cell_indexes.shuffle(&mut thread_rng());
         for item in cell_indexes.iter_mut().take(cell_amount) {
-            self.world[*item as usize] = CellState::On;
+            self.world[*item as usize] = CellState::Alive;
         }
     }
 
@@ -107,7 +107,7 @@ impl WorldState {
         
         for (i, item) in self.world.iter().enumerate() {
             match item {
-                CellState::On => { new_dyings.push(i); }
+                CellState::Alive => { new_dyings.push(i); }
                 CellState::Off => {
                     let neighbours = self.get_neighbours(
                             (i % self.size as usize) as u16,
@@ -118,7 +118,7 @@ impl WorldState {
                         for tuples in neighbours {
                             let cell_idx = (tuples.0 * self.size + tuples.1) as usize;
                             let cell_state = &self.world[cell_idx];
-                            if *cell_state == CellState::On {
+                            if *cell_state == CellState::Alive {
                                 sum += 1;
                             } 
                         }
@@ -139,7 +139,7 @@ impl WorldState {
             self.world[*item] = CellState::Off; 
         }
         for (_, item) in new_on.iter().enumerate() { 
-            self.world[*item] = CellState::On; 
+            self.world[*item] = CellState::Alive; 
         }
     }
     
@@ -214,7 +214,7 @@ impl WorldState {
             let (x6, y6) = (x3, y3);
             
             match item {
-                CellState::On => {
+                CellState::Alive => {
                     let mut cell_vertices = vec![
                         Vertex { position: [x1, y1], color: ALIVE_COLOR},
                         Vertex { position: [x2, y2], color: ALIVE_COLOR},  
@@ -256,7 +256,7 @@ mod tests {
     fn test_randomize_for_rate_equal_one() {
         let mut ws = WorldState::new(100);
         ws.randomize(1.0);
-        assert_eq!(count(&ws, CellState::On), 10_000);
+        assert_eq!(count(&ws, CellState::Alive), 10_000);
     }
 
     #[test]
@@ -271,7 +271,7 @@ mod tests {
         let mut ws = WorldState::new(100);
         ws.randomize(0.5);
         assert_eq!(count(&ws, CellState::Off), 5_000);    
-        assert_eq!(count(&ws, CellState::On), 5_000);    
+        assert_eq!(count(&ws, CellState::Alive), 5_000);    
     }
     
     #[test]
