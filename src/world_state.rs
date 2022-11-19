@@ -105,6 +105,8 @@ impl WorldState {
         ws
     }
     
+    /// Initialize a world 100x100 with a wick.
+    /// Example made by **The Turtle** on `conwaylife.com`.
     pub fn example3() -> WorldState {
         let mut ws = WorldState::new(100);
         ws.spawn_wick3(50, 50);
