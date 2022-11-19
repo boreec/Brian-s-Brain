@@ -42,31 +42,41 @@ struct Args {
     /// properly. It can be used alongside with `gui` argument.
     #[arg(short, long, action, default_value_t = false)]
     cli: bool,
+    
+    #[arg(short, long, action, default_value_t = 0)]
+    example: u16
 }
 
 /// Entry point of the program.
 fn main() {
     let args = Args::parse();
     
-    if args.gui || !args.cli {
+    let mut ws = match args.example {
+        0 => { 
+            let mut w = WorldState::new(args.size);
+            w.randomize(0.5);
+            w
+        }        
+        1 => { WorldState::example1() }
+        _ => { panic!("There is no example with that number!"); }
+    };
 
-    let mut ws = WorldState::new(args.size);
-    ws.randomize(0.5);
+    if args.gui || !args.cli {
         match run_gui(ws, args.framerate) {
-            Ok(()) => {}
-            Err(e) => {
-                panic!(
-                    "Can't run the program with a graphical
-                    interface because of the following error.
-                    Try to run it in the terminal with --cli.
-                    \n{}", e);
+                Ok(()) => {}
+                Err(e) => {
+                    panic!(
+                        "Can't run the program with a graphical
+                        interface because of the following error.
+                        Try to run it in the terminal with --cli.
+                        \n{}", e);
+                }
             }
-        }
     }
     
     if args.cli {
-    let mut ws = WorldState::new(args.size);
-    ws.randomize(0.5);
+        let mut ws = WorldState::new(args.size);
+        ws.randomize(0.5);
         run_cli(&mut ws, args.iter, args.framerate);
     }
 }

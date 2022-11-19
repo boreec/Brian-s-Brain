@@ -76,6 +76,16 @@ impl WorldState {
         }
     }
     
+    pub fn example1() -> WorldState {
+        let mut ws = WorldState::new(14);
+        ws.spawn_osc3(0, 0);
+        ws.spawn_osc3(10, 10);
+        ws.spawn_osc3(0, 10);
+        ws.spawn_osc3(10, 0);
+        ws.spawn_osc3(5, 5);
+        ws
+    }
+    
     /// Initialize the world with a certain amount of **CellState::On**.
     /// 
     /// `on_rate` corresponds to the percentage of cells in the world to
