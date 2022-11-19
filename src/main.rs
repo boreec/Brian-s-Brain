@@ -64,7 +64,7 @@ fn main() {
     };
 
     if args.gui || !args.cli {
-        match run_gui(ws, args.framerate) {
+        match run_gui(ws.clone(), args.framerate) {
                 Ok(()) => {}
                 Err(e) => {
                     panic!(
@@ -77,14 +77,12 @@ fn main() {
     }
     
     if args.cli {
-        let mut ws = WorldState::new(args.size);
-        ws.randomize(0.5);
-        run_cli(&mut ws, args.iter, args.framerate);
+        run_cli(ws.clone(), args.iter, args.framerate);
     }
 }
 
 /// Run the cellular automaton in the terminal.
-fn run_cli(ws: &mut WorldState, iteration: u16, framerate: u64){
+fn run_cli(mut ws: WorldState, iteration: u16, framerate: u64){
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
         println!("{}", ws);
         thread::sleep(Duration::from_millis(framerate));

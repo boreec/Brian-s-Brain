@@ -39,6 +39,7 @@ impl fmt::Display for CellState {
 }
 
 /// This struct represents the entire Cellular Automaton. 
+#[derive(Clone)]
 pub struct WorldState {
     
     /// The size of the world representing the Cellular Automaton.
