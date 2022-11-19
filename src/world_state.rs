@@ -39,7 +39,7 @@ impl fmt::Display for CellState {
 }
 
 /// This struct represents the entire Cellular Automaton. 
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct WorldState {
     
     /// The size of the world representing the Cellular Automaton.
@@ -442,5 +442,20 @@ mod tests {
         assert!(cells.contains( &Vertex { position: [-1.0, 1.0], color: DYING_COLOR }));
         assert!(cells.contains( &Vertex { position: [1.0, -1.0], color: DYING_COLOR }));
         assert!(cells.contains( &Vertex { position: [1.0, 1.0], color: DYING_COLOR }));
+    }
+    
+    #[test]
+    fn test_spawn_osc3() {
+        let mut ws = WorldState::new(4);
+        ws.spawn_osc3(0, 0);
+        let init_ws = ws.clone();
+        
+        assert_eq!(init_ws, ws); // initially worlds are equal
+        ws.next();
+        assert_ne!(init_ws, ws); // iter #1 worlds are different
+        ws.next();
+        assert_ne!(init_ws, ws); // iter #2 worlds are different
+        ws.next();
+        assert_eq!(init_ws, ws); // iter #3 worlds are equal again
     }
 }
