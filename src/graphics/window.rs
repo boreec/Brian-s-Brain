@@ -30,6 +30,8 @@ pub const WINDOW_INNER_SIZE: Size = Size::Physical(
     }
 );
 
+/// Create the surface, which is the graphical link between the framebuffers
+/// and the actual window on the desktop environment.
 pub fn create_surface(instance: &Arc<Instance>, event_loop: &EventLoop<()>)
 -> Result<Arc<Surface>, Box<dyn Error>> 
 {
