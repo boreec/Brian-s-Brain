@@ -89,15 +89,15 @@ impl WorldState {
     
     pub fn example2() ->  WorldState {
         let mut ws = WorldState::new(100);
-        ws.spawn_glider4_downward(32, 0);
-        ws.spawn_glider4_downward(20, 18);
-        ws.spawn_glider4_downward(20, 22);
-        ws.spawn_glider4_downward(3, 42);
-        ws.spawn_glider4_leftward(13, 57);
-        ws.spawn_glider4_leftward(9, 62);
-        ws.spawn_glider4_upward(0, 68);
-        ws.spawn_glider4_upward(14, 87);
-        ws.spawn_glider4_upward(18, 93);
+        ws.spawn_glider4_downward(42, 0);
+        ws.spawn_glider4_downward(30, 18);
+        ws.spawn_glider4_downward(30, 22);
+        ws.spawn_glider4_downward(13, 42);
+        ws.spawn_glider4_leftward(23, 57);
+        ws.spawn_glider4_leftward(19, 62);
+        ws.spawn_glider4_upward(10, 68);
+        ws.spawn_glider4_upward(24, 87);
+        ws.spawn_glider4_upward(28, 93);
         ws
     }
     
