@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::sync::Arc;
 
 use vulkano::instance::Instance;
@@ -6,8 +7,9 @@ use vulkano::swapchain::Surface;
 use vulkano_win::CreationError;
 use vulkano_win::VkSurfaceBuild;
 
-use winit::dpi::{Size, PhysicalSize};
+use winit::dpi::{Size, PhysicalPosition, PhysicalSize, Position};
 use winit::event_loop::EventLoop;
+use winit::monitor::MonitorHandle;
 use winit::window::{Window, WindowBuilder};
 
 /// The window's title.
@@ -36,6 +38,19 @@ pub fn create_surface(instance: &Arc<Instance>, event_loop: &EventLoop<()>)
         .with_max_inner_size(WINDOW_INNER_SIZE)
         .with_title(String::from(WINDOW_TITLE))
         .build_vk_surface(event_loop, instance.clone())
+    
+}
+
+fn select_best_monitor(event_loop: &EventLoop<()>) -> Option<MonitorHandle> {
+    let mut monitors = event_loop.available_monitors();
+    let mut best_monitor = monitors.next();
+    while monitors.size_hint().0 > 0 {
+        let tmp = monitors.next();
+        if tmp.cmp(&best_monitor) == Ordering::Greater {
+            best_monitor = tmp;
+        }
+    }
+    best_monitor
 }
 
 pub fn get_window_dimensions(surface: &Surface) -> PhysicalSize<u32> {
