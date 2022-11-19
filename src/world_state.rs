@@ -77,6 +77,8 @@ impl WorldState {
         }
     }
     
+    /// Initialize a world 14x14 with 5x3-period oscillators.
+    /// Example made by **boreec**.
     pub fn example1() -> WorldState {
         let mut ws = WorldState::new(14);
         ws.spawn_osc3(0, 0);
@@ -87,6 +89,8 @@ impl WorldState {
         ws
     }
     
+    /// Initialize a world 100x100 with many gliders creating
+    /// a breeder. Example made by **Wojowu** on `conwaylife.com`.
     pub fn example2() ->  WorldState {
         let mut ws = WorldState::new(100);
         ws.spawn_glider4_downward(42, 0);
