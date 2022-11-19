@@ -71,6 +71,7 @@ fn select_biggest_monitor(event_loop: &EventLoop<()>) -> Option<MonitorHandle> {
     best_monitor
 }
 
+/// Return the dimensions of the windows (as `PhisicalSize` pixels).
 pub fn get_window_dimensions(surface: &Surface) -> PhysicalSize<u32> {
     let window = surface.object().unwrap().downcast_ref::<Window>().unwrap();
     window.inner_size()
