@@ -5,7 +5,6 @@ use std::sync::Arc;
 use vulkano::instance::Instance;
 use vulkano::swapchain::Surface;
 
-use vulkano_win::CreationError;
 use vulkano_win::VkSurfaceBuild;
 
 use winit::dpi::{Size, PhysicalPosition, PhysicalSize, Position};
