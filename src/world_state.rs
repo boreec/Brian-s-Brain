@@ -23,14 +23,14 @@ const DYING_COLOR: [f32; 3] = [0.5, 0.0, 0.0];
 enum CellState {
     Alive,
     Dying,
-    Off,
+    Dead,
 }
 
 impl fmt::Display for CellState {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let c = match self {
             CellState::Alive => { 'O' }
-            CellState::Off => {'.'}
+            CellState::Dead => {'.'}
             CellState::Dying => {'X'}
         };
         
@@ -72,7 +72,7 @@ impl WorldState {
     pub fn new(size: u16) -> WorldState {
         WorldState {
             size,
-            world: vec![CellState::Off; size.pow(2).into()],
+            world: vec![CellState::Dead; size.pow(2).into()],
         }
     }
     
@@ -101,14 +101,14 @@ impl WorldState {
     /// A cell **Off** is turned into **On** if two of its neighbours
     /// are also in **On** State.
     pub fn next(&mut self) {
-        let mut new_dyings: Vec<_> = vec![];
-        let mut new_on: Vec<_> = vec![];
-        let mut new_off: Vec<_> = vec![];
+        let mut new_dying: Vec<_> = vec![];
+        let mut new_alive: Vec<_> = vec![];
+        let mut new_dead: Vec<_> = vec![];
         
         for (i, item) in self.world.iter().enumerate() {
             match item {
-                CellState::Alive => { new_dyings.push(i); }
-                CellState::Off => {
+                CellState::Alive => { new_dying.push(i); }
+                CellState::Dead => {
                     let neighbours = self.get_neighbours(
                             (i % self.size as usize) as u16,
                             (i / self.size as usize) as u16
@@ -125,20 +125,20 @@ impl WorldState {
                         sum
                     };
                     if alives == 2 {
-                        new_on.push(i);
+                        new_alive.push(i);
                     }
                 }
-                CellState::Dying => { new_off.push(i); }
+                CellState::Dying => { new_dead.push(i); }
             }
         }
         // update the world
-        for (_, item) in new_dyings.iter().enumerate() { 
+        for (_, item) in new_dying.iter().enumerate() { 
             self.world[*item] = CellState::Dying; 
         }
-        for (_, item) in new_off.iter().enumerate() { 
-            self.world[*item] = CellState::Off; 
+        for (_, item) in new_dead.iter().enumerate() { 
+            self.world[*item] = CellState::Dead; 
         }
-        for (_, item) in new_on.iter().enumerate() { 
+        for (_, item) in new_alive.iter().enumerate() { 
             self.world[*item] = CellState::Alive; 
         }
     }
@@ -236,7 +236,7 @@ impl WorldState {
                     ];
                     updated_cells.append(&mut cell_vertices);
                 }
-                CellState::Off => {}
+                CellState::Dead => {}
             }
         }    
         updated_cells
@@ -263,14 +263,14 @@ mod tests {
     fn test_randomize_for_rate_equal_zero() {
         let mut ws = WorldState::new(100);
         ws.randomize(0.0);
-        assert_eq!(count(&ws, CellState::Off), 10_000);    
+        assert_eq!(count(&ws, CellState::Dead), 10_000);    
     }
     
     #[test]
     fn test_randomize_for_rate_equal_one_point_five() {
         let mut ws = WorldState::new(100);
         ws.randomize(0.5);
-        assert_eq!(count(&ws, CellState::Off), 5_000);    
+        assert_eq!(count(&ws, CellState::Dead), 5_000);    
         assert_eq!(count(&ws, CellState::Alive), 5_000);    
     }
     
