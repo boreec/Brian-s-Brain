@@ -116,7 +116,7 @@ impl WorldState {
                     let alives = {
                         let mut sum = 0;
                         for tuples in neighbours {
-                            let cell_idx = (tuples.0 * self.size + tuples.1) as usize;
+                            let cell_idx = (tuples.1 * self.size + tuples.0) as usize;
                             let cell_state = &self.world[cell_idx];
                             if *cell_state == CellState::Alive {
                                 sum += 1;
@@ -240,6 +240,18 @@ impl WorldState {
             }
         }    
         updated_cells
+    }
+    
+    pub fn spawn_osc3(&mut self, x: usize, y: usize) {
+        let dying_cells = [(x + 1, y + 1), (x + 2, y + 1), (x + 1, y + 2), (x + 2, y + 2)];
+        let alive_cells = [(x, y + 1), (x + 2, y), (x + 1, y + 3), (x + 3, y + 2)];
+        
+        for i in alive_cells {
+            self.world[i.0 * self.size as usize + i.1] = CellState::Alive;
+        }
+        for i in dying_cells {
+            self.world[i.0 * self.size as usize + i.1] = CellState::Dying;
+        }    
     }
 }
 
