@@ -53,7 +53,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
     
-    let mut ws = match args.example {
+    let ws = match args.example {
         0 => { 
             let mut w = WorldState::new(args.size);
             w.randomize(0.5);
