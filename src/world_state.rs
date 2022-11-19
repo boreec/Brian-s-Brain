@@ -105,6 +105,12 @@ impl WorldState {
         ws
     }
     
+    pub fn example3() -> WorldState {
+        let mut ws = WorldState::new(100);
+        ws.spawn_wick3(50, 50);
+        ws
+    }
+    
     /// Initialize the world with a certain amount of **CellState::On**.
     /// 
     /// `on_rate` corresponds to the percentage of cells in the world to
@@ -310,6 +316,21 @@ impl WorldState {
     pub fn spawn_glider4_leftward(&mut self, x: usize, y: usize){
         let dying_cells = [(x + 1, y), (x + 1, y + 1)];
         let alive_cells = [(x, y), (x, y + 1)];
+        
+        for i in alive_cells {
+            self.world[i.1 * self.size as usize + i.0] = CellState::Alive;
+        }
+        for i in dying_cells {
+            self.world[i.1 * self.size as usize + i.0] = CellState::Dying;
+        }    
+    }
+    
+    pub fn spawn_wick3(&mut self, x: usize, y: usize) {
+        let dying_cells = [(x + 1, y + 2)];
+        let alive_cells = [
+            (x, y), (x + 1, y), (x + 2, y),
+            (x, y + 1), (x + 2, y + 1)
+        ];
         
         for i in alive_cells {
             self.world[i.1 * self.size as usize + i.0] = CellState::Alive;
