@@ -58,6 +58,7 @@ fn main() {
             w
         }        
         1 => { WorldState::example1() }
+        2 => { WorldState::example2() }
         _ => { panic!("There is no example with that number!"); }
     };
 

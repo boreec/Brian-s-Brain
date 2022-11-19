@@ -87,6 +87,20 @@ impl WorldState {
         ws
     }
     
+    pub fn example2() ->  WorldState {
+        let mut ws = WorldState::new(100);
+        ws.spawn_glider4_downward(32, 0);
+        ws.spawn_glider4_downward(20, 18);
+        ws.spawn_glider4_downward(20, 22);
+        ws.spawn_glider4_downward(3, 42);
+        ws.spawn_glider4_leftward(13, 57);
+        ws.spawn_glider4_leftward(9, 62);
+        ws.spawn_glider4_upward(0, 68);
+        ws.spawn_glider4_upward(14, 87);
+        ws.spawn_glider4_upward(18, 93);
+        ws
+    }
+    
     /// Initialize the world with a certain amount of **CellState::On**.
     /// 
     /// `on_rate` corresponds to the percentage of cells in the world to
@@ -262,6 +276,42 @@ impl WorldState {
         }
         for i in dying_cells {
             self.world[i.0 * self.size as usize + i.1] = CellState::Dying;
+        }    
+    }
+    
+    pub fn spawn_glider4_downward(&mut self, x: usize, y: usize){
+        let dying_cells = [(x, y), (x + 1, y)];
+        let alive_cells = [(x, y + 1), (x + 1, y + 1)];
+        
+        for i in alive_cells {
+            self.world[i.1 * self.size as usize + i.0] = CellState::Alive;
+        }
+        for i in dying_cells {
+            self.world[i.1 * self.size as usize + i.0] = CellState::Dying;
+        }    
+    }
+    
+    pub fn spawn_glider4_upward(&mut self, x: usize, y: usize){
+        let alive_cells = [(x, y), (x + 1, y)];
+        let dying_cells = [(x, y + 1), (x + 1, y + 1)];
+        
+        for i in alive_cells {
+            self.world[i.1 * self.size as usize + i.0] = CellState::Alive;
+        }
+        for i in dying_cells {
+            self.world[i.1 * self.size as usize + i.0] = CellState::Dying;
+        }    
+    }
+    
+    pub fn spawn_glider4_leftward(&mut self, x: usize, y: usize){
+        let dying_cells = [(x + 1, y), (x + 1, y + 1)];
+        let alive_cells = [(x, y), (x, y + 1)];
+        
+        for i in alive_cells {
+            self.world[i.1 * self.size as usize + i.0] = CellState::Alive;
+        }
+        for i in dying_cells {
+            self.world[i.1 * self.size as usize + i.0] = CellState::Dying;
         }    
     }
 }
