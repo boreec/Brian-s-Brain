@@ -33,13 +33,11 @@ struct Args {
     
     /// Run the program with a graphical user interface.
     /// This is the default mode if no other viewing modes is selected.
-    /// It can be used alongside with `cli`.
     #[arg(short, long, action, default_value_t = false)]
     gui: bool,
 
     /// Run the program in the terminal. Note that if the cellular
-    /// automaton's environment is too huge, render may not be done
-    /// properly. It can be used alongside with `gui` argument.
+    /// automaton's environment is too huge, render may fail.
     #[arg(short, long, action, default_value_t = false)]
     cli: bool,
     
