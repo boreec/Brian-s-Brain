@@ -76,7 +76,14 @@ The generated files will be placed in `target/doc/brian_s_brain` and the entry p
 To view the file, `cargo` can use the default web browser on the system with:
 
 ```console
-user:~ cargo doc --open
-``` 
+user:~$ cargo doc --open
+```
 
 ## Unit Tests
+
+I wrote unit tests to assert the good behaviour of the cellular automaton (represented by `WorldState` struct). 
+`cargo` can run the tests as follows:
+
+```console
+user:~$ cargo test --release
+```
