@@ -60,6 +60,23 @@ Options:
   -h, --help                   Print help information
   -V, --version                Print version information
 ```
+
+# Programmer manual
+
 ## Documentation
+
+The documentation can be generated with `cargo`:
+
+```console
+user:~$ cargo doc
+```
+
+The generated files will be placed in `target/doc/brian_s_brain` and the entry point is accessed by `index.html`.
+
+To view the file, `cargo` can use the default web browser on the system with:
+
+```console
+user:~ cargo doc --open
+``` 
 
 ## Unit Tests
