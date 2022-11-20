@@ -17,6 +17,11 @@ on your system (if you can run the test program `vkcube` it's good).
 Additionally, you may need to install basic packages (`build-essential`, `cmake`) and also
 others languages packages (`g++`, `python3`) required by dependencies.
 
+Finally, you can build the program with `cargo`.
+```console
+user:$ cargo build --release 
+```
+
 ## Execution
 
 ## Documentation
