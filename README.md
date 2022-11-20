@@ -26,7 +26,7 @@ user:~$ cargo build --release
 
 When it's compiled properly, the executable will be placed into `target/release/`.
 
-There's two ways to execute it. The first one is by simply using its path:
+There are two ways to execute it. The first one is by simply using its path:
 
 ```console
 user:~$ ./target/release/brian-s-brain
@@ -38,6 +38,28 @@ The other way is to use `cargo`:
 user:-$ cargo run
 ```
 
+### Arguments
+
+Note that to provide arguments through `cargo run`, they have to be separated with `--`.
+
+The executable can be provided with arguments (see them with `--help` or `-h`) :
+
+```console
+user:-$ cargo run -- --help
+program to run the Brian's Brain cellular automaton
+
+Usage: brian-s-brain [OPTIONS]
+
+Options:
+  -f, --framerate <FRAMERATE>  The number of time between two frames (in milliseconds) [default: 50]
+  -i, --iter <ITER>            The number of iterations to run for [default: 100]
+  -s, --size <SIZE>            The size of the world in which the cells live [default: 10]
+  -g, --gui                    Run the program with a graphical user interface. This is the default mode if no other viewing modes is selected
+  -c, --cli                    Run the program in the terminal. Note that if the cellular automaton's environment is too huge, render may fail
+  -e, --example <EXAMPLE>      Run the program with a specific start. `---example=1` depicts 5 period-3 oscillators [default: 0]
+  -h, --help                   Print help information
+  -V, --version                Print version information
+```
 ## Documentation
 
 ## Unit Tests
