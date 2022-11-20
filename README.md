@@ -19,10 +19,24 @@ are required by dependencies for a complete compilation.
 
 Finally, the program can be built with `cargo`.
 ```console
-user:$ cargo build --release 
+user:~$ cargo build --release 
 ```
 
 ## Execution
+
+When it's compiled properly, the executable will be placed into `target/release/`.
+
+There's two ways to execute it. The first one is by simply using its path:
+
+```console
+user:~$ ./target/release/brian-s-brain
+```
+
+The other way is to use `cargo`:
+
+```console
+user:-$ cargo run
+```
 
 ## Documentation
 
