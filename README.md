@@ -9,15 +9,15 @@ This project is an implementation of the cellular automaton called
 
 ## Compilation
 
-First of all you need to install rust language (see [here](https://www.rust-lang.org/tools/install)).
+First of all, rust language has to be installed (see [here](https://www.rust-lang.org/tools/install)).
 
-If you want to run the program in a GUI (a CLI version exists), you need to install the Vulkan API 
-on your system (if you can run the test program `vkcube` it's good).
+The program can be run in a GUI (a CLI version exists), in order to do so, Vulkan API has to be 
+installed on the system (if `vkcube` test program can be executed, it's good).
 
-Additionally, you may need to install basic packages (`build-essential`, `cmake`) and also
-others languages packages (`g++`, `python3`) required by dependencies.
+Additionally, basic packages (`build-essential`, `cmake`) and other languages packages (`g++`, `python3`)
+are required by dependencies for a complete compilation.
 
-Finally, you can build the program with `cargo`.
+Finally, the program can be built with `cargo`.
 ```console
 user:$ cargo build --release 
 ```
