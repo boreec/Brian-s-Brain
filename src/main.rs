@@ -42,7 +42,10 @@ struct Args {
     cli: bool,
     
     /// Run the program with a specific start.
-    /// `---example=1` depicts 5 period-3 oscillators.
+    ///
+    /// - `--example=1` depicts 5 period-3 oscillators.
+    /// - `--example=2` depicts gliders creating a breeder.
+    /// - `--example=3` depicts a wick.
     #[arg(short, long, default_value_t = 0)]
     example: u16,
     
@@ -50,7 +53,7 @@ struct Args {
     ///
     /// 1. Declare the size of the cellular automaton to be 100x100 (`WorldState::new()`)
     /// 2. Initialize the world with 50% random noise (`WorldState::randomize()`)
-    /// 3. Do 100 iterations on them (`WorldState::next()`)
+    /// 3. Do 100 iterations (`WorldState::next()`)
     ///
     /// Then, the average execution time for each call is displayed.
     #[arg(short, long, action, default_value_t = false)]
