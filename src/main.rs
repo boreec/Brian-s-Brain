@@ -47,7 +47,7 @@ struct Args {
     /// - `--example=1` depicts 5 period-3 oscillators.
     /// - `--example=2` depicts gliders creating a breeder.
     /// - `--example=3` depicts a wick.
-    #[arg(short, long, default_value_t = 0)]
+    #[arg(short, long, verbatim_doc_comment, default_value_t = 0)]
     example: u16,
     
     /// Do 100 runs of the program and for each of them:
@@ -57,7 +57,7 @@ struct Args {
     /// 3. Do 100 iterations (`WorldState::next()`)
     ///
     /// Then, the average execution time for each call is displayed.
-    #[arg(short, long, action, default_value_t = false)]
+    #[arg(short, long, action, verbatim_doc_comment, default_value_t = false)]
     benchmark: bool,
 }
 
