@@ -56,6 +56,9 @@ struct Args {
     #[arg(short, long, default_value_t = 100)]
     iter: u16,
     
+    #[arg(short, long, default_value_t = 0.5)]
+    randomness: f64,
+    
     /// The size of the world in which the cells live.    
     #[arg(short, long, default_value_t = 10)]
     size: u16,
@@ -72,7 +75,7 @@ fn main() {
     let ws = match args.example {
         0 => { 
             let mut w = WorldState::new(args.size);
-            w.randomize(0.5);
+            w.randomize(args.randomness);
             w
         }        
         1 => { WorldState::example1() }
