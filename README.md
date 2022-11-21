@@ -87,3 +87,16 @@ I wrote unit tests to assert the good behaviour of the cellular automaton (repre
 ```console
 user:~$ cargo test --release
 ```
+
+## Benchmark
+
+Use `--benchmark` to check the time taken by the main functions:
+
+```console
+user:~$ cargo run --release -- --benchmark
+Benchmark - 100 runs average
+WorldState::new()        	275ns
+WorldState::randomize()  	111.924µs
+WorldState::next() (x100)	20.23769ms
+total:                   	20.349889ms
+```
