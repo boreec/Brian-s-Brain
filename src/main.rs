@@ -4,6 +4,7 @@ use crate::world_state::WorldState;
 use clap::Parser;
 
 use std::time::Duration;
+use std::time::Instant;
 use std::thread;
 
 /// Module containing vulkan initialization and
@@ -64,6 +65,10 @@ struct Args {
 fn main() {
     let args = Args::parse();
     
+    if args.benchmark {
+        return benchmark();
+    }
+    
     let ws = match args.example {
         0 => { 
             let mut w = WorldState::new(args.size);
@@ -105,4 +110,34 @@ fn run_cli(mut ws: WorldState, iteration: u16, framerate: u64){
             println!("{}", ws);
             thread::sleep(Duration::from_millis(framerate));
         }
+}
+
+
+fn benchmark() {
+    let mut sum_new = Duration::ZERO;
+    let mut sum_randomize = Duration::ZERO;
+    let mut sum_next = Duration::ZERO;
+    
+    for _ in 0..100 {
+        let before_new = Instant::now();
+        let mut ws = WorldState::new(100);
+        sum_new += before_new.elapsed();
+        
+        let before_randomize = Instant::now();
+        ws.randomize(0.5);
+        sum_randomize += before_randomize.elapsed();
+    
+        let before_next = Instant::now();
+        for _ in 0..100 {
+            ws.next();
+        }
+        sum_next += before_next.elapsed();
+    }
+    
+    println!("Benchmark - 100 runs average");
+    println!("WorldState::new()        \t{:?}", sum_new / 100);
+    println!("WorldState::randomize()  \t{:?}", sum_randomize / 100);
+    println!("WorldState::next() (x100)\t{:?}", sum_next / 100);
+    println!("total:                   \t{:?}", 
+        (sum_new + sum_randomize + sum_next) / 100);
 }
