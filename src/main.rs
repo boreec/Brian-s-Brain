@@ -55,7 +55,9 @@ struct Args {
     /// The number of iterations to run for.
     #[arg(short, long, default_value_t = 100)]
     iter: u16,
-    
+ 
+    /// The percentage of cell alive at the beginning.
+    /// The cells are chosen randomly.  
     #[arg(short, long, default_value_t = 0.5)]
     randomness: f64,
     
