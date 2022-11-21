@@ -19,37 +19,7 @@ mod world_state;
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    
-    #[arg(short, long, default_value_t = 50)]
-    /// The number of time between two frames (in milliseconds).
-    framerate: u64,
-    
-    /// The number of iterations to run for.
-    #[arg(short, long, default_value_t = 100)]
-    iter: u16,
-    
-    /// The size of the world in which the cells live.    
-    #[arg(short, long, default_value_t = 10)]
-    size: u16,
-    
-    /// Run the program with a graphical user interface.
-    /// This is the default mode if no other viewing modes is selected.
-    #[arg(short, long, action, default_value_t = false)]
-    gui: bool,
-
-    /// Run the program in the terminal. Note that if the cellular
-    /// automaton's environment is too huge, render may fail.
-    #[arg(short, long, action, default_value_t = false)]
-    cli: bool,
-    
-    /// Run the program with a specific start.
-    ///
-    /// - `--example=1` depicts 5 period-3 oscillators.
-    /// - `--example=2` depicts gliders creating a breeder.
-    /// - `--example=3` depicts a wick.
-    #[arg(short, long, verbatim_doc_comment, default_value_t = 0)]
-    example: u16,
-    
+        
     /// Do 100 runs of the program and for each of them:
     ///
     /// 1. Declare the size of the cellular automaton to be 100x100 (`WorldState::new()`)
@@ -59,6 +29,36 @@ struct Args {
     /// Then, the average execution time for each call is displayed.
     #[arg(short, long, action, verbatim_doc_comment, default_value_t = false)]
     benchmark: bool,
+
+    /// Run the program in the terminal. Note that if the cellular
+    /// automaton's environment is too huge, render may fail.
+    #[arg(long, action, default_value_t = false)]
+    cli: bool,
+
+    /// Run the program with a specific start.
+    ///
+    /// - `--example=1` depicts 5 period-3 oscillators.
+    /// - `--example=2` depicts gliders creating a breeder.
+    /// - `--example=3` depicts a wick.
+    #[arg(long, verbatim_doc_comment, default_value_t = 0)]
+    example: u16,
+
+    #[arg(short, long, default_value_t = 50)]
+    /// The number of time between two frames (in milliseconds).
+    framerate: u64,
+
+    /// Run the program with a graphical user interface.
+    /// This is the default mode if no other viewing modes is selected.
+    #[arg(short, long, action, default_value_t = false)]
+    gui: bool,
+    
+    /// The number of iterations to run for.
+    #[arg(short, long, default_value_t = 100)]
+    iter: u16,
+    
+    /// The size of the world in which the cells live.    
+    #[arg(short, long, default_value_t = 10)]
+    size: u16,
 }
 
 /// Entry point of the program.
