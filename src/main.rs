@@ -42,9 +42,19 @@ struct Args {
     cli: bool,
     
     /// Run the program with a specific start.
-    /// `---example=1` depicts 5 period-3 oscillators. 
-    #[arg(short, long, action, default_value_t = 0)]
-    example: u16
+    /// `---example=1` depicts 5 period-3 oscillators.
+    #[arg(short, long, default_value_t = 0)]
+    example: u16,
+    
+    /// Do 100 runs of the program and for each of them:
+    ///
+    /// 1. Declare the size of the cellular automaton to be 100x100 (`WorldState::new()`)
+    /// 2. Initialize the world with 50% random noise (`WorldState::randomize()`)
+    /// 3. Do 100 iterations on them (`WorldState::next()`)
+    ///
+    /// Then, the average execution time for each call is displayed.
+    #[arg(short, long, action, default_value_t = false)]
+    benchmark: bool,
 }
 
 /// Entry point of the program.
