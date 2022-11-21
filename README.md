@@ -96,6 +96,29 @@ Options:
   -V, --version
           Print version information
 ```
+#### Examples
+
+Initialize a world 100x100, with 3% alive cells and run it in the terminal 
+for 100 iterations:
+
+```console
+user:~$ cargo run --release -- --cli --iter=100 --size=100 --randomness=0.03
+```
+
+Initialize a world 50x50, with 60% alive cells and run in a GUI for 1000 iterations:
+
+```console
+user:~$ cargo run --release -- --gui --iter=1000 --size=50 --randomness=0.6
+```
+
+Run the examples
+
+```console
+user:~$ cargo run --release -- --example=1
+user:~$ cargo run --release -- --example=2
+user:~$ cargo run --release -- --example=3
+```
+        
 
 # Programmer manual
 
