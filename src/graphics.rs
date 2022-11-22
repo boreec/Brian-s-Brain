@@ -3,12 +3,14 @@ use crate::graphics::vulkan::*;
 use crate::graphics::window::*;
 
 use std::error::Error;
+use std::time::Duration;
+use std::time::Instant;
 
 use vulkano::VulkanLibrary;
 use vulkano::swapchain::{acquire_next_image, AcquireError, SwapchainCreateInfo, SwapchainCreationError, SwapchainPresentInfo};
 use vulkano::sync::{FlushError, GpuFuture, self};
 
-use winit::event::{Event, VirtualKeyCode, WindowEvent};
+use winit::event::{Event, StartCause, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
 
 use winit_input_helper::WinitInputHelper;
@@ -85,19 +87,11 @@ pub fn run_gui(mut ws: WorldState, framerate: u64) -> Result<(), Box<dyn Error>>
             }
         }
         match event {
-            Event::WindowEvent {
-                event: WindowEvent::CloseRequested,
-                ..
-            } => {
-                *control_flow = ControlFlow::Exit;
+            Event::NewEvents(StartCause::Init) => {
+                control_flow.set_wait_until(Instant::now() + Duration::from_millis(framerate));
             }
-            Event::WindowEvent {
-                event: WindowEvent::Resized(_),
-                ..
-            } => {
-                recreate_swapchain = true;
-            }
-            Event::RedrawEventsCleared => {
+            Event::NewEvents(StartCause::ResumeTimeReached { .. }) => {
+                control_flow.set_wait_until(Instant::now() + Duration::from_millis(framerate));
                 let dimensions = get_window_dimensions(&surface);
                 // Don't draw frame if one dimension is equal to 0.
                 if dimensions.width == 0 || dimensions.height == 0 {
@@ -177,7 +171,17 @@ pub fn run_gui(mut ws: WorldState, framerate: u64) -> Result<(), Box<dyn Error>>
                         panic!("Failed to flush future: {:?}", e);
                     }
                 }
-                
+            } Event::WindowEvent {
+                event: WindowEvent::CloseRequested,
+                ..
+            } => {
+                *control_flow = ControlFlow::Exit;
+            }
+            Event::WindowEvent {
+                event: WindowEvent::Resized(_),
+                ..
+            } => {
+                recreate_swapchain = true;
             }
             _ => {}
         }
