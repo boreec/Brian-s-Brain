@@ -43,8 +43,9 @@ struct Args {
     #[arg(long, verbatim_doc_comment, default_value_t = 0)]
     example: u16,
 
-    #[arg(short, long, default_value_t = 50)]
+    #[arg(short, long, default_value_t = 0)]
     /// The number of time between two frames (in milliseconds).
+    /// if the value is not specified, the display rate will be as fast as possible.
     framerate: u64,
 
     /// Run the program with a graphical user interface.
