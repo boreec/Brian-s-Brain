@@ -5,6 +5,13 @@ This project is an implementation of the cellular automaton called
 [Rust](https://en.wikipedia.org/wiki/Rust_(programming_language)) and 
 [Vulkan](https://en.wikipedia.org/wiki/Vulkan)'s' graphics API.
 
+# Images
+
+<img src="img/ca.png" alt="Cellular Automaton" width="200"/>
+<img src="img/ca_example1.png" alt="Example #1" width="200"/>
+<img src="img/ca_example2.png" alt="Example #2" width="200"/>
+<img src="img/ca_example3.png" alt="Example #3" width="200"/>
+
 # User manual
 
 ## Compilation
