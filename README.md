@@ -6,6 +6,7 @@ This project is an implementation of the cellular automaton called
 [Vulkan](https://en.wikipedia.org/wiki/Vulkan)'s' graphics API.
 
 For more projects I did, see https://boreec.fr/projects.
+
 # Images
 
 <img src="img/ca.png" alt="Cellular Automaton" width="200"/>
@@ -13,6 +14,7 @@ For more projects I did, see https://boreec.fr/projects.
 <img src="img/ca_example2.png" alt="Example #2" width="200"/>
 <img src="img/ca_example3.png" alt="Example #3" width="200"/>
 
+A video is available here: https://youtu.be/r0fTs15-Qg0
 # User manual
 
 ## Compilation
