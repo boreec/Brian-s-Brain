@@ -101,7 +101,7 @@ fn main() {
     }
     
     if args.cli {
-        run_cli(ws.clone(), args.iter, args.framerate);
+        run_cli(ws, args.iter, args.framerate);
     }
 }
 
