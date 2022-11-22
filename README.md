@@ -51,36 +51,6 @@ program to run the Brian's Brain cellular automaton
 Usage: brian-s-brain [OPTIONS]
 
 Options:
-  -f, --framerate <FRAMERATE>
-          The number of time between two frames (in milliseconds)
-          
-          [default: 50]
-
-  -i, --iter <ITER>
-          The number of iterations to run for
-          
-          [default: 100]
-
-  -s, --size <SIZE>
-          The size of the world in which the cells live
-          
-          [default: 10]
-
-  -g, --gui
-          Run the program with a graphical user interface. This is the default mode if no other viewing modes is selected
-
-  -c, --cli
-          Run the program in the terminal. Note that if the cellular automaton's environment is too huge, render may fail
-
-  -e, --example <EXAMPLE>
-          Run the program with a specific start.
-          
-          - `--example=1` depicts 5 period-3 oscillators.
-          - `--example=2` depicts gliders creating a breeder.
-          - `--example=3` depicts a wick.
-          
-          [default: 0]
-
   -b, --benchmark
           Do 100 runs of the program and for each of them:
           
@@ -89,6 +59,41 @@ Options:
           3. Do 100 iterations (`WorldState::next()`)
           
           Then, the average execution time for each call is displayed.
+
+      --cli
+          Run the program in the terminal. Note that if the cellular automaton's environment is too huge, render may fail
+
+      --example <EXAMPLE>
+          Run the program with a specific start.
+          
+          - `--example=1` depicts 5 period-3 oscillators.
+          - `--example=2` depicts gliders creating a breeder.
+          - `--example=3` depicts a wick.
+          
+          [default: 0]
+
+  -f, --framerate <FRAMERATE>
+          The number of time between two frames (in milliseconds). if the value is not specified, the display rate will be as fast as possible
+          
+          [default: 0]
+
+  -g, --gui
+          Run the program with a graphical user interface. This is the default mode if no other viewing modes is selected
+
+  -i, --iter <ITER>
+          The number of iterations to run for
+          
+          [default: 100]
+
+  -r, --randomness <RANDOMNESS>
+          The percentage of cell alive at the beginning. The cells are chosen randomly
+          
+          [default: 0.5]
+
+  -s, --size <SIZE>
+          The size of the world in which the cells live
+          
+          [default: 10]
 
   -h, --help
           Print help information (use `-h` for a summary)
