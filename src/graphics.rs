@@ -159,6 +159,10 @@ pub fn run_gui(mut ws: WorldState, framerate: u64) -> Result<(), Box<dyn Error>>
                     Ok(future) => {
                         previous_frame_end = Some(future.boxed());
                         ws.next();
+                        if ws.as_vertices().is_empty() {
+                            *control_flow = ControlFlow::Exit;
+                            return;
+                        }
                         vertex_buffer = create_vertex_buffer(&device, ws.as_vertices()).unwrap();
                     }
                     Err(FlushError::OutOfDate) => {
