@@ -5,6 +5,7 @@ This project is an implementation of the cellular automaton called
 [Rust](https://en.wikipedia.org/wiki/Rust_(programming_language)) and 
 [Vulkan](https://en.wikipedia.org/wiki/Vulkan)'s' graphics API.
 
+For more projects I did, see https://boreec.fr/projects.
 # Images
 
 <img src="img/ca.png" alt="Cellular Automaton" width="200"/>
