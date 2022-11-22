@@ -81,10 +81,8 @@ pub fn run_gui(mut ws: WorldState, framerate: u64) -> Result<(), Box<dyn Error>>
     
     let mut input = WinitInputHelper::new();
     event_loop.run(move |event, _, control_flow| {
-        if input.update(&event){
-            if input.key_released(VirtualKeyCode::Escape) {
-                *control_flow = ControlFlow::Exit;
-            }
+        if input.update(&event)&& input.key_released(VirtualKeyCode::Escape) {
+            *control_flow = ControlFlow::Exit;
         }
         match event {
             Event::NewEvents(StartCause::Init) => {
