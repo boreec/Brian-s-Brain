@@ -423,8 +423,8 @@ mod tests {
         let neighbours = ws.get_neighbours(0);
         assert_eq!(neighbours.len(), 3);
         assert!(neighbours.contains(&1));
-        assert!(neighbours.contains(&11));
         assert!(neighbours.contains(&10));
+        assert!(neighbours.contains(&11));
     }    
 
     #[test]
@@ -452,8 +452,8 @@ mod tests {
         let ws = WorldState::new(10);
         let neighbours = ws.get_neighbours(99);
         assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&89));
         assert!(neighbours.contains(&88));
+        assert!(neighbours.contains(&89));
         assert!(neighbours.contains(&98));
     }
     
@@ -464,8 +464,8 @@ mod tests {
         assert_eq!(neighbours.len(), 5);
         assert!(neighbours.contains(&3));
         assert!(neighbours.contains(&5));
-        assert!(neighbours.contains(&14));
         assert!(neighbours.contains(&13));
+        assert!(neighbours.contains(&14));
         assert!(neighbours.contains(&15));
     }    
     
@@ -474,11 +474,11 @@ mod tests {
         let ws = WorldState::new(10);
         let neighbours = ws.get_neighbours(94);
         assert_eq!(neighbours.len(), 5);
+        assert!(neighbours.contains(&83));
+        assert!(neighbours.contains(&84));
+        assert!(neighbours.contains(&85));
         assert!(neighbours.contains(&93));
         assert!(neighbours.contains(&95));
-        assert!(neighbours.contains(&84));
-        assert!(neighbours.contains(&83));
-        assert!(neighbours.contains(&85));
     }
     
     #[test]
@@ -487,10 +487,10 @@ mod tests {
         let neighbours = ws.get_neighbours(50);
         assert_eq!(neighbours.len(), 5);
         assert!(neighbours.contains(&40));
-        assert!(neighbours.contains(&60));
-        assert!(neighbours.contains(&61));
         assert!(neighbours.contains(&41));
         assert!(neighbours.contains(&51));
+        assert!(neighbours.contains(&60));
+        assert!(neighbours.contains(&61));
     }    
 
     #[test]
@@ -498,11 +498,11 @@ mod tests {
         let ws = WorldState::new(10);
         let neighbours = ws.get_neighbours(59);
         assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&49));
-        assert!(neighbours.contains(&69));
-        assert!(neighbours.contains(&68));
         assert!(neighbours.contains(&48));
+        assert!(neighbours.contains(&49));
         assert!(neighbours.contains(&58));
+        assert!(neighbours.contains(&68));
+        assert!(neighbours.contains(&69));
     }    
 
     #[test]
