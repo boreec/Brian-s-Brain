@@ -248,7 +248,7 @@ impl WorldState {
             ]
         }
         //left edge: 5 neighbours
-        else if x == 0 {
+        else if x == 0 && y < self.size {
             vec![
                 (y - 1) * self.size + x,
                 (y + 1) * self.size + x,
@@ -420,110 +420,110 @@ mod tests {
     #[test]
     fn test_get_neighbours_top_left_corner() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(0, 0);
+        let neighbours = ws.get_neighbours(0);
         assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&(0,1)));
-        assert!(neighbours.contains(&(1,1)));
-        assert!(neighbours.contains(&(1,0)));
+        assert!(neighbours.contains(&1));
+        assert!(neighbours.contains(&11));
+        assert!(neighbours.contains(&10));
     }    
 
     #[test]
     fn test_get_neighbours_top_right_corner() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(9, 0);
+        let neighbours = ws.get_neighbours(9);
         assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&(8,0)));
-        assert!(neighbours.contains(&(8,1)));
-        assert!(neighbours.contains(&(9,1)));
+        assert!(neighbours.contains(&8));
+        assert!(neighbours.contains(&18));
+        assert!(neighbours.contains(&19));
     }    
     
     #[test]
     fn test_get_neighbours_bottom_left_corner() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(0, 9);
+        let neighbours = ws.get_neighbours(90);
         assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&(0,8)));
-        assert!(neighbours.contains(&(1,8)));
-        assert!(neighbours.contains(&(1,9)));
+        assert!(neighbours.contains(&80));
+        assert!(neighbours.contains(&81));
+        assert!(neighbours.contains(&91));
     }    
     
     #[test]
     fn test_get_neighbours_bottom_right_corner() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(9, 9);
+        let neighbours = ws.get_neighbours(99);
         assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&(9,8)));
-        assert!(neighbours.contains(&(8,8)));
-        assert!(neighbours.contains(&(8,9)));
+        assert!(neighbours.contains(&89));
+        assert!(neighbours.contains(&88));
+        assert!(neighbours.contains(&98));
     }
     
     #[test]
     fn test_get_neighbours_top_edge() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(4, 0);
+        let neighbours = ws.get_neighbours(4);
         assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&(3,0)));
-        assert!(neighbours.contains(&(5,0)));
-        assert!(neighbours.contains(&(4,1)));
-        assert!(neighbours.contains(&(3,1)));
-        assert!(neighbours.contains(&(5,1)));
+        assert!(neighbours.contains(&3));
+        assert!(neighbours.contains(&5));
+        assert!(neighbours.contains(&14));
+        assert!(neighbours.contains(&13));
+        assert!(neighbours.contains(&15));
     }    
     
     #[test]
     fn test_get_neighbours_bottom_edge() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(4, 9);
+        let neighbours = ws.get_neighbours(94);
         assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&(3,9)));
-        assert!(neighbours.contains(&(5,9)));
-        assert!(neighbours.contains(&(4,8)));
-        assert!(neighbours.contains(&(3,8)));
-        assert!(neighbours.contains(&(5,8)));
+        assert!(neighbours.contains(&93));
+        assert!(neighbours.contains(&95));
+        assert!(neighbours.contains(&84));
+        assert!(neighbours.contains(&83));
+        assert!(neighbours.contains(&85));
     }
     
     #[test]
     fn test_get_neighbours_left_edge() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(0, 5);
+        let neighbours = ws.get_neighbours(50);
         assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&(0,4)));
-        assert!(neighbours.contains(&(0,6)));
-        assert!(neighbours.contains(&(1,6)));
-        assert!(neighbours.contains(&(1,4)));
-        assert!(neighbours.contains(&(1,5)));
+        assert!(neighbours.contains(&40));
+        assert!(neighbours.contains(&60));
+        assert!(neighbours.contains(&61));
+        assert!(neighbours.contains(&41));
+        assert!(neighbours.contains(&51));
     }    
 
     #[test]
     fn test_get_neighbours_right_edge() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(9, 5);
+        let neighbours = ws.get_neighbours(59);
         assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&(9,4)));
-        assert!(neighbours.contains(&(9,6)));
-        assert!(neighbours.contains(&(8,6)));
-        assert!(neighbours.contains(&(8,4)));
-        assert!(neighbours.contains(&(8,5)));
+        assert!(neighbours.contains(&49));
+        assert!(neighbours.contains(&69));
+        assert!(neighbours.contains(&68));
+        assert!(neighbours.contains(&48));
+        assert!(neighbours.contains(&58));
     }    
 
     #[test]
     fn test_get_neighbours_general_case() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(5, 5);
+        let neighbours = ws.get_neighbours(55);
         assert_eq!(neighbours.len(), 8);
-        assert!(neighbours.contains(&(4,4)));
-        assert!(neighbours.contains(&(5,4)));
-        assert!(neighbours.contains(&(6,4)));
-        assert!(neighbours.contains(&(4,5)));
-        assert!(neighbours.contains(&(6,5)));
-        assert!(neighbours.contains(&(4,6)));
-        assert!(neighbours.contains(&(5,6)));
-        assert!(neighbours.contains(&(6,6)));
+        assert!(neighbours.contains(&44));
+        assert!(neighbours.contains(&45));
+        assert!(neighbours.contains(&46));
+        assert!(neighbours.contains(&54));
+        assert!(neighbours.contains(&56));
+        assert!(neighbours.contains(&64));
+        assert!(neighbours.contains(&65));
+        assert!(neighbours.contains(&66));
     }
     
     #[test]
     fn test_get_neighbours_outside(){
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(10,10);
+        let neighbours = ws.get_neighbours(100);
         assert_eq!(neighbours.len(), 0);
     }
     
