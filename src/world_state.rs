@@ -142,8 +142,8 @@ impl WorldState {
         let mut new_alive: Vec<_> = vec![];
         let mut new_dead: Vec<_> = vec![];
         
-        for (i, item) in self.world.iter().enumerate() {
-            match item {
+        for i in 0..self.world.len() {
+            match self.world[i] {
                 CellState::Alive => { new_dying.push(i); }
                 CellState::Dead => {
                     let alives = {
