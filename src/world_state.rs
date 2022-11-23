@@ -149,8 +149,7 @@ impl WorldState {
                     let alives = {
                         let mut sum = 0;
                         for n in self.get_neighbours(i as u16) {
-                            let cell_state = &self.world[n as usize];
-                            if *cell_state == CellState::Alive {
+                            if self.world[n as usize] == CellState::Alive {
                                 sum += 1;
                             } 
                         }
