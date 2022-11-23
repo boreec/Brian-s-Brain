@@ -420,104 +420,73 @@ mod tests {
     #[test]
     fn test_get_neighbours_top_left_corner() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(0);
-        assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&1));
-        assert!(neighbours.contains(&10));
-        assert!(neighbours.contains(&11));
+        let mut neighbours = ws.get_neighbours(0);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![1, 10, 11]);
     }    
 
     #[test]
     fn test_get_neighbours_top_right_corner() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(9);
-        assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&8));
-        assert!(neighbours.contains(&18));
-        assert!(neighbours.contains(&19));
+        let mut neighbours = ws.get_neighbours(9);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![8, 18, 19]);
     }    
     
     #[test]
     fn test_get_neighbours_bottom_left_corner() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(90);
-        assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&80));
-        assert!(neighbours.contains(&81));
-        assert!(neighbours.contains(&91));
+        let mut neighbours = ws.get_neighbours(90);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![80, 81, 91]);
     }    
     
     #[test]
     fn test_get_neighbours_bottom_right_corner() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(99);
-        assert_eq!(neighbours.len(), 3);
-        assert!(neighbours.contains(&88));
-        assert!(neighbours.contains(&89));
-        assert!(neighbours.contains(&98));
+        let mut neighbours = ws.get_neighbours(99);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![88, 89, 98]);
     }
     
     #[test]
     fn test_get_neighbours_top_edge() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(4);
-        assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&3));
-        assert!(neighbours.contains(&5));
-        assert!(neighbours.contains(&13));
-        assert!(neighbours.contains(&14));
-        assert!(neighbours.contains(&15));
+        let mut neighbours = ws.get_neighbours(4);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![3, 5, 13, 14, 15]);
     }    
     
     #[test]
     fn test_get_neighbours_bottom_edge() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(94);
-        assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&83));
-        assert!(neighbours.contains(&84));
-        assert!(neighbours.contains(&85));
-        assert!(neighbours.contains(&93));
-        assert!(neighbours.contains(&95));
+        let mut neighbours = ws.get_neighbours(94);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![83, 84, 85, 93, 95]);
     }
     
     #[test]
     fn test_get_neighbours_left_edge() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(50);
-        assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&40));
-        assert!(neighbours.contains(&41));
-        assert!(neighbours.contains(&51));
-        assert!(neighbours.contains(&60));
-        assert!(neighbours.contains(&61));
+        let mut neighbours = ws.get_neighbours(50);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![40, 41, 51, 60, 61]);
     }    
 
     #[test]
     fn test_get_neighbours_right_edge() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(59);
-        assert_eq!(neighbours.len(), 5);
-        assert!(neighbours.contains(&48));
-        assert!(neighbours.contains(&49));
-        assert!(neighbours.contains(&58));
-        assert!(neighbours.contains(&68));
-        assert!(neighbours.contains(&69));
+        let mut neighbours = ws.get_neighbours(59);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![48, 49, 58, 68, 69]);
     }    
 
     #[test]
     fn test_get_neighbours_general_case() {
         let ws = WorldState::new(10);
-        let neighbours = ws.get_neighbours(55);
-        assert_eq!(neighbours.len(), 8);
-        assert!(neighbours.contains(&44));
-        assert!(neighbours.contains(&45));
-        assert!(neighbours.contains(&46));
-        assert!(neighbours.contains(&54));
-        assert!(neighbours.contains(&56));
-        assert!(neighbours.contains(&64));
-        assert!(neighbours.contains(&65));
-        assert!(neighbours.contains(&66));
+        let mut neighbours = ws.get_neighbours(55);
+        neighbours.sort();
+        assert_eq!(neighbours, vec![44, 45, 46, 54, 56, 64, 65, 66]);        
     }
     
     #[test]
