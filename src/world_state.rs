@@ -146,10 +146,7 @@ impl WorldState {
             match item {
                 CellState::Alive => { new_dying.push(i); }
                 CellState::Dead => {
-                    let neighbours = self.get_neighbours(
-                            (i % self.size as usize) as u16,
-                            (i / self.size as usize) as u16
-                    );
+                    let neighbours = self.get_neighbours(i as u16);
                     let alives = {
                         let mut sum = 0;
                         for tuples in neighbours {
@@ -183,7 +180,9 @@ impl WorldState {
     /// Return the neighbours of a cell designated by the coordinates `x` and `y`.
     /// The neighbours are returned as a vector of tuples (x_i, y_i). If the given
     /// coordinates are outside the world, the returned vector is empty.
-    fn get_neighbours(&self, x: u16, y: u16) -> Vec<(u16, u16)> {
+    fn get_neighbours(&self, n: u16) -> Vec<(u16, u16)> {
+        let x = n % self.size;
+        let y = n / self.size;       
         // general case: 8 neighbours
         if x > 0 && x < self.size - 1 && y > 0 && y < self.size - 1 {
             vec![
