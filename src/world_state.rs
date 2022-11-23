@@ -197,11 +197,7 @@ impl WorldState {
         }
         // top left corner: 3 neighbours
         else if x == 0 && y == 0 {
-            vec![
-                (y + 1) * self.size + x,
-                (y + 1) * self.size + x + 1,
-                y * self.size + x + 1
-            ]
+            vec![1, self.size, self.size + 1]
         }  
         // top right corner: 3 neighbours
         else if x == self.size - 1 && y == 0 {
