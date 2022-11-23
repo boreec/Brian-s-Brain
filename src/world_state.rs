@@ -218,11 +218,11 @@ impl WorldState {
         // top edge: 5 neighbours
         else if y == 0 {
             vec![
-                y * self.size + x - 1,
-                y * self.size + x + 1,
-                (y + 1) * self.size + x - 1,
-                (y + 1) * self.size + x,
-                (y + 1) * self.size + x + 1  
+                x - 1,
+                x + 1,
+                self.size + x - 1,
+                self.size + x,
+                self.size + x + 1  
             ]
         }
         // bottom edge: 5 neighbours
