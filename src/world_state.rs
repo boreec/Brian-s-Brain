@@ -146,15 +146,12 @@ impl WorldState {
             match self.world[i] {
                 CellState::Alive => { new_dying.push(i); }
                 CellState::Dead => {
-                    let alives = {
-                        let mut sum = 0;
-                        for n in self.get_neighbours(i as u16) {
-                            if self.world[n as usize] == CellState::Alive {
-                                sum += 1;
-                            } 
-                        }
-                        sum
-                    };
+                    let mut alives = 0;
+                    for n in self.get_neighbours(i as u16) {
+                        if self.world[n as usize] == CellState::Alive {
+                            alives += 1;
+                        } 
+                    }
                     if alives == 2 {
                         new_alive.push(i);
                     }
