@@ -177,7 +177,7 @@ impl WorldState {
         }
     }
     
-    /// Return the neighbours of a cell designated by the coordinates `x` and `y`.
+    /// Return the neighbours of the nth-cell.
     /// The neighbours are returned as a vector of tuples (x_i, y_i). If the given
     /// coordinates are outside the world, the returned vector is empty.
     fn get_neighbours(&self, n: u16) -> Vec<(u16, u16)> {
