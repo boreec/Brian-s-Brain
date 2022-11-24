@@ -122,11 +122,11 @@ impl WorldState {
             // bottom edge: 5 neighbours
             else if y == size - 1 {
                 neighbours.push(vec![
-                    y * size + x - 1,
-                    y * size + x + 1,
                     (y - 1) * size + x - 1,
                     (y - 1) * size + x,
-                    (y - 1) * size + x + 1
+                    (y - 1) * size + x + 1,
+                    y * size + x - 1,
+                    y * size + x + 1,
                 ]);
             }
             //left edge: 5 neighbours
