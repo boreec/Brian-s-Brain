@@ -173,9 +173,7 @@ impl WorldState {
         }
     }
     
-    /// Return the neighbours of the nth-cell.
-    /// The neighbours are returned as a vector of tuples (x_i, y_i). If the given
-    /// coordinates are outside the world, the returned vector is empty.
+    /// Compute every neighbours for each cell of the CA.
     fn precompute_neighbours(size: u16) -> Vec<Vec<u16>> {
         let mut neighbours: Vec<Vec<u16>> = vec![];
         for i in 0..size.pow(2){
