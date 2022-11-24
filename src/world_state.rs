@@ -142,11 +142,11 @@ impl WorldState {
             // right edge: 5 neighbours
             else if x == size - 1 {
                 neighbours.push(vec![
-                    (y - 1) * size + x,
-                    (y + 1) * size + x,
                     (y - 1) * size + x - 1,
+                    (y - 1) * size + x,
                     y * size + x - 1,
-                    (y + 1) * size + x - 1
+                    (y + 1) * size + x - 1,
+                    (y + 1) * size + x,
                 ]);
             }         
             // outside the range of the world: 0 neighbours
@@ -455,7 +455,6 @@ mod tests {
         ws.randomize(1.0);
         let cells = ws.as_vertices();
         assert_eq!(cells.len(), 6);
-        
         // advance to next iteration: the cell must be in dying mode.
         ws.next();
         let cells = ws.as_vertices();
