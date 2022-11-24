@@ -182,13 +182,11 @@ impl WorldState {
     /// A cell **Dead** is turned into **Alive** if two of its neighbours
     /// are also in **Alive** State.
     pub fn next(&mut self) {
-        let mut new_dying: Vec<_> = vec![];
-        let mut new_alive: Vec<_> = vec![];
-        let mut new_dead: Vec<_> = vec![];
+        let (mut alive, mut dying, mut dead) = (vec![], vec![], vec![]);
         
         for i in 0..self.world.len() {
             match self.world[i] {
-                CellState::Alive => { new_dying.push(i); }
+                CellState::Alive => { dying.push(i); }
                 CellState::Dead => {
                     let alives = self.neighbours[i]
                         .iter()
@@ -196,20 +194,20 @@ impl WorldState {
                         .count();
                     
                     if alives == 2 {
-                        new_alive.push(i);
+                        alive.push(i);
                     }
                 }
-                CellState::Dying => { new_dead.push(i); }
+                CellState::Dying => { dead.push(i); }
             }
         }
         // update the world
-        for item in new_dying { 
+        for item in dying { 
             self.world[item] = CellState::Dying; 
         }
-        for item in new_dead { 
+        for item in dead { 
             self.world[item] = CellState::Dead; 
         }
-        for item in new_alive { 
+        for item in alive { 
             self.world[item] = CellState::Alive; 
         }
     }
