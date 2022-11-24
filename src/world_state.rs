@@ -133,9 +133,9 @@ impl WorldState {
             else if x == 0 && y < size {
                 neighbours.push(vec![
                     (y - 1) * size,
-                    (y + 1) * size,
                     (y - 1) * size + 1,
                     y * size + 1,
+                    (y + 1) * size,
                     (y + 1) * size + 1    
                 ]);
             }
