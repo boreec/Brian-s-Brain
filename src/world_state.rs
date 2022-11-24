@@ -200,16 +200,11 @@ impl WorldState {
                 CellState::Dying => { dead.push(i); }
             }
         }
-        // update the world
-        for item in dying { 
-            self.world[item] = CellState::Dying; 
-        }
-        for item in dead { 
-            self.world[item] = CellState::Dead; 
-        }
-        for item in alive { 
-            self.world[item] = CellState::Alive; 
-        }
+
+        // update the world        
+        alive.iter().for_each(|&n| self.world[n] = CellState::Alive);
+        dying.iter().for_each(|&n| self.world[n] = CellState::Dying);
+        dead.iter().for_each(|&n| self.world[n] = CellState::Dead);
     }
     
     /// Return vertices of the cells with `CellState::On` or `CellState::Dying`.
