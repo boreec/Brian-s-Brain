@@ -50,6 +50,8 @@ pub struct WorldState {
     /// The actual representation of the Cellular Automaton at a given time.
     /// It consists of a 1D vector of `CellState` values.
     world: Vec<CellState>,
+    
+    neighbours: Vec<Vec<u16>>,
 }
 
 impl fmt::Display for WorldState {
@@ -74,6 +76,7 @@ impl WorldState {
         WorldState {
             size,
             world: vec![CellState::Dead; size.pow(2).into()],
+            neighbours: Self::precompute_neighbours(size),
         }
     }
     
@@ -146,7 +149,7 @@ impl WorldState {
             match self.world[i] {
                 CellState::Alive => { new_dying.push(i); }
                 CellState::Dead => {
-                    let alives = self.get_neighbours(i as u16)
+                    let alives = self.neighbours[i]
                         .iter()
                         .filter(|&n| self.world[*n as usize] == CellState::Alive)
                         .count();
@@ -173,86 +176,80 @@ impl WorldState {
     /// Return the neighbours of the nth-cell.
     /// The neighbours are returned as a vector of tuples (x_i, y_i). If the given
     /// coordinates are outside the world, the returned vector is empty.
-    fn get_neighbours(&self, n: u16) -> Vec<u16> {
-        let x = n % self.size;
-        let y = n / self.size;
-        // general case: 8 neighbours
-        if x > 0 && x < self.size - 1 && y > 0 && y < self.size - 1 {
-            vec![
-                (y - 1) * self.size + x - 1,
-                (y - 1) * self.size + x,
-                (y - 1) * self.size + x + 1,
-                y * self.size + x - 1,
-                y * self.size + x + 1,
-                (y + 1) * self.size + x - 1,
-                (y + 1) * self.size + x,
-                (y + 1) * self.size + x + 1
-            ]
+    fn precompute_neighbours(size: u16) -> Vec<Vec<u16>> {
+        let mut neighbours: Vec<Vec<u16>> = vec![];
+        for i in 0..size.pow(2){
+            let x = i % size;
+            let y = i / size;
+            // general case: 8 neighbours
+            if x > 0 && x < size - 1 && y > 0 && y < size - 1 {
+                neighbours.push(vec![
+                    (y - 1) * size + x - 1,
+                    (y - 1) * size + x,
+                    (y - 1) * size + x + 1,
+                    y * size + x - 1,
+                    y * size + x + 1,
+                    (y + 1) * size + x - 1,
+                    (y + 1) * size + x,
+                    (y + 1) * size + x + 1
+                ]);
+            }
+            // top left corner: 3 neighbours
+            else if x == 0 && y == 0 {
+                neighbours.push(vec![1, size, size + 1])
+            }  
+            // top right corner: 3 neighbours
+            else if x == size - 1 && y == 0 {
+                neighbours.push(vec![x - 1, size + x - 1, size + x]);
+            }
+            // bottom left corner: 3 neighbours
+            else if x == 0 && y == size - 1 {
+                neighbours.push(vec![(y - 1) * size, (y - 1) * size + 1, y * size + 1]);
+            }
+            // bottom right corner: 3 neighbours
+            else if x == size - 1 && y == size - 1 {
+                neighbours.push(vec![y * size + x - 1,(y - 1) * size + x - 1, (y - 1) * size + x]);
+            }
+            // top edge: 5 neighbours
+            else if y == 0 {
+                neighbours.push(vec![x - 1, x + 1, size + x - 1, size + x, size + x + 1])
+            }
+            // bottom edge: 5 neighbours
+            else if y == size - 1 {
+                neighbours.push(vec![
+                    y * size + x - 1,
+                    y * size + x + 1,
+                    (y - 1) * size + x - 1,
+                    (y - 1) * size + x,
+                    (y - 1) * size + x + 1
+                ]);
+            }
+            //left edge: 5 neighbours
+            else if x == 0 && y < size {
+                neighbours.push(vec![
+                    (y - 1) * size,
+                    (y + 1) * size,
+                    (y - 1) * size + 1,
+                    y * size + 1,
+                    (y + 1) * size + 1    
+                ]);
+            }
+            // right edge: 5 neighbours
+            else if x == size - 1 {
+                neighbours.push(vec![
+                    (y - 1) * size + x,
+                    (y + 1) * size + x,
+                    (y - 1) * size + x - 1,
+                    y * size + x - 1,
+                    (y + 1) * size + x - 1
+                ]);
+            }         
+            // outside the range of the world: 0 neighbours
+            else {
+                neighbours.push(vec![]);
+            }
         }
-        // top left corner: 3 neighbours
-        else if x == 0 && y == 0 {
-            vec![1, self.size, self.size + 1]
-        }  
-        // top right corner: 3 neighbours
-        else if x == self.size - 1 && y == 0 {
-            vec![x - 1, self.size + x - 1, self.size + x]
-        }
-        // bottom left corner: 3 neighbours
-        else if x == 0 && y == self.size - 1 {
-            vec![(y - 1) * self.size, (y - 1) * self.size + 1, y * self.size + 1]
-        }
-        // bottom right corner: 3 neighbours
-        else if x == self.size - 1 && y == self.size - 1 {
-            vec![
-                y * self.size + x - 1,
-                (y - 1) * self.size + x - 1,
-                (y - 1) * self.size + x
-            ]
-        }
-        // top edge: 5 neighbours
-        else if y == 0 {
-            vec![
-                x - 1,
-                x + 1,
-                self.size + x - 1,
-                self.size + x,
-                self.size + x + 1  
-            ]
-        }
-        // bottom edge: 5 neighbours
-        else if y == self.size - 1 {
-            vec![
-                y * self.size + x - 1,
-                y * self.size + x + 1,
-                (y - 1) * self.size + x - 1,
-                (y - 1) * self.size + x,
-                (y - 1) * self.size + x + 1
-            ]
-        }
-        //left edge: 5 neighbours
-        else if x == 0 && y < self.size {
-            vec![
-                (y - 1) * self.size,
-                (y + 1) * self.size,
-                (y - 1) * self.size + 1,
-                y * self.size + 1,
-                (y + 1) * self.size + 1    
-            ]
-        }
-        // right edge: 5 neighbours
-        else if x == self.size - 1 {
-            vec![
-                (y - 1) * self.size + x,
-                (y + 1) * self.size + x,
-                (y - 1) * self.size + x - 1,
-                y * self.size + x - 1,
-                (y + 1) * self.size + x - 1
-            ]
-        }         
-        // outside the range of the world: 0 neighbours
-        else {
-            vec![]
-        }
+        neighbours
     }   
     
     /// Return vertices of the cells with `CellState::On` or `CellState::Dying`.
