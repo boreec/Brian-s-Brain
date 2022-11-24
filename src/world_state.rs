@@ -113,7 +113,7 @@ impl WorldState {
             }
             // bottom right corner: 3 neighbours
             else if x == size - 1 && y == size - 1 {
-                neighbours.push(vec![y * size + x - 1,(y - 1) * size + x - 1, (y - 1) * size + x]);
+                neighbours.push(vec![(y - 1) * size + x - 1, (y - 1) * size + x, y * size + x - 1]);
             }
             // top edge: 5 neighbours
             else if y == 0 {
