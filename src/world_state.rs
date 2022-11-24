@@ -80,99 +80,6 @@ impl WorldState {
         }
     }
     
-    /// Initialize a world 14x14 with 5x3-period oscillators.
-    /// Example made by **boreec**.
-    pub fn example1() -> WorldState {
-        let mut ws = WorldState::new(14);
-        ws.spawn_osc3(0, 0);
-        ws.spawn_osc3(10, 10);
-        ws.spawn_osc3(0, 10);
-        ws.spawn_osc3(10, 0);
-        ws.spawn_osc3(5, 5);
-        ws
-    }
-    
-    /// Initialize a world 100x100 with many gliders creating
-    /// a breeder. Example made by **Wojowu** on `conwaylife.com`.
-    pub fn example2() ->  WorldState {
-        let mut ws = WorldState::new(100);
-        ws.spawn_glider4_downward(42, 0);
-        ws.spawn_glider4_downward(30, 18);
-        ws.spawn_glider4_downward(30, 22);
-        ws.spawn_glider4_downward(13, 42);
-        ws.spawn_glider4_leftward(23, 57);
-        ws.spawn_glider4_leftward(19, 62);
-        ws.spawn_glider4_upward(10, 68);
-        ws.spawn_glider4_upward(24, 87);
-        ws.spawn_glider4_upward(28, 93);
-        ws
-    }
-    
-    /// Initialize a world 100x100 with a wick.
-    /// Example made by **The Turtle** on `conwaylife.com`.
-    pub fn example3() -> WorldState {
-        let mut ws = WorldState::new(100);
-        ws.spawn_wick3(50, 50);
-        ws
-    }
-    
-    /// Initialize the world with a certain amount of **CellState::On**.
-    /// 
-    /// `on_rate` corresponds to the percentage of cells in the world to
-    /// set their state to **CellState::On**. `on_rate` is expected to be
-    /// between 0 and 1. Any value outside that range will cause a panic.
-    pub fn randomize(&mut self, on_rate: f64) {
-        if on_rate == 1.0 {
-            self.world = vec![CellState::Alive; self.world.len()];
-            return;
-        }
-        let mut cell_indexes: Vec<_> = (0..self.world.len()).collect();
-        let cell_amount = (on_rate * (self.world.len() as f64)) as usize;
-        
-        cell_indexes.shuffle(&mut thread_rng());
-        for item in cell_indexes.iter_mut().take(cell_amount) {
-            self.world[*item as usize] = CellState::Alive;
-        }
-    }
-
-    /// Advance the world to its next state.
-    /// A cell **On** is turned into **Dying**.
-    /// A cell **Dying** is turned into **Off**.
-    /// A cell **Off** is turned into **On** if two of its neighbours
-    /// are also in **On** State.
-    pub fn next(&mut self) {
-        let mut new_dying: Vec<_> = vec![];
-        let mut new_alive: Vec<_> = vec![];
-        let mut new_dead: Vec<_> = vec![];
-        
-        for i in 0..self.world.len() {
-            match self.world[i] {
-                CellState::Alive => { new_dying.push(i); }
-                CellState::Dead => {
-                    let alives = self.neighbours[i]
-                        .iter()
-                        .filter(|&n| self.world[*n as usize] == CellState::Alive)
-                        .count();
-                    
-                    if alives == 2 {
-                        new_alive.push(i);
-                    }
-                }
-                CellState::Dying => { new_dead.push(i); }
-            }
-        }
-        // update the world
-        for item in new_dying { 
-            self.world[item] = CellState::Dying; 
-        }
-        for item in new_dead { 
-            self.world[item] = CellState::Dead; 
-        }
-        for item in new_alive { 
-            self.world[item] = CellState::Alive; 
-        }
-    }
-    
     /// Compute every neighbours for each cell of the CA.
     fn precompute_neighbours(size: u16) -> Vec<Vec<u16>> {
         let mut neighbours: Vec<Vec<u16>> = vec![];
@@ -249,6 +156,63 @@ impl WorldState {
         }
         neighbours
     }   
+
+    /// Initialize the world with a certain amount of **CellState::On**.
+    /// 
+    /// `on_rate` corresponds to the percentage of cells in the world to
+    /// set their state to **CellState::On**. `on_rate` is expected to be
+    /// between 0 and 1. Any value outside that range will cause a panic.
+    pub fn randomize(&mut self, on_rate: f64) {
+        if on_rate == 1.0 {
+            self.world = vec![CellState::Alive; self.world.len()];
+            return;
+        }
+        let mut cell_indexes: Vec<_> = (0..self.world.len()).collect();
+        let cell_amount = (on_rate * (self.world.len() as f64)) as usize;
+        
+        cell_indexes.shuffle(&mut thread_rng());
+        for item in cell_indexes.iter_mut().take(cell_amount) {
+            self.world[*item as usize] = CellState::Alive;
+        }
+    }
+
+    /// Advance the world to its next state.
+    /// A cell **On** is turned into **Dying**.
+    /// A cell **Dying** is turned into **Off**.
+    /// A cell **Off** is turned into **On** if two of its neighbours
+    /// are also in **On** State.
+    pub fn next(&mut self) {
+        let mut new_dying: Vec<_> = vec![];
+        let mut new_alive: Vec<_> = vec![];
+        let mut new_dead: Vec<_> = vec![];
+        
+        for i in 0..self.world.len() {
+            match self.world[i] {
+                CellState::Alive => { new_dying.push(i); }
+                CellState::Dead => {
+                    let alives = self.neighbours[i]
+                        .iter()
+                        .filter(|&n| self.world[*n as usize] == CellState::Alive)
+                        .count();
+                    
+                    if alives == 2 {
+                        new_alive.push(i);
+                    }
+                }
+                CellState::Dying => { new_dead.push(i); }
+            }
+        }
+        // update the world
+        for item in new_dying { 
+            self.world[item] = CellState::Dying; 
+        }
+        for item in new_dead { 
+            self.world[item] = CellState::Dead; 
+        }
+        for item in new_alive { 
+            self.world[item] = CellState::Alive; 
+        }
+    }
     
     /// Return vertices of the cells with `CellState::On` or `CellState::Dying`.
     /// Moreover, each cell is represented by 6 vertices (2 triangles).
@@ -299,6 +263,41 @@ impl WorldState {
         updated_cells
     }
     
+    /// Initialize a world 14x14 with 5x3-period oscillators.
+    /// Example made by **boreec**.
+    pub fn example1() -> WorldState {
+        let mut ws = WorldState::new(14);
+        ws.spawn_osc3(0, 0);
+        ws.spawn_osc3(10, 10);
+        ws.spawn_osc3(0, 10);
+        ws.spawn_osc3(10, 0);
+        ws.spawn_osc3(5, 5);
+        ws
+    }
+    
+    /// Initialize a world 100x100 with many gliders creating
+    /// a breeder. Example made by **Wojowu** on `conwaylife.com`.
+    pub fn example2() ->  WorldState {
+        let mut ws = WorldState::new(100);
+        ws.spawn_glider4_downward(42, 0);
+        ws.spawn_glider4_downward(30, 18);
+        ws.spawn_glider4_downward(30, 22);
+        ws.spawn_glider4_downward(13, 42);
+        ws.spawn_glider4_leftward(23, 57);
+        ws.spawn_glider4_leftward(19, 62);
+        ws.spawn_glider4_upward(10, 68);
+        ws.spawn_glider4_upward(24, 87);
+        ws.spawn_glider4_upward(28, 93);
+        ws
+    }
+    
+    /// Initialize a world 100x100 with a wick.
+    /// Example made by **The Turtle** on `conwaylife.com`.
+    pub fn example3() -> WorldState {
+        let mut ws = WorldState::new(100);
+        ws.spawn_wick3(50, 50);
+        ws
+    }
     pub fn spawn_osc3(&mut self, x: usize, y: usize) {
         let dying_cells = [(x + 1, y + 1), (x + 2, y + 1), (x + 1, y + 2), (x + 2, y + 2)];
         let alive_cells = [(x, y + 1), (x + 2, y), (x + 1, y + 3), (x + 3, y + 2)];
