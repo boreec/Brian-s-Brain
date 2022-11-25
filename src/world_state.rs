@@ -14,15 +14,20 @@ const ALIVE_COLOR: [f32; 3] = [1.0, 0.0, 0.0];
 const DYING_COLOR: [f32; 3] = [0.5, 0.0, 0.0];
 
 /// The three states a cell can take.
-/// Each cell is considered to have 8 neighbors (the Moore neighborhood).
-/// In each time step, a cell turns on if it was **Off** but had exactly two neighbors
-/// that were on. All cells that were **On** go into the **Dying** state, which is not
-/// counted as an **On** cell in the neighbor count, and prevents any cell from being
-/// born there. Cells that were in the **Dying** state go into the **Off** state.
+/// Each cell is considered to have 8 neighbors (Moore neighborhood).
 #[derive(Clone, Debug, PartialEq, Eq)]
 enum CellState {
+    
+    /// **Alive** cells become **Dying** on their next step,
+    /// regardless of there neighbours.
     Alive,
+    
+    /// **Dying** cells become **Dead** on their next step,
+    /// regardless of there neighbours.
     Dying,
+    
+    /// **Dead** cells can become **Alive** only if there are
+    /// exactly two cells **Alive** in their neighbourhood.
     Dead,
 }
 
