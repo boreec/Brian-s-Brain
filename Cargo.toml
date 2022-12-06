@@ -8,7 +8,7 @@ authors = ["Cyprien Borée <cyprien.boree@tuta.io>"]
 bytemuck = "1.12.3"
 clap = { version = "4.0.29", features = ["derive"] }
 rand = "0.8.5"
-vulkano = "0.32.1"
+vulkano = "0.32.2"
 vulkano-win = "0.32.0"
 vulkano-shaders = "0.32.0"
 winit = "0.27.5"
