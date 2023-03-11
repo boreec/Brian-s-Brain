@@ -62,7 +62,7 @@ struct Args {
     randomness: f64,
 
     /// The size of the world in which the cells live.    
-    #[arg(short, long, default_value_t = 10)]
+    #[arg(short, long, default_value_t = 50)]
     size: u16,
 }
 
